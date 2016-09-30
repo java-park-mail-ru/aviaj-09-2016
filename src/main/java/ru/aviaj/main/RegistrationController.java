@@ -25,6 +25,8 @@ public class RegistrationController {
         private String email;
         private String password;
 
+        private UserSignupRequest() { };
+
         private UserSignupRequest(String login, String email, String password) {
             this.login = login;
             this.email = email;
@@ -48,6 +50,8 @@ public class RegistrationController {
         private String login;
         private String email;
         private String rating;
+
+        private UserProfileResponse() { };
 
         private UserProfileResponse(String login, String email) {
             this.login = login;
@@ -73,22 +77,22 @@ public class RegistrationController {
         this.accountService = accountService;
     }
 
-    @RequestMapping(path = "/api/signup", method = RequestMethod.POST)
+    @RequestMapping(path = "/api/users/signup", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity signup(@RequestBody UserSignupRequest body) {
         final String login = body.getLogin();
         final String email = body.getEmail();
         final String password = body.getPassword();
 
         if (StringUtils.isEmpty(login)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error}");
         }
 
         if (StringUtils.isEmpty(email)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error}");
         }
 
         if (StringUtils.isEmpty(password)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{}");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error}");
         }
 
         UserProfile existingUser = accountService.getUserByLogin(login);
