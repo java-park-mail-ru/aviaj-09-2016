@@ -7,15 +7,15 @@ public class Error {
 
     private int code;
     public static enum ErrorType {
-        NoUserId(100),
-        NoLogin(10),
-        WrongPassword(11),
-        DublicateLogin(21),
-        DublicateEmail(22),
-        EmptyLogin(23),
-        EmptyEmail(24),
-        EmptyPassword(25),
-        UnexpectedError(900);
+        NOUSERID(100),
+        NOLOGIN(10),
+        WRONGPASSWORD(11),
+        DUBLICATELOGIN(21),
+        DUBLICATEEMAIL(22),
+        EMPTYLOGIN(23),
+        EMPTYEMAIL(24),
+        EMPTYPASSWORD(25),
+        UNEXPECTEDERROR(900);
 
         private int code;
 
