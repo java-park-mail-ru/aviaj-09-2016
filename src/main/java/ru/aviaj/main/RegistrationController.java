@@ -8,8 +8,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ru.aviaj.model.Error;
 import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sibirsky on 25.09.16.
@@ -83,21 +87,33 @@ public class RegistrationController {
         final String email = body.getEmail();
         final String password = body.getPassword();
 
+        Boolean hasErrors = false;
+        List<Error> errorList = new ArrayList<Error>();
+
         if (StringUtils.isEmpty(login)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error}");
+            hasErrors = true;
+            errorList.add(new Error(Error.ErrorType.EMPTYLOGIN));
+            //return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error}");
         }
 
         if (StringUtils.isEmpty(email)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error}");
+            hasErrors = true;
+            errorList.add(new Error(Error.ErrorType.EMPTYEMAIL));
         }
 
         if (StringUtils.isEmpty(password)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error}");
+            hasErrors = true;
+            errorList.add(new Error(Error.ErrorType.EMPTYPASSWORD));
         }
 
-        UserProfile existingUser = accountService.getUserByLogin(login);
+        if (hasErrors) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorList);
+        }
+
+        final UserProfile existingUser = accountService.getUserByLogin(login);
         if (existingUser != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{}");
+            errorList.add(new Error(Error.ErrorType.DUBLICATELOGIN));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorList);
         }
 
         accountService.addUser(login, email, password);
