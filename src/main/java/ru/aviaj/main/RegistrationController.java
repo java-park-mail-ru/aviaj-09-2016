@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.aviaj.model.Error;
+import ru.aviaj.model.ErrorList;
 import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
 
@@ -88,22 +89,25 @@ public class RegistrationController {
         final String password = body.getPassword();
 
         Boolean hasErrors = false;
-        List<Error> errorList = new ArrayList<Error>();
+        //List<Error> errorList = new ArrayList<Error>();
+        ErrorList errorList = new ErrorList();
 
         if (StringUtils.isEmpty(login)) {
             hasErrors = true;
-            errorList.add(new Error(Error.ErrorType.EMPTYLOGIN));
-            //return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{error}");
+            //errorList.add(new Error(Error.ErrorType.EMPTYLOGIN));
+            errorList.addError(Error.ErrorType.EMPTYLOGIN);
         }
 
         if (StringUtils.isEmpty(email)) {
             hasErrors = true;
-            errorList.add(new Error(Error.ErrorType.EMPTYEMAIL));
+            //errorList.add(new Error(Error.ErrorType.EMPTYEMAIL));
+            errorList.addError(Error.ErrorType.DUBLICATEEMAIL);
         }
 
         if (StringUtils.isEmpty(password)) {
             hasErrors = true;
-            errorList.add(new Error(Error.ErrorType.EMPTYPASSWORD));
+            //errorList.add(new Error(Error.ErrorType.EMPTYPASSWORD));
+            errorList.addError(Error.ErrorType.EMPTYPASSWORD);
         }
 
         if (hasErrors) {
@@ -112,8 +116,10 @@ public class RegistrationController {
 
         final UserProfile existingUser = accountService.getUserByLogin(login);
         if (existingUser != null) {
-            errorList.add(new Error(Error.ErrorType.DUBLICATELOGIN));
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorList);
+            //errorList.add(new Error(Error.ErrorType.DUBLICATELOGIN));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ErrorList(Error.ErrorType.DUBLICATELOGIN)
+            );
         }
 
         accountService.addUser(login, email, password);
