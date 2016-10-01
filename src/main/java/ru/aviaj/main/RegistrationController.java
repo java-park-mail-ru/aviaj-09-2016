@@ -1,6 +1,7 @@
 package ru.aviaj.main;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.parsing.Location;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -53,17 +54,21 @@ public class RegistrationController {
     }
 
     private static final class UserProfileResponse {
+        private String id;
         private String login;
         private String email;
         private String rating;
 
         private UserProfileResponse() { };
 
-        private UserProfileResponse(String login, String email) {
-            this.login = login;
-            this.email = email;
-            this.rating = "0";
+        private UserProfileResponse(UserProfile user) {
+            this.id = Long.toString(user.getId());
+            this.login = user.getLogin();
+            this.email = user.getEmail();
+            this.rating = Long.toString(user.getRating());
         }
+
+        public String getId() { return id; }
 
         public String getLogin() {
             return login;
@@ -121,9 +126,14 @@ public class RegistrationController {
             );
         }
 
-        accountService.addUser(login, email, password);
+        UserProfile registeredUser = accountService.addUser(login, email, password);
+        if (registeredUser == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ErrorList(Error.ErrorType.UNEXPECTEDERROR)
+            );
+        }
 
-        return ResponseEntity.ok(new UserProfileResponse(login, email));
+        return ResponseEntity.ok(new UserProfileResponse(registeredUser));
     }
 
 }

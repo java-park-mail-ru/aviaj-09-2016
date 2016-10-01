@@ -51,6 +51,7 @@ public class AuthenticationController {
     public static final class UserLoginResponse {
         private String id;
         private String login;
+        private String email;
         private String rating;
 
         private UserLoginResponse() { };
@@ -58,6 +59,7 @@ public class AuthenticationController {
         private UserLoginResponse(UserProfile user) {
             this.id = Long.toString(user.getId());
             this.login = user.getLogin();
+            this.email = user.getEmail();
             this.rating = Long.toString(user.getRating());
         }
 
@@ -68,6 +70,8 @@ public class AuthenticationController {
         public String getLogin() {
             return login;
         }
+
+        public String getEmail() { return email; }
 
         public String getRating() {
             return rating;
