@@ -8,6 +8,7 @@ public class Error {
     private int code;
     public static enum ErrorType {
         NOUSERID(100),
+        ALREADYLOGIN(101),
         NOLOGIN(10),
         WRONGPASSWORD(11),
         DUBLICATELOGIN(21),
