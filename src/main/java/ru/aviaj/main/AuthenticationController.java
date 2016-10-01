@@ -102,7 +102,6 @@ public class AuthenticationController {
 
         String truePassword = requestUser.getPassword();
         String bodyPassword = body.getPassword();
-        System.out.println(truePassword + " " + bodyPassword);
         if (!truePassword.equals(bodyPassword)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ErrorList(Error.ErrorType.WRONGPASSWORD)
