@@ -13,6 +13,7 @@ import ru.aviaj.model.ErrorList;
 import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,30 +84,29 @@ public class RegistrationController {
     }
 
     @RequestMapping(path = "/api/users/signup", method = RequestMethod.POST, consumes = "application/json")
-    public ResponseEntity signup(@RequestBody UserSignupRequest body) {
+    public ResponseEntity signup(@RequestBody UserSignupRequest body, HttpSession sessionID) {
+
+        System.out.println(sessionID.getId());
+
         final String login = body.getLogin();
         final String email = body.getEmail();
         final String password = body.getPassword();
 
         Boolean hasErrors = false;
-        //List<Error> errorList = new ArrayList<Error>();
         ErrorList errorList = new ErrorList();
 
         if (StringUtils.isEmpty(login)) {
             hasErrors = true;
-            //errorList.add(new Error(Error.ErrorType.EMPTYLOGIN));
             errorList.addError(Error.ErrorType.EMPTYLOGIN);
         }
 
         if (StringUtils.isEmpty(email)) {
             hasErrors = true;
-            //errorList.add(new Error(Error.ErrorType.EMPTYEMAIL));
             errorList.addError(Error.ErrorType.DUBLICATEEMAIL);
         }
 
         if (StringUtils.isEmpty(password)) {
             hasErrors = true;
-            //errorList.add(new Error(Error.ErrorType.EMPTYPASSWORD));
             errorList.addError(Error.ErrorType.EMPTYPASSWORD);
         }
 
@@ -116,7 +116,6 @@ public class RegistrationController {
 
         final UserProfile existingUser = accountService.getUserByLogin(login);
         if (existingUser != null) {
-            //errorList.add(new Error(Error.ErrorType.DUBLICATELOGIN));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ErrorList(Error.ErrorType.DUBLICATELOGIN)
             );
