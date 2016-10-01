@@ -96,7 +96,7 @@ public class RegistrationController {
 
         String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
         if (!StringUtils.isEmpty(loginedUserLogin)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                     new ErrorList(Error.ErrorType.ALREADYLOGIN)
             );
         }
@@ -136,7 +136,7 @@ public class RegistrationController {
 
         UserProfile registeredUser = accountService.addUser(login, email, password);
         if (registeredUser == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(Error.ErrorType.UNEXPECTEDERROR)
             );
         }

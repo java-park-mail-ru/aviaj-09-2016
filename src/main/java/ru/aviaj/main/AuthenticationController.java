@@ -88,7 +88,7 @@ public class AuthenticationController {
         String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
         UserProfile loginedUser = accountService.getUserByLogin(loginedUserLogin);
         if (loginedUser != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                 new ErrorList(Error.ErrorType.ALREADYLOGIN)
             );
         }
@@ -118,14 +118,14 @@ public class AuthenticationController {
 
         String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
         if (StringUtils.isEmpty(loginedUserLogin)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                 new ErrorList(Error.ErrorType.NOTLOGINED)
             );
         }
 
         UserProfile loginedUser = accountService.getUserByLogin(loginedUserLogin);
         if (loginedUser == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 new ErrorList(Error.ErrorType.UNEXPECTEDERROR)
             );
         }
@@ -141,7 +141,7 @@ public class AuthenticationController {
 
         String loginedUserLogin = sessionService.getUserLoginBySession(sessionId);
         if(StringUtils.isEmpty(loginedUserLogin)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                     new ErrorList(Error.ErrorType.NOTLOGINED)
             );
         }
