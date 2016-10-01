@@ -1,0 +1,108 @@
+[33mcommit f465d7d4e6164e7549482bbfc91b9c651b5921ab[m
+Author: TimeEscaper <rentgeny05@gmail.com>
+Date:   Sat Oct 1 22:52:51 2016 +0300
+
+    Изменены классы AuthenticationController и RegistrationController (возвращается больше информации о пользователе).
+
+[33mcommit e3b08ee4df81d5ca1af8ead3b563293b0dc52c4b[m
+Author: TimeEscaper <rentgeny05@gmail.com>
+Date:   Sat Oct 1 22:38:49 2016 +0300
+
+    Изменён класс SessionService (теперь хранятся не профили, а логины)
+
+[33mcommit cd481a60d6ba59e2b85a86d67c63a2c4f58687f3[m
+Author: TimeEscaper <rentgeny05@gmail.com>
+Date:   Sat Oct 1 21:57:09 2016 +0300
+
+    Реализована функция логина.
+
+[33mcommit 9760601764b8c4615bc21cc09a7f84bed5bc34fe[m
+Author: TimeEscaper <rentgeny05@gmail.com>
+Date:   Sat Oct 1 16:30:47 2016 +0300
+
+    Добавлен класс SessionService.
+
+[33mcommit f3bc4c100fafa9f8bf5f13e7b51bff8bac8d325e[m
+Author: TimeEscaper <rentgeny05@gmail.com>
+Date:   Sat Oct 1 02:09:52 2016 +0300
+
+    Добавлены класс GlobalExceptionController для обработки глобальных исключений и обработка неправильных HTTP-запросов.
+
+[33mcommit 70dca01d66f68974e83083edf045cb16ffa35880[m
+Author: TimeEscaper <rentgeny05@gmail.com>
+Date:   Sat Oct 1 01:42:12 2016 +0300
+
+    Добавлен класс ErrorList, теперь у массива ошибок в ответе RegistrationController есть имя.
+
+[33mcommit d597061bfdab9befbdc790c005970755ea9cb6ba[m
+Author: TimeEscaper <rentgeny05@gmail.com>
+Date:   Sat Oct 1 01:00:32 2016 +0300
+
+    Добавлена базовая обработка ошибок во входных данных.
+
+[33mcommit 71068953ebc7db0e5ff3db3b7e4fbc53ae35d23f[m
+Author: TimeEscaper <rentgeny05@gmail.com>
+Date:   Sat Oct 1 00:48:53 2016 +0300
+
+    Исправлена ошибка в RegistrationController (были нужны конструкторы по умолчанию во внутренних классах).
+
+[33mcommit f08dffa817a670b9de14b38b1c732a36e8bf53cf[m
+Author: TimeEscaper <rentgeny05@gmail.com>
+Date:   Fri Sep 30 20:29:14 2016 +0300
+
+    Начата работа над RegistrationController. Удалён класс UserProfile. Добавлены инспекции в IDEA.
+
+[33mcommit b18d1711f36fbfa77e9f9333487398d85cfcf355[m
+Merge: 00eb294 0ec9ade
+Author: TimeEscaper <rentgeny05@gmail.com>
+Date:   Sun Sep 25 15:43:20 2016 +0300
+
+    Merge branch 'master' of https://github.com/TimeEscaper/aviaj-09-2016
+
+[33mcommit 00eb2940ff92f276aacb870a624995a5f78ab907[m
+Author: TimeEscaper <rentgeny05@gmail.com>
+Date:   Sun Sep 25 15:37:54 2016 +0300
+
+    Добавлены прототипы RestController-классов (ru.aviaj.main) без реализации.
+
+[33mcommit ed492f48215b219f659b82b084af63cc8c664974[m
+Author: TimeEscaper <rentgeny05@gmail.com>
+Date:   Sun Sep 25 15:35:15 2016 +0300
+
+    Добавлены прототипы RestController-классов (ru.aviaj.main) без реализации.
+
+[33mcommit 80931b69f3339e65080f5714bc4327770eeaffd5[m
+Author: TimeEscaper <rentgeny05@gmail.com>
+Date:   Sun Sep 25 15:20:48 2016 +0300
+
+    Добавлен класс AccountService
+
+[33mcommit c3e3b3e99f71557bdf2223f2e8931b3c29db0410[m
+Author: TimeEscaper <rentgeny05@gmail.com>
+Date:   Sun Sep 25 15:04:53 2016 +0300
+
+    Добавлен класс Error
+
+[33mcommit df1d4f575ead2882f1b795d111ba5bad13d2a589[m
+Author: TimeEscaper <rentgeny05@gmail.com>
+Date:   Sun Sep 25 14:14:05 2016 +0300
+
+    Добавлены классы UserProfile и UserProfileResponse
+
+[33mcommit 0ec9ade7573b8fcaf017dafb0736a1cdb1787c9b[m
+Author: Akhtyamov Timur <rentgeny05@gmail.com>
+Date:   Sat Sep 17 14:03:58 2016 +0300
+
+    Update README.md
+
+[33mcommit b0783d593d95704075bfae834a10baf442530150[m
+Author: TimeEscaper <rentgeny05@gmail.com>
+Date:   Sat Sep 17 14:00:59 2016 +0300
+
+    Создана структура проекта, добавлен файл gitignore.
+
+[33mcommit ff5d785a991fe91f7a7953156433e01b6c1a7bbc[m
+Author: Konstantin Solovyev <koctukS@gmail.com>
+Date:   Mon Sep 12 11:56:43 2016 +0300
+
+    Initial commit

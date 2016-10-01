@@ -13,6 +13,7 @@ import ru.aviaj.model.Error;
 import ru.aviaj.model.ErrorList;
 import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
+import ru.aviaj.service.SessionService;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import java.util.List;
 public class RegistrationController {
 
     private final AccountService accountService;
+    private final SessionService sessionService;
 
     public static final class UserSignupRequest {
         private String login;
@@ -84,14 +86,20 @@ public class RegistrationController {
     }
 
     @Autowired
-    public RegistrationController(AccountService accountService) {
+    public RegistrationController(AccountService accountService, SessionService sessionService) {
         this.accountService = accountService;
+        this.sessionService = sessionService;
     }
 
     @RequestMapping(path = "/api/users/signup", method = RequestMethod.POST, consumes = "application/json")
-    public ResponseEntity signup(@RequestBody UserSignupRequest body, HttpSession sessionID) {
+    public ResponseEntity signup(@RequestBody UserSignupRequest body, HttpSession httpSession) {
 
-        System.out.println(sessionID.getId());
+        String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
+        if (!StringUtils.isEmpty(loginedUserLogin)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ErrorList(Error.ErrorType.ALREADYLOGIN)
+            );
+        }
 
         final String login = body.getLogin();
         final String email = body.getEmail();
@@ -107,7 +115,7 @@ public class RegistrationController {
 
         if (StringUtils.isEmpty(email)) {
             hasErrors = true;
-            errorList.addError(Error.ErrorType.DUBLICATEEMAIL);
+            errorList.addError(Error.ErrorType.EMPTYEMAIL);
         }
 
         if (StringUtils.isEmpty(password)) {

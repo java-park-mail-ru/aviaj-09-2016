@@ -9,6 +9,7 @@ public class Error {
     public static enum ErrorType {
         NOUSERID(100),
         ALREADYLOGIN(101),
+        NOTLOGINED(102),
         NOLOGIN(10),
         WRONGPASSWORD(11),
         DUBLICATELOGIN(21),
