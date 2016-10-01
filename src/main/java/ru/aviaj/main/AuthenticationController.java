@@ -135,6 +135,28 @@ public class AuthenticationController {
 
     }
 
+    @RequestMapping(path = "/api/auth/logout", method = RequestMethod.POST)
+    public ResponseEntity logout(HttpSession httpSession) {
+
+        String sessionId = httpSession.getId();
+
+        String loginedUserLogin = sessionService.getUserLoginBySession(sessionId);
+        if(StringUtils.isEmpty(loginedUserLogin)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ErrorList(Error.ErrorType.NOTLOGINED)
+            );
+        }
+
+        String removedLogin = sessionService.removeSession(sessionId);
+        if (!removedLogin.equals(loginedUserLogin)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ErrorList(Error.ErrorType.UNEXPECTEDERROR)
+            );
+        }
+
+        return ResponseEntity.ok("{}");
+    }
+
 }
 
 

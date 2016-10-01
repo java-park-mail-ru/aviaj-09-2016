@@ -23,4 +23,8 @@ public class SessionService {
         return sessionIdToUser.get(sessionId);
     }
 
+    public String removeSession(String sessionId) {
+        return sessionIdToUser.remove(sessionId);
+    }
+
 }
