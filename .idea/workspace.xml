@@ -121,8 +121,8 @@
       <file leaf-file-name="AuthenticationController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/ru/aviaj/main/AuthenticationController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="125">
-              <caret line="143" column="64" selection-start-line="143" selection-start-column="64" selection-end-line="143" selection-end-column="64" />
+            <state relative-caret-position="305">
+              <caret line="155" column="8" selection-start-line="155" selection-start-column="8" selection-end-line="155" selection-end-column="8" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -939,12 +939,12 @@
       <workItem from="1475252456539" duration="13456000" />
       <workItem from="1475324905566" duration="5240000" />
       <workItem from="1475348071851" duration="627000" />
-      <workItem from="1475354608004" duration="5744000" />
+      <workItem from="1475354608004" duration="5813000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="39264000" />
+    <option name="totallyTimeSpent" value="39333000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1366" height="744" extended-state="6" />
@@ -1433,8 +1433,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ru/aviaj/main/AuthenticationController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="143" column="64" selection-start-line="143" selection-start-column="64" selection-end-line="143" selection-end-column="64" />
+        <state relative-caret-position="305">
+          <caret line="155" column="8" selection-start-line="155" selection-start-column="8" selection-end-line="155" selection-end-column="8" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
