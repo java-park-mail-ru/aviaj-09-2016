@@ -83,7 +83,8 @@ public class AuthenticationController {
     @RequestMapping(path = "/api/auth/login", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity login(@RequestBody UserLoginRequest body, HttpSession httpSession) {
 
-        UserProfile loginedUser = sessionService.getUserBySession(httpSession.getId());
+        String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
+        UserProfile loginedUser = accountService.getUserByLogin(loginedUserLogin);
         if (loginedUser != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new ErrorList(Error.ErrorType.ALREADYLOGIN)
@@ -110,6 +111,15 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(new UserLoginResponse(requestUser));
     }
+
+   /* @RequestMapping(path = "/api/auth/authenticate", method = RequestMethod.GET)
+    public ResponseEntity authenticate(HttpSession httpSession) {
+
+        UserProfile loginedUser = sessionService.getUserBySession(httpSession.getId());
+        if (loginedUser == null) {
+
+        }
+    }*/
 
 }
 
