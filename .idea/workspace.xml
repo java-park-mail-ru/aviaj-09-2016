@@ -28,13 +28,13 @@
       <file leaf-file-name="Application.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/ru/aviaj/Application.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="26" column="10" selection-start-line="26" selection-start-column="10" selection-end-line="26" selection-end-column="10" />
+            <state relative-caret-position="285">
+              <caret line="24" column="37" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
               <folding>
                 <element signature="e#558#559#0" expanded="true" />
                 <element signature="e#620#621#0" expanded="true" />
-                <element signature="e#695#905#0" expanded="true" />
-                <element signature="e#904#905#0" expanded="true" />
+                <element signature="e#695#901#0" expanded="true" />
+                <element signature="e#900#901#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -940,12 +940,12 @@
       <workItem from="1475348071851" duration="627000" />
       <workItem from="1475354608004" duration="9041000" />
       <workItem from="1475410021003" duration="7000" />
-      <workItem from="1475434988913" duration="1245000" />
+      <workItem from="1475434988913" duration="1867000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="43813000" />
+    <option name="totallyTimeSpent" value="44435000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1366" height="744" extended-state="6" />
@@ -1023,8 +1023,8 @@
           <folding>
             <element signature="e#558#559#0" expanded="true" />
             <element signature="e#620#621#0" expanded="true" />
-            <element signature="e#695#905#0" expanded="true" />
-            <element signature="e#904#905#0" expanded="true" />
+            <element signature="e#695#901#0" expanded="true" />
+            <element signature="e#900#901#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1094,8 +1094,8 @@
           <folding>
             <element signature="e#558#559#0" expanded="true" />
             <element signature="e#620#621#0" expanded="true" />
-            <element signature="e#695#905#0" expanded="true" />
-            <element signature="e#904#905#0" expanded="true" />
+            <element signature="e#695#901#0" expanded="true" />
+            <element signature="e#900#901#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1165,8 +1165,8 @@
           <folding>
             <element signature="e#558#559#0" expanded="true" />
             <element signature="e#620#621#0" expanded="true" />
-            <element signature="e#695#905#0" expanded="true" />
-            <element signature="e#904#905#0" expanded="true" />
+            <element signature="e#695#901#0" expanded="true" />
+            <element signature="e#900#901#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1236,8 +1236,8 @@
           <folding>
             <element signature="e#558#559#0" expanded="true" />
             <element signature="e#620#621#0" expanded="true" />
-            <element signature="e#695#905#0" expanded="true" />
-            <element signature="e#904#905#0" expanded="true" />
+            <element signature="e#695#901#0" expanded="true" />
+            <element signature="e#900#901#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1256,8 +1256,8 @@
           <folding>
             <element signature="e#558#559#0" expanded="true" />
             <element signature="e#620#621#0" expanded="true" />
-            <element signature="e#695#905#0" expanded="true" />
-            <element signature="e#904#905#0" expanded="true" />
+            <element signature="e#695#901#0" expanded="true" />
+            <element signature="e#900#901#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1276,8 +1276,8 @@
           <folding>
             <element signature="e#558#559#0" expanded="true" />
             <element signature="e#620#621#0" expanded="true" />
-            <element signature="e#695#905#0" expanded="true" />
-            <element signature="e#904#905#0" expanded="true" />
+            <element signature="e#695#901#0" expanded="true" />
+            <element signature="e#900#901#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1296,8 +1296,8 @@
           <folding>
             <element signature="e#558#559#0" expanded="true" />
             <element signature="e#620#621#0" expanded="true" />
-            <element signature="e#695#905#0" expanded="true" />
-            <element signature="e#904#905#0" expanded="true" />
+            <element signature="e#695#901#0" expanded="true" />
+            <element signature="e#900#901#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1310,8 +1310,8 @@
           <folding>
             <element signature="e#558#559#0" expanded="true" />
             <element signature="e#620#621#0" expanded="true" />
-            <element signature="e#695#905#0" expanded="true" />
-            <element signature="e#904#905#0" expanded="true" />
+            <element signature="e#695#901#0" expanded="true" />
+            <element signature="e#900#901#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1415,13 +1415,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ru/aviaj/Application.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="26" column="10" selection-start-line="26" selection-start-column="10" selection-end-line="26" selection-end-column="10" />
+        <state relative-caret-position="285">
+          <caret line="24" column="37" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
           <folding>
             <element signature="e#558#559#0" expanded="true" />
             <element signature="e#620#621#0" expanded="true" />
-            <element signature="e#695#905#0" expanded="true" />
-            <element signature="e#904#905#0" expanded="true" />
+            <element signature="e#695#901#0" expanded="true" />
+            <element signature="e#900#901#0" expanded="true" />
           </folding>
         </state>
       </provider>
