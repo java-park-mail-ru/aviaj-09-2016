@@ -91,7 +91,7 @@ public class RegistrationController {
         this.sessionService = sessionService;
     }
 
-    @RequestMapping(path = "/api/users/signup", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(path = "/api/auth/signup", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity signup(@RequestBody UserSignupRequest body, HttpSession httpSession) {
 
         String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
