@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "version": "0.0.1",
+        "version": "0.0.2",
         "title": "AviaJ API",
         "description": "API для взаимодействия фронтенда и бэкенда в проекте AviaJ",
         "contact": {
@@ -68,10 +68,10 @@
                 }
             }
         },
-        "/users/{userId}": {
+        "/users/id/{userId}": {
             "get": {
-                "summary": "Пользователь",
-                "description": "Возвращает информацию о пользователе.",
+                "summary": "Пользователь по ID",
+                "description": "Возвращает информацию о пользователе по его ID.",
                 "produces": [
                     "application/json"
                 ],
@@ -110,7 +110,48 @@
                 }
             }
         },
-        "/users/signup": {
+        "/users/{login}": {
+            "get": {
+                "summary": "Пользователь по ID",
+                "description": "Возвращает информацию о пользователе по его ID.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Пользователи"
+                ],
+                "parameters": [
+                    {
+                        "name": "login",
+                        "in": "path",
+                        "type": "string",
+                        "required": true,
+                        "description": "Логин пользователя"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Информация о пользователе",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "404": {
+                        "description": "Пользователь с таким логином не найден",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorList"
+                        }
+                    },
+                    "500": {
+                        "description": "Неизвестная ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorList"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/signup": {
             "post": {
                 "summary": "Регистрация",
                 "description": "Регистрация нового пользователя.",
@@ -118,7 +159,8 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Пользователи"
+                    "Пользователи",
+                    "Сессии"
                 ],
                 "parameters": [
                     {
@@ -145,7 +187,7 @@
                         }
                     },
                     "403": {
-                        "description": "Для регистрации необхожимо заверщить сессию (логаут)",
+                        "description": "Для регистрации необхожимо завершить сессию (логаут)",
                         "schema": {
                             "$ref": "#/definitions/ErrorList"
                         }
