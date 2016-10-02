@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1acffe7a-0d84-4822-b888-2c4e518400a7" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ru/aviaj/Application.java" afterPath="$PROJECT_DIR$/src/main/java/ru/aviaj/Application.java" />
-    </list>
+    <list default="true" id="1acffe7a-0d84-4822-b888-2c4e518400a7" name="Default" comment="" />
     <ignored path="AviaJ.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -940,12 +938,12 @@
       <workItem from="1475348071851" duration="627000" />
       <workItem from="1475354608004" duration="9041000" />
       <workItem from="1475410021003" duration="7000" />
-      <workItem from="1475434988913" duration="1867000" />
+      <workItem from="1475434988913" duration="2466000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="44435000" />
+    <option name="totallyTimeSpent" value="45034000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1366" height="744" extended-state="6" />
