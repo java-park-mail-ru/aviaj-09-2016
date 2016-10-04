@@ -1,17 +1,14 @@
 package ru.aviaj.model;
 
-/**
- * Created by sibirsky on 25.09.16.
- */
+@SuppressWarnings("unused")
 public class Error {
 
     private int code;
-    public static enum ErrorType {
+    public enum ErrorType {
         WRONGUSERID(9),
         NOLOGIN(10),
         WRONGPASSWORD(11),
         DUBLICATELOGIN(21),
-        DUBLICATEEMAIL(22),
         EMPTYLOGIN(23),
         EMPTYEMAIL(24),
         EMPTYPASSWORD(25),

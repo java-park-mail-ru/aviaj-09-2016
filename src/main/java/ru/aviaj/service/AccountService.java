@@ -7,14 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by sibirsky on 25.09.16.
- */
-
 @Service
 public class AccountService {
 
-    private Map<String, UserProfile> loginToUser = new HashMap<String, UserProfile>();
+    private Map<String, UserProfile> loginToUser = new HashMap<>();
 
     public UserProfile addUser(String login, String email, String password) {
         final UserProfile newUserProfile = new UserProfile(login, email, password);

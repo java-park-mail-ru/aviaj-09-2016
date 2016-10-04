@@ -3,12 +3,10 @@ package ru.aviaj.model;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by sibirsky on 01.10.16.
- */
+@SuppressWarnings("unused")
 public class ErrorList {
 
-    private final List<Error> errors = new ArrayList<Error>();
+    private final List<Error> errors = new ArrayList<>();
 
     public ErrorList() { }
 

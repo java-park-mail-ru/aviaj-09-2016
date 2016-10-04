@@ -1,7 +1,6 @@
 package ru.aviaj.main;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.parsing.Location;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -14,14 +13,8 @@ import ru.aviaj.model.ErrorList;
 import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
 import ru.aviaj.service.SessionService;
-
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
 
-/**
- * Created by sibirsky on 25.09.16.
- */
 
 @RestController
 public class RegistrationController {
@@ -29,12 +22,13 @@ public class RegistrationController {
     private final AccountService accountService;
     private final SessionService sessionService;
 
+    @SuppressWarnings("unused")
     public static final class UserSignupRequest {
         private String login;
         private String email;
         private String password;
 
-        private UserSignupRequest() { };
+        private UserSignupRequest() { }
 
         private UserSignupRequest(String login, String email, String password) {
             this.login = login;
@@ -55,13 +49,15 @@ public class RegistrationController {
         }
     }
 
+    @SuppressWarnings("unused")
     private static final class UserProfileResponse {
         private String id;
         private String login;
         private String email;
         private String rating;
 
-        private UserProfileResponse() { };
+
+        private UserProfileResponse() { }
 
         private UserProfileResponse(UserProfile user) {
             this.id = Long.toString(user.getId());
@@ -94,7 +90,7 @@ public class RegistrationController {
     @RequestMapping(path = "/api/auth/signup", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity signup(@RequestBody UserSignupRequest body, HttpSession httpSession) {
 
-        String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
+        final String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
         if (!StringUtils.isEmpty(loginedUserLogin)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                     new ErrorList(Error.ErrorType.ALREADYLOGIN)
@@ -106,7 +102,7 @@ public class RegistrationController {
         final String password = body.getPassword();
 
         Boolean hasErrors = false;
-        ErrorList errorList = new ErrorList();
+        final ErrorList errorList = new ErrorList();
 
         if (StringUtils.isEmpty(login)) {
             hasErrors = true;
@@ -134,7 +130,7 @@ public class RegistrationController {
             );
         }
 
-        UserProfile registeredUser = accountService.addUser(login, email, password);
+        final UserProfile registeredUser = accountService.addUser(login, email, password);
         if (registeredUser == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(Error.ErrorType.UNEXPECTEDERROR)

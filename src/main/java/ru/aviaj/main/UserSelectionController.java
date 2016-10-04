@@ -11,21 +11,16 @@ import ru.aviaj.model.Error;
 import ru.aviaj.model.ErrorList;
 import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-/**
- * Created by sibirsky on 25.09.16.
- */
 
 @RestController
 public class UserSelectionController {
 
     private final AccountService accountService;
 
+    @SuppressWarnings("unused")
     private static final class UserResponse {
         String id;
         String login;
@@ -46,8 +41,9 @@ public class UserSelectionController {
         public String getRating() { return rating; }
     }
 
+    @SuppressWarnings("unused")
     private static final class UserResponseList {
-        private final List<UserResponse> users = new ArrayList<UserResponse>();
+        private final List<UserResponse> users = new ArrayList<>();
 
         private UserResponseList() { }
 
@@ -71,7 +67,7 @@ public class UserSelectionController {
 
     @RequestMapping(path = "/api/users")
     public ResponseEntity getUsers() {
-        UserResponseList users = new UserResponseList();
+        final UserResponseList users = new UserResponseList();
         for (Map.Entry<String, UserProfile> it : accountService.getEntrySet()) {
             users.addUserResponse(new UserResponse(it.getValue()));
         }
@@ -111,7 +107,7 @@ public class UserSelectionController {
             );
         }
 
-        UserProfile user = accountService.getUserByLogin(login);
+        final UserProfile user = accountService.getUserByLogin(login);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                     new ErrorList(Error.ErrorType.NOLOGIN)

@@ -16,21 +16,18 @@ import ru.aviaj.service.SessionService;
 
 import javax.servlet.http.HttpSession;
 
-/**
- * Created by sibirsky on 25.09.16.
- */
-
 @RestController
 public class AuthenticationController {
 
     private final AccountService accountService;
     private final SessionService sessionService;
 
+    @SuppressWarnings("unused")
     public static final class UserRequest {
         private String login;
         private String password;
 
-        private UserRequest() { };
+        private UserRequest() { }
 
         private UserRequest(String login, String email, String password) {
             this.login = login;
@@ -46,13 +43,14 @@ public class AuthenticationController {
         }
     }
 
+    @SuppressWarnings("unused")
     public static final class UserResponse {
         private String id;
         private String login;
         private String email;
         private String rating;
 
-        private UserResponse() { };
+        private UserResponse() { }
 
         private UserResponse(UserProfile user) {
             this.id = Long.toString(user.getId());
@@ -85,23 +83,23 @@ public class AuthenticationController {
     @RequestMapping(path = "/api/auth/login", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity login(@RequestBody UserRequest body, HttpSession httpSession) {
 
-        String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
-        UserProfile loginedUser = accountService.getUserByLogin(loginedUserLogin);
+        final String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
+        final UserProfile loginedUser = accountService.getUserByLogin(loginedUserLogin);
         if (loginedUser != null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                 new ErrorList(Error.ErrorType.ALREADYLOGIN)
             );
         }
 
-        UserProfile requestUser = accountService.getUserByLogin(body.getLogin());
+        final UserProfile requestUser = accountService.getUserByLogin(body.getLogin());
         if (requestUser == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ErrorList(Error.ErrorType.NOLOGIN)
             );
         }
 
-        String truePassword = requestUser.getPassword();
-        String bodyPassword = body.getPassword();
+        final String truePassword = requestUser.getPassword();
+        final String bodyPassword = body.getPassword();
         if (!truePassword.equals(bodyPassword)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ErrorList(Error.ErrorType.WRONGPASSWORD)
@@ -116,14 +114,14 @@ public class AuthenticationController {
     @RequestMapping(path = "/api/auth/authenticate", method = RequestMethod.GET)
     public ResponseEntity authenticate(HttpSession httpSession) {
 
-        String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
+        final String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
         if (StringUtils.isEmpty(loginedUserLogin)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                 new ErrorList(Error.ErrorType.NOTLOGINED)
             );
         }
 
-        UserProfile loginedUser = accountService.getUserByLogin(loginedUserLogin);
+        final UserProfile loginedUser = accountService.getUserByLogin(loginedUserLogin);
         if (loginedUser == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 new ErrorList(Error.ErrorType.UNEXPECTEDERROR)
@@ -137,16 +135,16 @@ public class AuthenticationController {
     @RequestMapping(path = "/api/auth/logout", method = RequestMethod.POST)
     public ResponseEntity logout(HttpSession httpSession) {
 
-        String sessionId = httpSession.getId();
+        final String sessionId = httpSession.getId();
 
-        String loginedUserLogin = sessionService.getUserLoginBySession(sessionId);
+        final String loginedUserLogin = sessionService.getUserLoginBySession(sessionId);
         if(StringUtils.isEmpty(loginedUserLogin)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                     new ErrorList(Error.ErrorType.NOTLOGINED)
             );
         }
 
-        String removedLogin = sessionService.removeSession(sessionId);
+        final String removedLogin = sessionService.removeSession(sessionId);
         if (!removedLogin.equals(loginedUserLogin)) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(Error.ErrorType.UNEXPECTEDERROR)

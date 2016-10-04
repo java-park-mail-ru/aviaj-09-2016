@@ -6,14 +6,11 @@ import ru.aviaj.model.UserProfile;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by sibirsky on 01.10.16.
- */
 
 @Service
 public class SessionService {
 
-    private Map<String, String> sessionIdToUser = new HashMap<String, String>();
+    private Map<String, String> sessionIdToUser = new HashMap<>();
 
     public String addSession(String sessionId, UserProfile user) {
         return sessionIdToUser.put(sessionId, user.getLogin());

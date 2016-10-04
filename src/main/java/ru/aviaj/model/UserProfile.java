@@ -1,19 +1,14 @@
 package ru.aviaj.model;
 
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 
-import java.security.SecureRandom;
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * Created by sibirsky on 25.09.16.
- */
+@SuppressWarnings({"ConstantNamingConvention", "unused"})
 public class UserProfile {
 
     private long id;
     private String login;
     private String email;
-    //private String passwordHash;
     private String password;
     private long rating;
 
@@ -26,11 +21,6 @@ public class UserProfile {
         this.email = email;
         this.password = password;
         this.rating = 0;
-      /*  SecureRandom randomGenerator = new SecureRandom();
-        int seed = email.hashCode();
-        long salt = randomGenerator.nextInt(seed)*100;
-        ShaPasswordEncoder sha256Encoder = new ShaPasswordEncoder(256);
-        this.passwordHash = sha256Encoder.encodePassword(password, salt); */
     }
 
     public long getId() {

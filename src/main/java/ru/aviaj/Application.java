@@ -7,10 +7,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-/**
- * Created by sibirsky on 17.09.16.
- */
-
+@SuppressWarnings({"SpringFacetCodeInspection", "AnonymousInnerClassMayBeStatic"})
 @SpringBootApplication
 public class Application {
     public static void main(String[] args) {
