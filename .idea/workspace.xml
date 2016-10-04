@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1acffe7a-0d84-4822-b888-2c4e518400a7" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/API.js" afterPath="$PROJECT_DIR$/API.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/API.json" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ru/aviaj/main/GlobalExceptionController.java" afterPath="$PROJECT_DIR$/src/main/java/ru/aviaj/main/GlobalExceptionController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ru/aviaj/main/UserSelectionController.java" afterPath="$PROJECT_DIR$/src/main/java/ru/aviaj/main/UserSelectionController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ru/aviaj/model/Error.java" afterPath="$PROJECT_DIR$/src/main/java/ru/aviaj/model/Error.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ru/aviaj/model/UserProfile.java" afterPath="$PROJECT_DIR$/src/main/java/ru/aviaj/model/UserProfile.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ru/aviaj/service/AccountService.java" afterPath="$PROJECT_DIR$/src/main/java/ru/aviaj/service/AccountService.java" />
     </list>
     <ignored path="AviaJ.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -144,8 +138,8 @@
       <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="50" selection-start-line="6" selection-start-column="50" selection-end-line="6" selection-end-column="50" />
+            <state relative-caret-position="75">
+              <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -186,8 +180,8 @@
         <option value="$PROJECT_DIR$/src/main/java/ru/aviaj/main/UserSelectionController.java" />
         <option value="$PROJECT_DIR$/src/main/java/ru/aviaj/main/GlobalExceptionController.java" />
         <option value="$PROJECT_DIR$/src/main/java/ru/aviaj/model/Error.java" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/API.json" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -1009,12 +1003,12 @@
       <workItem from="1475434988913" duration="4203000" />
       <workItem from="1475512470261" duration="18000" />
       <workItem from="1475580911764" duration="6283000" />
-      <workItem from="1475594052024" duration="3407000" />
+      <workItem from="1475594052024" duration="3432000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="56479000" />
+    <option name="totallyTimeSpent" value="56504000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="24" width="1366" height="744" extended-state="6" />
@@ -1537,8 +1531,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="50" selection-start-line="6" selection-start-column="50" selection-end-line="6" selection-end-column="50" />
+        <state relative-caret-position="75">
+          <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
           <folding />
         </state>
       </provider>
