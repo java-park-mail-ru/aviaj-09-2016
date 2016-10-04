@@ -5,6 +5,7 @@ import ru.aviaj.model.UserProfile;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by sibirsky on 25.09.16.
@@ -23,5 +24,9 @@ public class AccountService {
 
     public UserProfile getUserByLogin(String login) {
         return loginToUser.get(login);
+    }
+
+    public Set<Map.Entry<String, UserProfile>> getEntrySet() {
+        return loginToUser.entrySet();
     }
 }

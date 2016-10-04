@@ -19,6 +19,14 @@ public class GlobalExceptionController {
     @ExceptionHandler(org.springframework.http.converter.HttpMessageNotReadableException.class)
     @ResponseBody ErrorList
     handleHttpMessageNotReadable() {
-        return new ErrorList(Error.ErrorType.UNEXPECTEDERROR);
+        return new ErrorList(Error.ErrorType.WRONGBODY);
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(org.springframework.web.method.annotation.MethodArgumentTypeMismatchException.class)
+    @ResponseBody ErrorList
+    handleMethodArgumentTypeMismatch() {
+        return new ErrorList(Error.ErrorType.WRONGTYPE);
+    }
+
 }

@@ -7,9 +7,7 @@ public class Error {
 
     private int code;
     public static enum ErrorType {
-        NOUSERID(100),
-        ALREADYLOGIN(101),
-        NOTLOGINED(102),
+        WRONGUSERID(9),
         NOLOGIN(10),
         WRONGPASSWORD(11),
         DUBLICATELOGIN(21),
@@ -17,7 +15,13 @@ public class Error {
         EMPTYLOGIN(23),
         EMPTYEMAIL(24),
         EMPTYPASSWORD(25),
-        UNEXPECTEDERROR(900);
+        NOUSERID(100),
+        ALREADYLOGIN(101),
+        NOTLOGINED(102),
+        UNEXPECTEDERROR(900),
+        NOTREALISED(901),
+        WRONGTYPE(902),
+        WRONGBODY(903);
 
         private int code;
 

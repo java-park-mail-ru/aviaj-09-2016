@@ -17,7 +17,7 @@ public class UserProfile {
     private String password;
     private long rating;
 
-    private static final AtomicLong idGenerator = new AtomicLong(0);
+    private static final AtomicLong idGenerator = new AtomicLong(1);
 
     public UserProfile(String login, String email, String password) {
 
