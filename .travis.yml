@@ -8,3 +8,6 @@ deploy:
   app: aviaj-backend-travis
   on:
     repo: TimeEscaper/aviaj-09-2016
+    branches:
+        only:
+	- master
