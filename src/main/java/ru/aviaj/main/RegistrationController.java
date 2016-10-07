@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.aviaj.model.Error;
 import ru.aviaj.model.ErrorList;
+import ru.aviaj.model.ErrorType;
 import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
 import ru.aviaj.service.SessionService;
@@ -51,22 +51,22 @@ public class RegistrationController {
 
     @SuppressWarnings("unused")
     private static final class UserProfileResponse {
-        private String id;
+        private long id;
         private String login;
         private String email;
-        private String rating;
+        private long rating;
 
 
         private UserProfileResponse() { }
 
         private UserProfileResponse(UserProfile user) {
-            this.id = Long.toString(user.getId());
+            this.id = user.getId();
             this.login = user.getLogin();
             this.email = user.getEmail();
-            this.rating = Long.toString(user.getRating());
+            this.rating = user.getRating();
         }
 
-        public String getId() { return id; }
+        public long getId() { return id; }
 
         public String getLogin() {
             return login;
@@ -76,7 +76,7 @@ public class RegistrationController {
             return email;
         }
 
-        public String getRating() {
+        public long getRating() {
             return rating;
         }
     }
@@ -93,7 +93,7 @@ public class RegistrationController {
         final String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
         if (!StringUtils.isEmpty(loginedUserLogin)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                    new ErrorList(Error.ErrorType.ALREADYLOGIN)
+                    new ErrorList(ErrorType.ALREADYLOGIN)
             );
         }
 
@@ -101,39 +101,36 @@ public class RegistrationController {
         final String email = body.getEmail();
         final String password = body.getPassword();
 
-        Boolean hasErrors = false;
+
         final ErrorList errorList = new ErrorList();
 
         if (StringUtils.isEmpty(login)) {
-            hasErrors = true;
-            errorList.addError(Error.ErrorType.EMPTYLOGIN);
+            errorList.addError(ErrorType.EMPTYLOGIN);
         }
 
         if (StringUtils.isEmpty(email)) {
-            hasErrors = true;
-            errorList.addError(Error.ErrorType.EMPTYEMAIL);
+            errorList.addError(ErrorType.EMPTYEMAIL);
         }
 
         if (StringUtils.isEmpty(password)) {
-            hasErrors = true;
-            errorList.addError(Error.ErrorType.EMPTYPASSWORD);
+            errorList.addError(ErrorType.EMPTYPASSWORD);
         }
 
-        if (hasErrors) {
+        if (!errorList.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorList);
         }
 
         final UserProfile existingUser = accountService.getUserByLogin(login);
         if (existingUser != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ErrorList(Error.ErrorType.DUBLICATELOGIN)
+                    new ErrorList(ErrorType.DUBLICATELOGIN)
             );
         }
 
         final UserProfile registeredUser = accountService.addUser(login, email, password);
         if (registeredUser == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(Error.ErrorType.UNEXPECTEDERROR)
+                    new ErrorList(ErrorType.UNEXPECTEDERROR)
             );
         }
 

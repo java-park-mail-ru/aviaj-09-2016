@@ -1,5 +1,7 @@
 package ru.aviaj.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,16 +12,21 @@ public class ErrorList {
 
     public ErrorList() { }
 
-    public ErrorList(Error.ErrorType defaultError) {
+    public ErrorList(ErrorType defaultError) {
         errors.add(new Error(defaultError));
     }
 
-    public void addError(Error.ErrorType error) {
+    public void addError(ErrorType error) {
         errors.add(new Error(error));
     }
 
     public List<Error> getErrors() {
         return errors;
+    }
+
+    @JsonIgnore
+    public boolean isEmpty() {
+        return errors.isEmpty();
     }
 
 }

@@ -6,9 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.aviaj.model.Error;
 import ru.aviaj.model.ErrorList;
+import ru.aviaj.model.ErrorType;
 import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
 import java.util.ArrayList;
@@ -22,23 +23,23 @@ public class UserSelectionController {
 
     @SuppressWarnings("unused")
     private static final class UserResponse {
-        String id;
-        String login;
-        String rating;
+        private long id;
+        private String login;
+        private long rating;
 
         private UserResponse() { }
 
         private UserResponse(UserProfile user) {
-            this.id = Long.toString(user.getId());
+            this.id = user.getId();
             this.login = user.getLogin();
-            this.rating = Long.toString(user.getRating());
+            this.rating = user.getRating();
         }
 
-        public String getId() { return id;}
+        public long getId() { return id;}
 
         public String getLogin() { return login; }
 
-        public String getRating() { return rating; }
+        public long getRating() { return rating; }
     }
 
     @SuppressWarnings("unused")
@@ -65,7 +66,7 @@ public class UserSelectionController {
         this.accountService = accountService;
     }
 
-    @RequestMapping(path = "/api/users")
+    @RequestMapping(path = "/api/users", method = RequestMethod.GET)
     public ResponseEntity getUsers() {
         final UserResponseList users = new UserResponseList();
         for (Map.Entry<String, UserProfile> it : accountService.getEntrySet()) {
@@ -74,18 +75,18 @@ public class UserSelectionController {
         return ResponseEntity.ok(users);
     }
 
-    @RequestMapping(path = "/api/users/top")
+    @RequestMapping(path = "/api/users/top", method = RequestMethod.GET)
     public ResponseEntity getTop() {
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(
-                new ErrorList(Error.ErrorType.NOTREALISED)
+                new ErrorList(ErrorType.NOTREALISED)
         );
     }
 
-    @RequestMapping(path = "/api/users/id/{userId}")
+    @RequestMapping(path = "/api/users/id/{userId}", method = RequestMethod.GET)
     public ResponseEntity getById(@PathVariable long userId) {
         if (userId <= 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ErrorList(Error.ErrorType.WRONGUSERID)
+                    new ErrorList(ErrorType.WRONGUSERID)
             );
         }
 
@@ -95,22 +96,22 @@ public class UserSelectionController {
         }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ErrorList(Error.ErrorType.NOUSERID)
+                    new ErrorList(ErrorType.NOUSERID)
         );
     }
 
-    @RequestMapping(path = "/api/users/login/{login}")
+    @RequestMapping(path = "/api/users/login/{login}", method = RequestMethod.GET)
     public ResponseEntity getByLogin(@PathVariable String login) {
         if(StringUtils.isEmpty(login)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ErrorList(Error.ErrorType.EMPTYLOGIN)
+                    new ErrorList(ErrorType.EMPTYLOGIN)
             );
         }
 
         final UserProfile user = accountService.getUserByLogin(login);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ErrorList(Error.ErrorType.NOLOGIN)
+                    new ErrorList(ErrorType.NOLOGIN)
             );
         }
 

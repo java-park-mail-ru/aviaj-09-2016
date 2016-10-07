@@ -8,14 +8,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.aviaj.model.Error;
 import ru.aviaj.model.ErrorList;
+import ru.aviaj.model.ErrorType;
 import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
 import ru.aviaj.service.SessionService;
 
 import javax.servlet.http.HttpSession;
 
+@SuppressWarnings("unused")
 @RestController
 public class AuthenticationController {
 
@@ -45,21 +46,21 @@ public class AuthenticationController {
 
     @SuppressWarnings("unused")
     public static final class UserResponse {
-        private String id;
+        private long id;
         private String login;
         private String email;
-        private String rating;
+        private long rating;
 
         private UserResponse() { }
 
         private UserResponse(UserProfile user) {
-            this.id = Long.toString(user.getId());
+            this.id = user.getId();
             this.login = user.getLogin();
             this.email = user.getEmail();
-            this.rating = Long.toString(user.getRating());
+            this.rating = user.getRating();
         }
 
-        public String getId() {
+        public long getId() {
             return id;
         }
 
@@ -69,7 +70,7 @@ public class AuthenticationController {
 
         public String getEmail() { return email; }
 
-        public String getRating() {
+        public long getRating() {
             return rating;
         }
     }
@@ -87,14 +88,14 @@ public class AuthenticationController {
         final UserProfile loginedUser = accountService.getUserByLogin(loginedUserLogin);
         if (loginedUser != null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                new ErrorList(Error.ErrorType.ALREADYLOGIN)
+                new ErrorList(ErrorType.ALREADYLOGIN)
             );
         }
 
         final UserProfile requestUser = accountService.getUserByLogin(body.getLogin());
         if (requestUser == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ErrorList(Error.ErrorType.NOLOGIN)
+                    new ErrorList(ErrorType.NOLOGIN)
             );
         }
 
@@ -102,7 +103,7 @@ public class AuthenticationController {
         final String bodyPassword = body.getPassword();
         if (!truePassword.equals(bodyPassword)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ErrorList(Error.ErrorType.WRONGPASSWORD)
+                    new ErrorList(ErrorType.WRONGPASSWORD)
             );
         }
 
@@ -117,14 +118,14 @@ public class AuthenticationController {
         final String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
         if (StringUtils.isEmpty(loginedUserLogin)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                new ErrorList(Error.ErrorType.NOTLOGINED)
+                new ErrorList(ErrorType.NOTLOGINED)
             );
         }
 
         final UserProfile loginedUser = accountService.getUserByLogin(loginedUserLogin);
         if (loginedUser == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                new ErrorList(Error.ErrorType.UNEXPECTEDERROR)
+                new ErrorList(ErrorType.UNEXPECTEDERROR)
             );
         }
 
@@ -140,19 +141,19 @@ public class AuthenticationController {
         final String loginedUserLogin = sessionService.getUserLoginBySession(sessionId);
         if(StringUtils.isEmpty(loginedUserLogin)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                    new ErrorList(Error.ErrorType.NOTLOGINED)
+                    new ErrorList(ErrorType.NOTLOGINED)
             );
         }
 
         final String removedLogin = sessionService.removeSession(sessionId);
         if (!removedLogin.equals(loginedUserLogin)) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(Error.ErrorType.UNEXPECTEDERROR)
+                    new ErrorList(ErrorType.UNEXPECTEDERROR)
             );
         }
 
 
-        return ResponseEntity.ok("{}");
+        return ResponseEntity.ok("{\"success\": \"true\"}");
     }
 
 }

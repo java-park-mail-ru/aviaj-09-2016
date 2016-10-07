@@ -7,9 +7,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import ru.aviaj.model.Error;
 import ru.aviaj.model.ErrorList;
+import ru.aviaj.model.ErrorType;
 
+@SuppressWarnings("unused")
 @ControllerAdvice
 public class GlobalExceptionController {
 
@@ -17,14 +18,14 @@ public class GlobalExceptionController {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseBody ErrorList
     handleHttpMessageNotReadable() {
-        return new ErrorList(Error.ErrorType.WRONGBODY);
+        return new ErrorList(ErrorType.WRONGBODY);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseBody ErrorList
     handleMethodArgumentTypeMismatch() {
-        return new ErrorList(Error.ErrorType.WRONGTYPE);
+        return new ErrorList(ErrorType.WRONGTYPE);
     }
 
 }
