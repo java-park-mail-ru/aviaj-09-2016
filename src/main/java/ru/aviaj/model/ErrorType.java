@@ -14,7 +14,8 @@ public enum ErrorType {
     UNEXPECTEDERROR(900),
     NOTREALISED(901),
     WRONGTYPE(902),
-    WRONGBODY(903);
+    WRONGBODY(903),
+    DBCONNECTERROR(951);
 
     private int code;
 
