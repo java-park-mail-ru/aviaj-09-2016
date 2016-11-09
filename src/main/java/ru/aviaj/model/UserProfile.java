@@ -12,15 +12,22 @@ public class UserProfile {
     private String password;
     private long rating;
 
-    private static final AtomicLong idGenerator = new AtomicLong(1);
-
     public UserProfile(String login, String email, String password) {
 
-        this.id = idGenerator.getAndIncrement();
+        this.id = 0;
         this.login = login;
         this.email = email;
         this.password = password;
         this.rating = 0;
+    }
+
+    public UserProfile(String login, String email, String password, long id, long rating) {
+
+        this.id = id;
+        this.login = login;
+        this.email = email;
+        this.password = password;
+        this.rating = rating;
     }
 
     public long getId() {
