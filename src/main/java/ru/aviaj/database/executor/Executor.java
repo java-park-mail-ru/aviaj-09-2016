@@ -26,5 +26,6 @@ public class Executor {
 
         Statement statement = dbConnection.createStatement();
         statement.execute(sqlUpdate);
+        statement.close();
     }
 }
