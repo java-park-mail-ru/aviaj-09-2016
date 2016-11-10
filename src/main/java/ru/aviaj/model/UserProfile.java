@@ -4,7 +4,7 @@ package ru.aviaj.model;
 import java.util.concurrent.atomic.AtomicLong;
 
 @SuppressWarnings({"ConstantNamingConvention", "unused"})
-public class UserProfile {
+public class UserProfile implements Cloneable{
 
     private long id;
     private String login;
@@ -22,12 +22,20 @@ public class UserProfile {
     }
 
     public UserProfile(String login, String email, String password, long id, long rating) {
-
         this.id = id;
         this.login = login;
         this.email = email;
         this.password = password;
         this.rating = rating;
+    }
+
+    public UserProfile(UserProfile other) {
+
+        this.id = other.getId();
+        this.login = other.getLogin();
+        this.email = other.getEmail();
+        this.password = other.getPassword();
+        this.rating = other.getRating();
     }
 
     public long getId() {
