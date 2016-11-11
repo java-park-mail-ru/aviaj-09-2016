@@ -3,6 +3,9 @@ package ru.aviaj.database;
 import org.springframework.util.StringUtils;
 
 import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Map;
 
 public abstract class MySqlService implements IDataBaseService {
@@ -13,7 +16,16 @@ public abstract class MySqlService implements IDataBaseService {
     public DBType getDbType() { return DB_TYPE; }
 
     private Connection getConnection() {
-        //TODO: создание соединения
+        try {
+            Driver driver = (Driver) Class.forName("com.mysql.jdbc.Driver").newInstance();
+            DriverManager.registerDriver(driver);
+            String url = "jdbc:mysql://localhost:3306/Aviaj?user=" + dbUser + "&password=" + dbPassword;
+
+            return DriverManager.getConnection(url);
+        }
+        catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
