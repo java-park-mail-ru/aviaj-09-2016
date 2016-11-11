@@ -16,6 +16,7 @@ public abstract class MySqlService implements IDataBaseService {
     public DBType getDbType() { return DB_TYPE; }
 
     private Connection getConnection() {
+        //TODO: добавить Connecion Pool
         try {
             Driver driver = (Driver) Class.forName("com.mysql.jdbc.Driver").newInstance();
             DriverManager.registerDriver(driver);
