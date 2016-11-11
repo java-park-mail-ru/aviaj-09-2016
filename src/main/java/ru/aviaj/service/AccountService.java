@@ -25,4 +25,18 @@ public class AccountService {
     public Set<Map.Entry<String, UserProfile>> getEntrySet() {
         return loginToUser.entrySet();
     }
+
+    /*public UserProfile addUser(String login, String email, String password) throws ConnectException {
+
+        Connection dbConnection = getConnection();
+        if (dbConnection == null)
+            throw new ConnectException("Cannot connect to MySQL database!");
+
+        UserProfileDAO userDao = new UserProfileDAO(dbConnection);
+        UserProfile user = userDao.addUser(login, email, password);
+        if (user == null) {
+
+        }
+        return null;
+    } */
 }
