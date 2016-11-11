@@ -5,10 +5,10 @@ import java.sql.Connection;
 
 public abstract class H2Service implements IDataBaseService {
 
-    private static final DbType dbType = DbType.H2;
+    private static final DBType DB_TYPE = DBType.H2;
     private String dbUser, dbPassword;
 
-    public DbType getDbType() { return dbType; }
+    public DBType getDbType() { return DB_TYPE; }
 
     private Connection getConnection() {
         //TODO: создание соединения

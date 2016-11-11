@@ -1,7 +1,7 @@
 package ru.aviaj.database;
 
 
-public enum DbType {
+public enum DBType {
     MYSQL,
     H2
 }

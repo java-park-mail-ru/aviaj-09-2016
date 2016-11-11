@@ -1,13 +1,16 @@
 package ru.aviaj.database;
 
+import org.springframework.util.StringUtils;
+
 import java.sql.Connection;
+import java.util.Map;
 
 public abstract class MySqlService implements IDataBaseService {
 
-    private static final DbType dbType = DbType.MYSQL;
+    private static final DBType DB_TYPE = DBType.MYSQL;
     private String dbUser, dbPassword;
 
-    private DbType getDbType() { return dbType; }
+    public DBType getDbType() { return DB_TYPE; }
 
     private Connection getConnection() {
         //TODO: создание соединения
@@ -15,6 +18,13 @@ public abstract class MySqlService implements IDataBaseService {
     }
 
     public MySqlService() {
-        //TODO: получение логина и пароля из системных переменных
+
+        Map<String, String> envVar = System.getenv();
+        dbUser = envVar.get("AVIAJ_MYSQL_USER");
+        dbPassword = envVar.get("AVIAJ_MYSQL_PASSWORD");
+
+        if (StringUtils.isEmpty(dbUser) || StringUtils.isEmpty(dbPassword)) {
+            System.out.println("AVIAJ_MYSQL_USER or AVIAJ_MYSQL_PASSWORD are not set in environment!");
+        }
     }
 }
