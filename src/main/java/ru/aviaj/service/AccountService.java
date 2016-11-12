@@ -8,66 +8,69 @@ import ru.aviaj.database.exception.NotExistsException;
 import ru.aviaj.model.UserProfile;
 
 import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
 
 @Service
 public class AccountService extends DatabaseService {
 
+    @Override
     protected Connection getConnection() {
         return connectionFactory.getMySQLConnection();
     }
 
-    private Map<String, UserProfile> loginToUser = new HashMap<>();
-
-    public UserProfile addUser(String login, String email, String password) {
-        final UserProfile newUserProfile = new UserProfile(login, email, password);
-        loginToUser.put(login, newUserProfile);
-        return  newUserProfile;
-    }
-
-    public Set<Map.Entry<String, UserProfile>> getEntrySet() {
-        return loginToUser.entrySet();
-    }
-
-    /*public UserProfile addUser(String login, String email, String password) throws ConnectException {
-
-        Connection dbConnection = getConnection();
-        if (dbConnection == null)
-            throw new ConnectException("Cannot connect to MySQL database!");
-
-        UserProfileDAO userDao = new UserProfileDAO(dbConnection);
-        UserProfile user = userDao.addUser(login, email, password);
-        if (user == null) {
-
-        }
-        return null;
-    } */
-
-    public UserProfile getUserById(long id) throws ConnectException, NotExistsException {
-        Connection dbConnection = getConnection();
+    public UserProfile getUserById(long id) throws ConnectException {
+        final Connection dbConnection = getConnection();
         if (dbConnection == null) {
             throw new ConnectException("Unable to connect database!");
         }
 
-        UserProfileDAO userDao = new UserProfileDAO(dbConnection);
-        UserProfile user = userDao.getUserById(id);
-        if (user == null)
-            throw new NotExistsException("No such user id!");
+        final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
 
-        return user;
+        return userDao.getUserById(id);
     }
 
     public UserProfile getUserByLogin(String login) throws ConnectException {
-        Connection dbConnection = getConnection();
+        final Connection dbConnection = getConnection();
         if (dbConnection == null) {
             throw new ConnectException("Unable to connect database!");
         }
 
-        UserProfileDAO userDao = new UserProfileDAO(dbConnection);
-        UserProfile user = userDao.getUserByLogin(login);
+        final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
 
-        return user;
+        return userDao.getUserByLogin(login);
     }
+
+    public List<UserProfile> getTopUsers() throws ConnectException {
+        final Connection dbConnection = getConnection();
+        if (dbConnection == null) {
+            throw new ConnectException("Unable to connect database!");
+        }
+
+        final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
+
+        return userDao.getTopUsers();
+    }
+
+    public List<UserProfile> getAllUsers() throws ConnectException {
+        final Connection dbConnection = getConnection();
+        if (dbConnection == null) {
+            throw new ConnectException("Unable to connect database!");
+        }
+
+        final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
+
+        return userDao.getUsers();
+    }
+
+    public UserProfile addUser(String login, String email, String password) throws ConnectException {
+        final Connection dbConnection = getConnection();
+        if (dbConnection == null) {
+            throw new ConnectException("Unable to connect database!");
+        }
+
+        final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
+
+        return userDao.addUser(login, email, password);
+    }
+
 }

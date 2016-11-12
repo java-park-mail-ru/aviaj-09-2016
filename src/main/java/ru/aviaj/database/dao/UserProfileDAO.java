@@ -54,7 +54,7 @@ public class UserProfileDAO {
     public List<UserProfile> getUsers() {
         final Executor executor = new Executor();
         try {
-            final String query = "SELECT * FROM User;";
+            final String query = "SELECT * FROM User ORDER BY login;";
             return executor.execQuery(dbConnection, query, new UserListResultHandler());
         } catch (SQLException e) {
             System.out.println(Integer.toString(e.getErrorCode()) + ": " + e.getSQLState());

@@ -1,20 +1,10 @@
-package ru.aviaj.main;
+package ru.aviaj.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.aviaj.model.ErrorList;
-import ru.aviaj.model.ErrorType;
 import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
 import ru.aviaj.service.SessionService;
-
-import javax.servlet.http.HttpSession;
 
 @SuppressWarnings("unused")
 @RestController

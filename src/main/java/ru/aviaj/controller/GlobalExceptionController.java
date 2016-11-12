@@ -1,4 +1,4 @@
-package ru.aviaj.main;
+package ru.aviaj.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;

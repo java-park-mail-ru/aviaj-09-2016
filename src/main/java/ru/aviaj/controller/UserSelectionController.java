@@ -1,4 +1,4 @@
-package ru.aviaj.main;
+package ru.aviaj.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,6 @@ import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class UserSelectionController {
@@ -69,18 +68,40 @@ public class UserSelectionController {
 
     @RequestMapping(path = "/api/users", method = RequestMethod.GET)
     public ResponseEntity getUsers() {
-        final UserResponseList users = new UserResponseList();
-        for (Map.Entry<String, UserProfile> it : accountService.getEntrySet()) {
-            users.addUserResponse(new UserResponse(it.getValue()));
+        try {
+            final UserResponseList users = new UserResponseList();
+            final List<UserProfile> usersList = accountService.getAllUsers();
+
+            for(UserProfile profile : usersList) {
+                users.addUserResponse(new UserResponse(profile));
+            }
+
+            return ResponseEntity.ok(users);
         }
-        return ResponseEntity.ok(users);
+        catch (ConnectException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new ErrorList(ErrorType.UNEXPECTEDERROR)
+            );
+        }
     }
 
     @RequestMapping(path = "/api/users/top", method = RequestMethod.GET)
     public ResponseEntity getTop() {
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(
-                new ErrorList(ErrorType.NOTREALISED)
-        );
+        try {
+            final UserResponseList users = new UserResponseList();
+            final List<UserProfile> usersList = accountService.getTopUsers();
+
+            for(UserProfile profile : usersList) {
+                users.addUserResponse(new UserResponse(profile));
+            }
+
+            return ResponseEntity.ok(users);
+        }
+        catch (ConnectException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new ErrorList(ErrorType.UNEXPECTEDERROR)
+            );
+        }
     }
 
     @RequestMapping(path = "/api/users/id/{userId}", method = RequestMethod.GET)
@@ -91,14 +112,21 @@ public class UserSelectionController {
             );
         }
 
-        for (Map.Entry<String, UserProfile> it : accountService.getEntrySet()) {
-            if (it.getValue().getId() == userId)
-                return ResponseEntity.ok(new UserResponse(it.getValue()));
+        try {
+            final UserProfile user = accountService.getUserById(userId);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        new ErrorList(ErrorType.NOUSERID)
+                );
+            }
+            else
+                return ResponseEntity.ok(new UserResponse(user));
         }
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ErrorList(ErrorType.NOUSERID)
-        );
+        catch (ConnectException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new ErrorList(ErrorType.UNEXPECTEDERROR)
+            );
+        }
     }
 
     @RequestMapping(path = "/api/users/login/{login}", method = RequestMethod.GET)
@@ -123,7 +151,6 @@ public class UserSelectionController {
             );
         }
 
-        //return ResponseEntity.ok(new UserResponse(user));
     }
 
 }
