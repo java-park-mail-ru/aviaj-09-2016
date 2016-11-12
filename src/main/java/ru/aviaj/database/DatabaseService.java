@@ -4,7 +4,7 @@ import java.sql.Connection;
 
 public abstract class DatabaseService {
 
-    private ConnectionFactory connectionFactory;
+    protected ConnectionFactory connectionFactory = new ConnectionFactory();
 
     protected abstract Connection getConnection();
 }

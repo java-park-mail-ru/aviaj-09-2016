@@ -21,9 +21,8 @@ public class UserProfileDAO {
     public UserProfile getUserById(long id) {
         Executor executor = new Executor();
         String query = "SELECT * FROM User WHERE id = " + Long.toString(id) + ";";
-        UserProfile user;
         try {
-            user = executor.execQuery(dbConnection, query, resultSet -> {
+            UserProfile user = executor.execQuery(dbConnection, query, resultSet -> {
                 resultSet.next();
                 return new UserProfile(resultSet.getString("login"),
                         resultSet.getString("email"),
@@ -31,12 +30,12 @@ public class UserProfileDAO {
                         resultSet.getLong("id"),
                         resultSet.getLong("rating"));
             });
+            return user;
         } catch (SQLException e) {
             System.out.println(Integer.toString(e.getErrorCode()) + ": " + e.getSQLState());
-            return null;
         }
 
-        return user;
+        return null;
     }
 
     public UserProfile getUserByLogin(String login) {
@@ -109,6 +108,11 @@ public class UserProfileDAO {
 
         return userList;
     }
+
+    /*public int checkUserExistance(String login, String email) {
+        Executor executor = new Executor();
+        String query = "SELECT login, email FROM User WHERE login='"+login+"' OR emai='"+email+"';";
+    } */
 
     public UserProfile addUser(String login, String email, String password) {
         Executor executor = new Executor();
