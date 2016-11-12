@@ -87,7 +87,7 @@ public class RegistrationController {
         this.sessionService = sessionService;
     }
 
-    @RequestMapping(path = "/api/auth/signup", method = RequestMethod.POST, consumes = "application/json")
+    /*@RequestMapping(path = "/api/auth/signup", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity signup(@RequestBody UserSignupRequest body, HttpSession httpSession) {
 
         final String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
@@ -135,6 +135,6 @@ public class RegistrationController {
         }
 
         return ResponseEntity.ok(new UserProfileResponse(registeredUser));
-    }
+    } */
 
 }

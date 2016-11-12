@@ -81,7 +81,7 @@ public class AuthenticationController {
         this.sessionService = sessionService;
     }
 
-    @RequestMapping(path = "/api/auth/login", method = RequestMethod.POST, consumes = "application/json")
+    /*@RequestMapping(path = "/api/auth/login", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity login(@RequestBody UserRequest body, HttpSession httpSession) {
 
         final String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
@@ -154,7 +154,7 @@ public class AuthenticationController {
 
 
         return ResponseEntity.ok("{\"success\": \"true\"}");
-    }
+    } */
 
 }
 

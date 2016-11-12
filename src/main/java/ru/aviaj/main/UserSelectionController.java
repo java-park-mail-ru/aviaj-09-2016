@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ru.aviaj.database.exception.ConnectException;
 import ru.aviaj.model.ErrorList;
 import ru.aviaj.model.ErrorType;
 import ru.aviaj.model.UserProfile;
@@ -108,14 +109,21 @@ public class UserSelectionController {
             );
         }
 
-        final UserProfile user = accountService.getUserByLogin(login);
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ErrorList(ErrorType.NOLOGIN)
+        try {
+            final UserProfile user = accountService.getUserByLogin(login);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                        new ErrorList(ErrorType.NOLOGIN)
+                );
+            }
+            return ResponseEntity.ok(new UserResponse(user));
+        } catch (ConnectException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new ErrorList(ErrorType.UNEXPECTEDERROR)
             );
         }
 
-        return ResponseEntity.ok(new UserResponse(user));
+        //return ResponseEntity.ok(new UserResponse(user));
     }
 
 }

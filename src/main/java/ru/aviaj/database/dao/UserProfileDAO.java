@@ -1,15 +1,15 @@
 package ru.aviaj.database.dao;
 
-import org.springframework.security.access.method.P;
 import ru.aviaj.database.executor.Executor;
+import ru.aviaj.database.handler.UserListResultHandler;
+import ru.aviaj.database.handler.UserResultHandler;
 import ru.aviaj.model.UserProfile;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings({"Duplicates", "unused"})
 public class UserProfileDAO {
 
     private Connection dbConnection;
@@ -19,94 +19,47 @@ public class UserProfileDAO {
     }
 
     public UserProfile getUserById(long id) {
-        Executor executor = new Executor();
-        String query = "SELECT * FROM User WHERE id = " + Long.toString(id) + ";";
+        final Executor executor = new Executor();
         try {
-            UserProfile user = executor.execQuery(dbConnection, query, resultSet -> {
-                resultSet.next();
-                return new UserProfile(resultSet.getString("login"),
-                        resultSet.getString("email"),
-                        resultSet.getString("password"),
-                        resultSet.getLong("id"),
-                        resultSet.getLong("rating"));
-            });
-            return user;
+            final String query = "SELECT * FROM User WHERE id = " + Long.toString(id) + ';';
+            return executor.execQuery(dbConnection, query, new UserResultHandler());
         } catch (SQLException e) {
             System.out.println(Integer.toString(e.getErrorCode()) + ": " + e.getSQLState());
+            return null;
         }
-
-        return null;
     }
 
     public UserProfile getUserByLogin(String login) {
-        Executor executor = new Executor();
-        String query = "SELECT * FROM User WHERE login = " + login + ";";
-        UserProfile user;
+        final Executor executor = new Executor();
         try {
-            user = executor.execQuery(dbConnection, query, resultSet -> {
-                resultSet.next();
-                return new UserProfile(resultSet.getString("login"),
-                        resultSet.getString("email"),
-                        resultSet.getString("password"),
-                        resultSet.getLong("id"),
-                        resultSet.getLong("rating"));
-            });
+            final String query = "SELECT * FROM User WHERE login = '" + login + "';";
+            return executor.execQuery(dbConnection, query, new UserResultHandler());
         } catch (SQLException e) {
             System.out.println(Integer.toString(e.getErrorCode()) + ": " + e.getSQLState());
             return null;
         }
-
-        return user;
     }
 
     public List<UserProfile> getTopUsers() {
-        Executor executor = new Executor();
-        String query = "SELECT * FROM User ORDER BY rating DESC LIMIT 10;";
-        List<UserProfile> userList = new ArrayList<>();
+        final Executor executor = new Executor();
         try {
-                Collections.copy(userList, executor.execQuery(dbConnection, query, resultSet -> {
-                List<UserProfile> bufferUserList = new ArrayList<>();
-                while (resultSet.next()) {
-                    bufferUserList.add(new UserProfile(resultSet.getString("login"),
-                            resultSet.getString("email"),
-                            resultSet.getString("password"),
-                            resultSet.getLong("id"),
-                            resultSet.getLong("rating")));
-                }
-
-                return bufferUserList;
-            }));
+            final String query = "SELECT * FROM User ORDER BY rating DESC LIMIT 10;";
+            return executor.execQuery(dbConnection, query, new UserListResultHandler());
         } catch (SQLException e) {
             System.out.println(Integer.toString(e.getErrorCode()) + ": " + e.getSQLState());
             return null;
         }
-
-        return userList;
     }
 
     public List<UserProfile> getUsers() {
-        Executor executor = new Executor();
-        String query = "SELECT * FROM User;";
-        List<UserProfile> userList = new ArrayList<>();
+        final Executor executor = new Executor();
         try {
-            Collections.copy(userList, executor.execQuery(dbConnection, query, resultSet -> {
-                List<UserProfile> bufferUserList = new ArrayList<>();
-                while (resultSet.next()) {
-                    bufferUserList.add(new UserProfile(resultSet.getString("login"),
-                            resultSet.getString("email"),
-                            resultSet.getString("password"),
-                            resultSet.getLong("id"),
-                            resultSet.getLong("rating")));
-                }
-
-                return bufferUserList;
-            }));
+            final String query = "SELECT * FROM User;";
+            return executor.execQuery(dbConnection, query, new UserListResultHandler());
         } catch (SQLException e) {
             System.out.println(Integer.toString(e.getErrorCode()) + ": " + e.getSQLState());
             return null;
         }
-
-        return userList;
     }
 
     /*public int checkUserExistance(String login, String email) {
@@ -115,26 +68,25 @@ public class UserProfileDAO {
     } */
 
     public UserProfile addUser(String login, String email, String password) {
-        Executor executor = new Executor();
-        String update = "INSERT INTO User(login, email, password) VALUES('" +
-                login + "','" + email + "','" + password + "');";
+        final Executor executor = new Executor();
         try {
+            final String update = "INSERT INTO User(login, email, password) VALUES('" +
+                    login + "','" + email + "','" + password + "');";
             executor.execUpdate(dbConnection, update);
         }
         catch (SQLException e) {
             System.out.println(Integer.toString(e.getErrorCode()) + ": " + e.getSQLState());
             return  null;
         }
-        UserProfile user = getUserByLogin(login);
 
-        return user;
+        return getUserByLogin(login);
     }
 
     public boolean updateRating(long id, long incValue) {
-        Executor executor = new Executor();
-        String update = "UPDATE User set rating = (rating + " + Long.toString(incValue) + ") WHERE id = " +
-                Long.toString(id) + ";";
+        final Executor executor = new Executor();
         try {
+            final String update = "UPDATE User set rating = (rating + " + Long.toString(incValue) + ") WHERE id = " +
+                    Long.toString(id) + ';';
             executor.execUpdate(dbConnection, update);
         }
         catch (SQLException e) {

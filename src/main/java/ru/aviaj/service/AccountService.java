@@ -59,7 +59,7 @@ public class AccountService extends DatabaseService {
         return user;
     }
 
-    public UserProfile getUserByLogin(String login) throws ConnectException, NotExistsException {
+    public UserProfile getUserByLogin(String login) throws ConnectException {
         Connection dbConnection = getConnection();
         if (dbConnection == null) {
             throw new ConnectException("Unable to connect database!");
@@ -67,8 +67,6 @@ public class AccountService extends DatabaseService {
 
         UserProfileDAO userDao = new UserProfileDAO(dbConnection);
         UserProfile user = userDao.getUserByLogin(login);
-        if (user == null)
-            throw new NotExistsException("No such login!");
 
         return user;
     }
