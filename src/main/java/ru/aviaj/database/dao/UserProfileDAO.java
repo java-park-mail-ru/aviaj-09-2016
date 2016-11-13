@@ -40,6 +40,28 @@ public class UserProfileDAO {
         }
     }
 
+    public UserProfile getUserByEmail(String email) {
+        final Executor executor = new Executor();
+        try {
+            final String query = "SELECT * FROM User WHERE email = '" + email + "';";
+            return executor.execQuery(dbConnection, query, new UserResultHandler());
+        } catch (SQLException e) {
+            System.out.println(Integer.toString(e.getErrorCode()) + ": " + e.getSQLState());
+            return null;
+        }
+    }
+
+    public UserProfile getUserExistance(String login, String email) {
+        final Executor executor = new Executor();
+        try {
+            final String query = "SELECT * FROM User WHERE login = '" + login + "' OR email = '" + email +"';";
+            return executor.execQuery(dbConnection, query, new UserResultHandler());
+        } catch (SQLException e) {
+            System.out.println(Integer.toString(e.getErrorCode()) + ": " + e.getSQLState());
+            return null;
+        }
+    }
+
     public List<UserProfile> getTopUsers() {
         final Executor executor = new Executor();
         try {
@@ -61,11 +83,6 @@ public class UserProfileDAO {
             return null;
         }
     }
-
-    /*public int checkUserExistance(String login, String email) {
-        Executor executor = new Executor();
-        String query = "SELECT login, email FROM User WHERE login='"+login+"' OR emai='"+email+"';";
-    } */
 
     public UserProfile addUser(String login, String email, String password) {
         final Executor executor = new Executor();

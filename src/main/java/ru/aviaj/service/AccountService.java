@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import ru.aviaj.database.DatabaseService;
 import ru.aviaj.database.dao.UserProfileDAO;
 import ru.aviaj.database.exception.ConnectException;
-import ru.aviaj.database.exception.NotExistsException;
 import ru.aviaj.model.UserProfile;
 
 import java.sql.Connection;
@@ -38,6 +37,17 @@ public class AccountService extends DatabaseService {
         final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
 
         return userDao.getUserByLogin(login);
+    }
+
+    public UserProfile getUserExistance(String login, String email) throws ConnectException {
+        final Connection dbConnection = getConnection();
+        if (dbConnection == null) {
+            throw new ConnectException("Unable to connect database!");
+        }
+
+        final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
+
+        return userDao.getUserExistance(login,email);
     }
 
     public List<UserProfile> getTopUsers() throws ConnectException {
