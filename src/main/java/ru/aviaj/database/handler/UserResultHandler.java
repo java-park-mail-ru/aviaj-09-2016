@@ -10,8 +10,8 @@ public class UserResultHandler implements IResultHandler<UserProfile> {
     public UserProfile handle(ResultSet resultSet) throws SQLException {
         resultSet.next();
         return new UserProfile(resultSet.getString("login"),
-                resultSet.getString("password"),
                 resultSet.getString("email"),
+                resultSet.getString("password"),
                 resultSet.getLong("id"),
                 resultSet.getLong("rating"));
     }

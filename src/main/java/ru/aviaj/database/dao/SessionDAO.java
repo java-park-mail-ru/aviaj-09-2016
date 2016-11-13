@@ -36,6 +36,7 @@ public class SessionDAO {
             return true;
         }
         catch (SQLException e) {
+            System.out.print(e.getErrorCode() + ": " + e.toString());
             return false;
         }
     }

@@ -3,11 +3,11 @@ package ru.aviaj.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ru.aviaj.database.exception.ConnectException;
 import ru.aviaj.model.ErrorList;
 import ru.aviaj.model.ErrorType;
 import ru.aviaj.model.UserProfile;
@@ -81,80 +81,102 @@ public class AuthenticationController {
         this.sessionService = sessionService;
     }
 
-    /* @RequestMapping(path = "/api/auth/login", method = RequestMethod.POST, consumes = "application/json")
+     @RequestMapping(path = "/api/auth/login", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity login(@RequestBody UserRequest body, HttpSession httpSession) {
+        try {
 
-        final String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
-        final UserProfile loginedUser = accountService.getUserByLogin(loginedUserLogin);
-        if (loginedUser != null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                new ErrorList(ErrorType.ALREADYLOGIN)
+            final long loginedUserId = sessionService.getUserIdBySession(httpSession.getId());
+            if (loginedUserId != 0)
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                        new ErrorList(ErrorType.ALREADYLOGIN)
+                );
+
+            final UserProfile requestUser = accountService.getUserByLogin(body.getLogin());
+            if (requestUser == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                        new ErrorList(ErrorType.NOLOGIN)
+                );
+            }
+
+            final String truePassword = requestUser.getPassword();
+            final String bodyPassword = body.getPassword();
+            if (!truePassword.equals(bodyPassword)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                        new ErrorList(ErrorType.WRONGPASSWORD)
+                );
+            }
+
+            final boolean success = sessionService.addSession(httpSession.getId(), requestUser.getId());
+            if (!success) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                        new ErrorList(ErrorType.UNEXPECTEDERROR)
+                );
+            }
+
+            return ResponseEntity.ok(new UserResponse(requestUser));
+        }
+        catch (ConnectException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new ErrorList(ErrorType.UNEXPECTEDERROR)
             );
         }
-
-        final UserProfile requestUser = accountService.getUserByLogin(body.getLogin());
-        if (requestUser == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ErrorList(ErrorType.NOLOGIN)
-            );
-        }
-
-        final String truePassword = requestUser.getPassword();
-        final String bodyPassword = body.getPassword();
-        if (!truePassword.equals(bodyPassword)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ErrorList(ErrorType.WRONGPASSWORD)
-            );
-        }
-
-        sessionService.addSession(httpSession.getId(), requestUser);
-
-        return ResponseEntity.ok(new UserResponse(requestUser));
     }
 
     @RequestMapping(path = "/api/auth/authenticate", method = RequestMethod.GET)
     public ResponseEntity authenticate(HttpSession httpSession) {
+        try {
+            final long loginedUserId = sessionService.getUserIdBySession(httpSession.getId());
+            if (loginedUserId == 0) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                        new ErrorList(ErrorType.NOTLOGINED)
+                );
+            }
 
-        final String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
-        if (StringUtils.isEmpty(loginedUserLogin)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                new ErrorList(ErrorType.NOTLOGINED)
-            );
+            final UserProfile loginedUser = accountService.getUserById(loginedUserId);
+            if (loginedUser == null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                        new ErrorList(ErrorType.UNEXPECTEDERROR)
+                );
+            }
+
+            return ResponseEntity.ok(new UserResponse(loginedUser));
         }
-
-        final UserProfile loginedUser = accountService.getUserByLogin(loginedUserLogin);
-        if (loginedUser == null) {
+        catch (ConnectException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                new ErrorList(ErrorType.UNEXPECTEDERROR)
+                    new ErrorList(ErrorType.UNEXPECTEDERROR)
             );
         }
-
-        return ResponseEntity.ok(new UserResponse(loginedUser));
 
     }
 
     @RequestMapping(path = "/api/auth/logout", method = RequestMethod.POST)
     public ResponseEntity logout(HttpSession httpSession) {
 
-        final String sessionId = httpSession.getId();
+        try {
+            final String sessionId = httpSession.getId();
 
-        final String loginedUserLogin = sessionService.getUserLoginBySession(sessionId);
-        if(StringUtils.isEmpty(loginedUserLogin)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                    new ErrorList(ErrorType.NOTLOGINED)
-            );
+            final long loginedUserId = sessionService.getUserIdBySession(sessionId);
+            if (loginedUserId == 0) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                        new ErrorList(ErrorType.NOTLOGINED)
+                );
+            }
+
+            final boolean success = sessionService.removeSession(sessionId);
+            if (!success) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                        new ErrorList(ErrorType.UNEXPECTEDERROR)
+                );
+            }
+
+            return ResponseEntity.ok("{\"success\": \"true\"}");
         }
-
-        final String removedLogin = sessionService.removeSession(sessionId);
-        if (!removedLogin.equals(loginedUserLogin)) {
+        catch (ConnectException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.UNEXPECTEDERROR)
             );
         }
-
-
-        return ResponseEntity.ok("{\"success\": \"true\"}");
-    } */
+    }
 
 }
 

@@ -7,14 +7,32 @@ import ru.aviaj.database.exception.ConnectException;
 import ru.aviaj.model.UserProfile;
 
 import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AccountService extends DatabaseService {
 
     @Override
     protected Connection getConnection() {
-        return connectionFactory.getMySQLConnection();
+        final Map<String, String> envVar = System.getenv();
+        final String mysqlUser = envVar.get("AVIAJ_MYSQL_USER");
+        final String mysqlPassword = envVar.get("AVIAJ_MYSQL_PASSWORD");
+
+        try {
+            final Driver driver = (Driver) Class.forName("com.mysql.jdbc.Driver").newInstance();
+            DriverManager.registerDriver(driver);
+            final String url = "jdbc:mysql://localhost:3306/Aviaj?user=" + mysqlUser + "&password=" + mysqlPassword;
+
+            return DriverManager.getConnection(url);
+        }
+        catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public UserProfile getUserById(long id) throws ConnectException {
@@ -47,7 +65,7 @@ public class AccountService extends DatabaseService {
 
         final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
 
-        return userDao.getUserExistance(login,email);
+        return userDao.getUserExistance(login, email);
     }
 
     public List<UserProfile> getTopUsers() throws ConnectException {

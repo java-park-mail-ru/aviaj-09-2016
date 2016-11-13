@@ -46,9 +46,7 @@ public class UserProfile implements Cloneable{
         return login;
     }
 
-    public String getEmail() {
-        return email;
-    }
+    public String getEmail() { return email; }
 
     public String getPassword() {
         return password;

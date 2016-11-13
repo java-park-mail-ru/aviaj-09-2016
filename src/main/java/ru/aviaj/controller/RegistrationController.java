@@ -93,37 +93,37 @@ public class RegistrationController {
     @RequestMapping(path = "/api/auth/signup", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity signup(@RequestBody UserSignupRequest body, HttpSession httpSession) {
 
-        final String loginedUserLogin = sessionService.getUserLoginBySession(httpSession.getId());
-        if (!StringUtils.isEmpty(loginedUserLogin)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                    new ErrorList(ErrorType.ALREADYLOGIN)
-            );
-        }
-
-        final String login = body.getLogin();
-        final String email = body.getEmail();
-        final String password = body.getPassword();
-
-
-        final ErrorList errorList = new ErrorList();
-
-        if (StringUtils.isEmpty(login)) {
-            errorList.addError(ErrorType.EMPTYLOGIN);
-        }
-
-        if (StringUtils.isEmpty(email)) {
-            errorList.addError(ErrorType.EMPTYEMAIL);
-        }
-
-        if (StringUtils.isEmpty(password)) {
-            errorList.addError(ErrorType.EMPTYPASSWORD);
-        }
-
-        if (!errorList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorList);
-        }
-
         try {
+            final long loginedUserId = sessionService.getUserIdBySession(httpSession.getId());
+            if (loginedUserId != 0) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                        new ErrorList(ErrorType.ALREADYLOGIN)
+                );
+            }
+
+            final String login = body.getLogin();
+            final String email = body.getEmail();
+            final String password = body.getPassword();
+
+
+            final ErrorList errorList = new ErrorList();
+
+            if (StringUtils.isEmpty(login)) {
+                errorList.addError(ErrorType.EMPTYLOGIN);
+            }
+
+            if (StringUtils.isEmpty(email)) {
+                errorList.addError(ErrorType.EMPTYEMAIL);
+            }
+
+            if (StringUtils.isEmpty(password)) {
+                errorList.addError(ErrorType.EMPTYPASSWORD);
+            }
+
+            if (!errorList.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorList);
+            }
+
 
             final UserProfile existingUser = accountService.getUserExistance(login, email);
             if (existingUser != null) {
@@ -133,8 +133,8 @@ public class RegistrationController {
                     );
                 if (email.equals(existingUser.getEmail()))
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                        new ErrorList(ErrorType.DUBLICATEEMAIL)
-                );
+                            new ErrorList(ErrorType.DUBLICATEEMAIL)
+                    );
             }
 
             final UserProfile registeredUser = accountService.addUser(login, email, password);
