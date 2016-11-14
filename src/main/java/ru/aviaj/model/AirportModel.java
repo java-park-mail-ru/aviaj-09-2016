@@ -1,6 +1,7 @@
 package ru.aviaj.model;
 
 
+@SuppressWarnings("unused")
 public class AirportModel {
     private long id;
     private String title;

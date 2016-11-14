@@ -1,5 +1,6 @@
 package ru.aviaj.model;
 
+@SuppressWarnings("unused")
 public enum ErrorType {
     WRONGUSERID(9),
     NOLOGIN(10),

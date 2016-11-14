@@ -5,12 +5,9 @@ import org.springframework.stereotype.Service;
 import ru.aviaj.database.DatabaseService;
 import ru.aviaj.database.dao.SessionDAO;
 import ru.aviaj.database.exception.ConnectException;
-import ru.aviaj.model.UserProfile;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Map;
 
 
 @Service

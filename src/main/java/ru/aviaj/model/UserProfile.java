@@ -1,10 +1,9 @@
 package ru.aviaj.model;
 
 
-import java.util.concurrent.atomic.AtomicLong;
 
-@SuppressWarnings({"ConstantNamingConvention", "unused"})
-public class UserProfile implements Cloneable{
+@SuppressWarnings({"ConstantNamingConvention", "unused", "OverlyComplexBooleanExpression"})
+public class UserProfile {
 
     private long id;
     private String login;
@@ -31,11 +30,27 @@ public class UserProfile implements Cloneable{
 
     public UserProfile(UserProfile other) {
 
-        this.id = other.getId();
-        this.login = other.getLogin();
-        this.email = other.getEmail();
-        this.password = other.getPassword();
-        this.rating = other.getRating();
+        this.id = other.id;
+        this.login = other.login;
+        this.email = other.email;
+        this.password = other.password;
+        this.rating = other.rating;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object == null)
+            return false;
+        if (object == this)
+            return true;
+        if (!(object instanceof UserProfile))
+            return false;
+
+        final UserProfile other = (UserProfile)object;
+        if ( (this.id == other.id) && (this.rating == other.rating) && (this.email.equals(other.email))
+                && (this.login.equals(other.login)) && (this.password.equals(other.password)))
+            return true;
+        return false;
     }
 
     public long getId() {

@@ -1,5 +1,6 @@
 package ru.aviaj.database.dao;
 
+import ru.aviaj.database.exception.ConnectException;
 import ru.aviaj.database.executor.Executor;
 import ru.aviaj.database.handler.UserListResultHandler;
 import ru.aviaj.database.handler.UserResultHandler;
@@ -18,18 +19,17 @@ public class UserProfileDAO {
         this.dbConnection = dbConnection;
     }
 
-    public UserProfile getUserById(long id) {
+    public UserProfile getUserById(long id) throws ConnectException {
         final Executor executor = new Executor();
         try {
             final String query = "SELECT * FROM User WHERE id = " + Long.toString(id) + ';';
             return executor.execQuery(dbConnection, query, new UserResultHandler());
         } catch (SQLException e) {
-            System.out.println(Integer.toString(e.getErrorCode()) + ": " + e.getSQLState());
             return null;
         }
     }
 
-    public UserProfile getUserByLogin(String login) {
+    public UserProfile getUserByLogin(String login) throws ConnectException {
         final Executor executor = new Executor();
         try {
             final String query = "SELECT * FROM User WHERE login = '" + login + "';";
@@ -40,7 +40,7 @@ public class UserProfileDAO {
         }
     }
 
-    public UserProfile getUserByEmail(String email) {
+    public UserProfile getUserByEmail(String email) throws ConnectException {
         final Executor executor = new Executor();
         try {
             final String query = "SELECT * FROM User WHERE email = '" + email + "';";
@@ -51,7 +51,7 @@ public class UserProfileDAO {
         }
     }
 
-    public UserProfile getUserExistance(String login, String email) {
+    public UserProfile getUserExistance(String login, String email) throws ConnectException {
         final Executor executor = new Executor();
         try {
             final String query = "SELECT * FROM User WHERE login = '" + login + "' OR email = '" + email +"';";
@@ -62,7 +62,7 @@ public class UserProfileDAO {
         }
     }
 
-    public List<UserProfile> getTopUsers() {
+    public List<UserProfile> getTopUsers() throws ConnectException {
         final Executor executor = new Executor();
         try {
             final String query = "SELECT * FROM User ORDER BY rating DESC LIMIT 10;";
@@ -73,7 +73,7 @@ public class UserProfileDAO {
         }
     }
 
-    public List<UserProfile> getUsers() {
+    public List<UserProfile> getUsers() throws ConnectException {
         final Executor executor = new Executor();
         try {
             final String query = "SELECT * FROM User ORDER BY login;";
@@ -84,7 +84,7 @@ public class UserProfileDAO {
         }
     }
 
-    public UserProfile addUser(String login, String email, String password) {
+    public UserProfile addUser(String login, String email, String password) throws ConnectException {
         final Executor executor = new Executor();
         try {
             final String update = "INSERT INTO User(login, email, password) VALUES('" +
@@ -99,7 +99,7 @@ public class UserProfileDAO {
         return getUserByLogin(login);
     }
 
-    public boolean updateRating(long id, long incValue) {
+    public boolean updateRating(long id, long incValue) throws ConnectException {
         final Executor executor = new Executor();
         try {
             final String update = "UPDATE User set rating = (rating + " + Long.toString(incValue) + ") WHERE id = " +

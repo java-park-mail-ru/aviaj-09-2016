@@ -1,5 +1,6 @@
 package ru.aviaj.database.dao;
 
+import ru.aviaj.database.exception.ConnectException;
 import ru.aviaj.database.executor.Executor;
 
 import java.sql.Connection;
@@ -13,7 +14,7 @@ public class SessionDAO {
         this.dbConnection = dbConnection;
     }
 
-    public long getUserIdBySession(String session) {
+    public long getUserIdBySession(String session) throws ConnectException {
         final Executor executor = new Executor();
         try {
             final String query = "SELECT userId FROM Session WHERE session = '" + session + "';";
@@ -26,7 +27,7 @@ public class SessionDAO {
         }
     }
 
-    public boolean addSession(String session, long userId) {
+    public boolean addSession(String session, long userId) throws ConnectException {
         final Executor executor = new Executor();
         try {
             final String update = "INSERT INTO Session (session, userId) VALUES ('" + session +
@@ -41,7 +42,7 @@ public class SessionDAO {
         }
     }
 
-    public boolean removeSession(String session) {
+    public boolean removeSession(String session) throws ConnectException {
         final Executor executor = new Executor();
         try {
             final String update = "DELETE FROM Session WHERE session = '" + session + "';";
