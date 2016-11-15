@@ -3,6 +3,7 @@ package ru.aviaj.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -81,7 +82,7 @@ public class AuthenticationController {
         this.sessionService = sessionService;
     }
 
-     @RequestMapping(path = "/api/auth/login", method = RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(path = "/api/auth/login", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity login(@RequestBody UserRequest body, HttpSession httpSession) {
         try {
 
@@ -98,9 +99,11 @@ public class AuthenticationController {
                 );
             }
 
-            final String truePassword = requestUser.getPassword();
+            final String truePasswordHash = requestUser.getPassword();
             final String bodyPassword = body.getPassword();
-            if (!truePassword.equals(bodyPassword)) {
+            final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+            if (!encoder.matches(bodyPassword, truePasswordHash)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                         new ErrorList(ErrorType.WRONGPASSWORD)
                 );

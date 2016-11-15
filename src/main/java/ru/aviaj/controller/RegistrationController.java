@@ -3,6 +3,7 @@ package ru.aviaj.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -137,7 +138,10 @@ public class RegistrationController {
                     );
             }
 
-            final UserProfile registeredUser = accountService.addUser(login, email, password);
+            final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            final String encodedPassword = encoder.encode(password);
+
+            final UserProfile registeredUser = accountService.addUser(login, email, encodedPassword);
             if (registeredUser == null) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                         new ErrorList(ErrorType.UNEXPECTEDERROR)
