@@ -20,11 +20,15 @@ public class AccountService extends DatabaseService {
     protected Connection getConnection() {
 
         final Map<String, String> envVar = System.getenv();
+        final String mysqlUser = envVar.get("AVIAJ_MYSQL_USER");
+        final String mysqlPassword = envVar.get("AVIAJ_MYSQL_PASSWORD");
+        final String mysqlPath = envVar.get("AVIAJ_MYSQL_PATH");
 
         try {
             final Driver driver = (Driver) Class.forName("com.mysql.jdbc.Driver").newInstance();
             DriverManager.registerDriver(driver);
-            final String url = envVar.get("AVIAJ_MYSQL_PATH");
+            final String url = "jdbc:" +
+                     mysqlPath + "?user=" + mysqlUser + "&password=" + mysqlPassword + "&reconnect=true";
 
             return DriverManager.getConnection(url);
         }
