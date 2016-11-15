@@ -21,45 +21,7 @@ public class UserSelectionController {
 
     private final AccountService accountService;
 
-    @SuppressWarnings("unused")
-    private static final class UserResponse {
-        private long id;
-        private String login;
-        private long rating;
 
-        private UserResponse() { }
-
-        private UserResponse(UserProfile user) {
-            this.id = user.getId();
-            this.login = user.getLogin();
-            this.rating = user.getRating();
-        }
-
-        public long getId() { return id;}
-
-        public String getLogin() { return login; }
-
-        public long getRating() { return rating; }
-    }
-
-    @SuppressWarnings("unused")
-    private static final class UserResponseList {
-        private final List<UserResponse> users = new ArrayList<>();
-
-        private UserResponseList() { }
-
-        private UserResponseList(UserResponse user) {
-            users.add(user);
-        }
-
-        public void addUserResponse(UserResponse user) {
-            users.add(user);
-        }
-
-        public List<UserResponse> getUsers() {
-            return users;
-        }
-    }
 
     @Autowired
     public UserSelectionController(AccountService accountService) {
@@ -152,5 +114,45 @@ public class UserSelectionController {
         }
 
     }
+    @SuppressWarnings("unused")
+    private static final class UserResponse {
+        private long id;
+        private String login;
+        private long rating;
+
+        private UserResponse() { }
+
+        private UserResponse(UserProfile user) {
+            this.id = user.getId();
+            this.login = user.getLogin();
+            this.rating = user.getRating();
+        }
+
+        public long getId() { return id;}
+
+        public String getLogin() { return login; }
+
+        public long getRating() { return rating; }
+    }
+
+    @SuppressWarnings("unused")
+    private static final class UserResponseList {
+        private final List<UserResponse> users = new ArrayList<>();
+
+        private UserResponseList() { }
+
+        private UserResponseList(UserResponse user) {
+            users.add(user);
+        }
+
+        public void addUserResponse(UserResponse user) {
+            users.add(user);
+        }
+
+        public List<UserResponse> getUsers() {
+            return users;
+        }
+    }
+
 
 }

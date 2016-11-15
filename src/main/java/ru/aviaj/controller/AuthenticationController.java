@@ -24,58 +24,6 @@ public class AuthenticationController {
     private final AccountService accountService;
     private final SessionService sessionService;
 
-    @SuppressWarnings("unused")
-    public static final class UserRequest {
-        private String login;
-        private String password;
-
-        private UserRequest() { }
-
-        private UserRequest(String login, String email, String password) {
-            this.login = login;
-            this.password = password;
-        }
-
-        public String getLogin() {
-            return login;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-    }
-
-    @SuppressWarnings("unused")
-    public static final class UserResponse {
-        private long id;
-        private String login;
-        private String email;
-        private long rating;
-
-        private UserResponse() { }
-
-        private UserResponse(UserProfile user) {
-            this.id = user.getId();
-            this.login = user.getLogin();
-            this.email = user.getEmail();
-            this.rating = user.getRating();
-        }
-
-        public long getId() {
-            return id;
-        }
-
-        public String getLogin() {
-            return login;
-        }
-
-        public String getEmail() { return email; }
-
-        public long getRating() {
-            return rating;
-        }
-    }
-
     @Autowired
     public AuthenticationController(AccountService accountService, SessionService sessionService) {
         this.accountService = accountService;
@@ -178,6 +126,58 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBCONNECTERROR)
             );
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static final class UserRequest {
+        private String login;
+        private String password;
+
+        private UserRequest() { }
+
+        private UserRequest(String login, String email, String password) {
+            this.login = login;
+            this.password = password;
+        }
+
+        public String getLogin() {
+            return login;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static final class UserResponse {
+        private long id;
+        private String login;
+        private String email;
+        private long rating;
+
+        private UserResponse() { }
+
+        private UserResponse(UserProfile user) {
+            this.id = user.getId();
+            this.login = user.getLogin();
+            this.email = user.getEmail();
+            this.rating = user.getRating();
+        }
+
+        public long getId() {
+            return id;
+        }
+
+        public String getLogin() {
+            return login;
+        }
+
+        public String getEmail() { return email; }
+
+        public long getRating() {
+            return rating;
         }
     }
 

@@ -25,65 +25,6 @@ public class RegistrationController {
     private final AccountService accountService;
     private final SessionService sessionService;
 
-    @SuppressWarnings("unused")
-    public static final class UserSignupRequest {
-        private String login;
-        private String email;
-        private String password;
-
-        private UserSignupRequest() { }
-
-        private UserSignupRequest(String login, String email, String password) {
-            this.login = login;
-            this.email = email;
-            this.password = password;
-        }
-
-        public String getLogin() {
-            return login;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-    }
-
-    @SuppressWarnings("unused")
-    private static final class UserProfileResponse {
-        private long id;
-        private String login;
-        private String email;
-        private long rating;
-
-
-        private UserProfileResponse() { }
-
-        private UserProfileResponse(UserProfile user) {
-            this.id = user.getId();
-            this.login = user.getLogin();
-            this.email = user.getEmail();
-            this.rating = user.getRating();
-        }
-
-        public long getId() { return id; }
-
-        public String getLogin() {
-            return login;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public long getRating() {
-            return rating;
-        }
-    }
-
     @Autowired
     public RegistrationController(AccountService accountService, SessionService sessionService) {
         this.accountService = accountService;
@@ -154,6 +95,65 @@ public class RegistrationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBCONNECTERROR)
             );
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static final class UserSignupRequest {
+        private String login;
+        private String email;
+        private String password;
+
+        private UserSignupRequest() { }
+
+        private UserSignupRequest(String login, String email, String password) {
+            this.login = login;
+            this.email = email;
+            this.password = password;
+        }
+
+        public String getLogin() {
+            return login;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    private static final class UserProfileResponse {
+        private long id;
+        private String login;
+        private String email;
+        private long rating;
+
+
+        private UserProfileResponse() { }
+
+        private UserProfileResponse(UserProfile user) {
+            this.id = user.getId();
+            this.login = user.getLogin();
+            this.email = user.getEmail();
+            this.rating = user.getRating();
+        }
+
+        public long getId() { return id; }
+
+        public String getLogin() {
+            return login;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public long getRating() {
+            return rating;
         }
     }
 
