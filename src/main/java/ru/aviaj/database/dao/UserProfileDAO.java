@@ -79,7 +79,7 @@ public class UserProfileDAO {
             final String query = "SELECT * FROM User ORDER BY login;";
             return executor.execQuery(dbConnection, query, new UserListResultHandler());
         } catch (SQLException e) {
-            System.out.println(Integer.toString(e.getErrorCode()) + ": " + e.getSQLState());
+            System.out.println(e.toString());
             return null;
         }
     }
@@ -92,7 +92,7 @@ public class UserProfileDAO {
             executor.execUpdate(dbConnection, update);
         }
         catch (SQLException e) {
-            System.out.println(Integer.toString(e.getErrorCode()) + ": " + e.getSQLState());
+            System.out.println(e.toString());
             return  null;
         }
 
@@ -107,7 +107,7 @@ public class UserProfileDAO {
             executor.execUpdate(dbConnection, update);
         }
         catch (SQLException e) {
-            System.out.println(Integer.toString(e.getErrorCode()) + ": " + e.getSQLState());
+            System.out.println(e.toString());
             return false;
         }
 
