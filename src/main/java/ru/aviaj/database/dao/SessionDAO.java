@@ -42,10 +42,24 @@ public class SessionDAO {
         }
     }
 
+    @SuppressWarnings("Duplicates")
     public boolean removeSession(String session) throws ConnectException {
         final Executor executor = new Executor();
         try {
             final String update = "DELETE FROM Session WHERE session = '" + session + "';";
+            executor.execUpdate(dbConnection, update);
+
+            return true;
+        }
+        catch (SQLException e) {
+            return false;
+        }
+    }
+
+    public boolean removeAll() throws ConnectException {
+        final Executor executor = new Executor();
+        try {
+            final String update = "DELETE * FROM Session;";
             executor.execUpdate(dbConnection, update);
 
             return true;

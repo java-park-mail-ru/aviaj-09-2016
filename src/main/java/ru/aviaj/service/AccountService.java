@@ -101,4 +101,15 @@ public class AccountService extends DatabaseService {
         return userDao.addUser(login, email, password);
     }
 
+    public boolean updateUserRating(long userId, int incrementValue) throws ConnectException {
+        final Connection dbConnection = getConnection();
+        if (dbConnection == null) {
+            throw new ConnectException("Unable to connect database!");
+        }
+
+        final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
+
+        return userDao.updateRating(userId, incrementValue);
+    }
+
 }

@@ -57,4 +57,15 @@ public class SessionService extends DatabaseService {
         return sessionDao.removeSession(session);
     }
 
+    public boolean removeAll() throws ConnectException {
+        final Connection dbConnection = getConnection();
+        if (dbConnection == null) {
+            throw new ConnectException("Unable to connect to the database!");
+        }
+
+        final SessionDAO sessionDao = new SessionDAO(dbConnection);
+
+        return sessionDao.removeAll();
+    }
+
 }

@@ -37,6 +37,7 @@ public class UserProfile {
         this.rating = other.rating;
     }
 
+    @SuppressWarnings("RedundantIfStatement")
     @Override
     public boolean equals(Object object) {
         if (object == null)
@@ -75,4 +76,13 @@ public class UserProfile {
         rating += updateValue;
     }
 
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + login.hashCode();
+        result = 31 * result + email.hashCode();
+        result = 31 * result + password.hashCode();
+        result = 31 * result + (int) (rating ^ (rating >>> 32));
+        return result;
+    }
 }
