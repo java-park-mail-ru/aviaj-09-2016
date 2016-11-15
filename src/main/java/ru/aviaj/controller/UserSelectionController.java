@@ -80,7 +80,7 @@ public class UserSelectionController {
         }
         catch (ConnectException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.UNEXPECTEDERROR)
+                    new ErrorList(ErrorType.DBCONNECTERROR)
             );
         }
     }
@@ -99,7 +99,7 @@ public class UserSelectionController {
         }
         catch (ConnectException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.UNEXPECTEDERROR)
+                    new ErrorList(ErrorType.DBCONNECTERROR)
             );
         }
     }
@@ -124,7 +124,7 @@ public class UserSelectionController {
         }
         catch (ConnectException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.UNEXPECTEDERROR)
+                    new ErrorList(ErrorType.DBCONNECTERROR)
             );
         }
     }
@@ -147,7 +147,7 @@ public class UserSelectionController {
             return ResponseEntity.ok(new UserResponse(user));
         } catch (ConnectException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.UNEXPECTEDERROR)
+                    new ErrorList(ErrorType.DBCONNECTERROR)
             );
         }
 

@@ -152,7 +152,7 @@ public class RegistrationController {
         }
         catch (ConnectException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.UNEXPECTEDERROR)
+                    new ErrorList(ErrorType.DBCONNECTERROR)
             );
         }
     }
