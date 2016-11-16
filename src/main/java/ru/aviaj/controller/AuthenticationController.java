@@ -23,8 +23,8 @@ import javax.servlet.http.HttpSession;
 @RestController
 public class AuthenticationController {
 
-    private  AccountService accountService;
-    private  SessionService sessionService;
+    private final AccountService accountService;
+    private final SessionService sessionService;
 
     @Autowired
     public AuthenticationController(AccountService accountService, SessionService sessionService) {

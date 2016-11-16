@@ -24,8 +24,8 @@ import javax.servlet.http.HttpSession;
 @RestController
 public class RegistrationController {
 
-    private  AccountService accountService;
-    private SessionService sessionService;
+    private final AccountService accountService;
+    private final SessionService sessionService;
 
     @Autowired
     public RegistrationController(AccountService accountService, SessionService sessionService) {

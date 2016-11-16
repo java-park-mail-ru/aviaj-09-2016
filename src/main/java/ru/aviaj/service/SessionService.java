@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
+import ru.aviaj.database.DatabaseService;
 import ru.aviaj.database.dao.SessionDAO;
 import ru.aviaj.database.exception.DbConnectException;
 
@@ -12,7 +13,7 @@ import java.sql.Connection;
 
 
 @Service
-public class SessionService {
+public class SessionService extends DatabaseService {
 
     private DataSource ds;
 
@@ -21,6 +22,7 @@ public class SessionService {
         this.ds = ds;
     }
 
+    @Override
     protected Connection getConnection() throws DbConnectException {
         try {
            return DataSourceUtils.getConnection(ds);
