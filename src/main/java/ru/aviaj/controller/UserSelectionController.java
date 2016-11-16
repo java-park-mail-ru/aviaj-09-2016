@@ -21,8 +21,12 @@ import java.util.List;
 @RestController
 public class UserSelectionController {
 
-    @Autowired
     private AccountService accountService;
+
+    @Autowired
+    public UserSelectionController(AccountService accountService) {
+        this.accountService = accountService;
+    }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserSelectionController.class);
 

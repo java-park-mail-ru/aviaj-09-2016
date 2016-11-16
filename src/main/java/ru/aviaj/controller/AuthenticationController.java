@@ -23,11 +23,14 @@ import javax.servlet.http.HttpSession;
 @RestController
 public class AuthenticationController {
 
-    @Autowired
     private  AccountService accountService;
+    private  SessionService sessionService;
 
     @Autowired
-    private  SessionService sessionService;
+    public AuthenticationController(AccountService accountService, SessionService sessionService) {
+        this.accountService = accountService;
+        this.sessionService = sessionService;
+    }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
 

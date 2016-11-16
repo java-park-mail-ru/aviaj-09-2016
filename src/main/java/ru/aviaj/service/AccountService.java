@@ -1,7 +1,6 @@
 package ru.aviaj.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
@@ -17,9 +16,12 @@ import java.util.List;
 @Service
 public class AccountService extends DatabaseService {
 
-    @Autowired
-    @Qualifier("accountServiceDs")
     private DataSource ds;
+
+    @Autowired
+    public AccountService(DataSource ds) {
+        this.ds = ds;
+    }
 
     @Override
     protected Connection getConnection() throws DbConnectException {

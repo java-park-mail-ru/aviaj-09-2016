@@ -1,7 +1,6 @@
 package ru.aviaj.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
@@ -15,9 +14,12 @@ import java.sql.Connection;
 @Service
 public class SessionService {
 
-    @Autowired
-    @Qualifier("sessionServiceDs")
     private DataSource ds;
+
+    @Autowired
+    public SessionService(DataSource ds) {
+        this.ds = ds;
+    }
 
     protected Connection getConnection() throws DbConnectException {
         try {
