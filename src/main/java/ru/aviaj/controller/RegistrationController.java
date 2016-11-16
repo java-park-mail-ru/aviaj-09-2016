@@ -24,16 +24,13 @@ import javax.servlet.http.HttpSession;
 @RestController
 public class RegistrationController {
 
-    private final AccountService accountService;
-    private final SessionService sessionService;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationController.class);
+    @Autowired
+    private  AccountService accountService;
 
     @Autowired
-    public RegistrationController(AccountService accountService, SessionService sessionService) {
-        this.accountService = accountService;
-        this.sessionService = sessionService;
-    }
+    private SessionService sessionService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationController.class);
 
     @SuppressWarnings("OverlyComplexMethod")
     @RequestMapping(path = "/api/auth/signup", method = RequestMethod.POST, consumes = "application/json")

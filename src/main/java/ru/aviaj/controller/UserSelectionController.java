@@ -21,14 +21,10 @@ import java.util.List;
 @RestController
 public class UserSelectionController {
 
-    private final AccountService accountService;
+    @Autowired
+    private AccountService accountService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserSelectionController.class);
-
-    @Autowired
-    public UserSelectionController(AccountService accountService) {
-        this.accountService = accountService;
-    }
 
     @RequestMapping(path = "/api/users", method = RequestMethod.GET)
     public ResponseEntity getUsers() {

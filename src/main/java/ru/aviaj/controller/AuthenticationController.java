@@ -23,16 +23,13 @@ import javax.servlet.http.HttpSession;
 @RestController
 public class AuthenticationController {
 
-    private final AccountService accountService;
-    private final SessionService sessionService;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
+    @Autowired
+    private  AccountService accountService;
 
     @Autowired
-    public AuthenticationController(AccountService accountService, SessionService sessionService) {
-        this.accountService = accountService;
-        this.sessionService = sessionService;
-    }
+    private  SessionService sessionService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
 
     @RequestMapping(path = "/api/auth/login", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity login(@RequestBody UserRequest body, HttpSession httpSession) {

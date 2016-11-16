@@ -1,8 +1,9 @@
 package ru.aviaj.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
-import ru.aviaj.database.DatabaseService;
 import ru.aviaj.database.dao.SessionDAO;
 import ru.aviaj.database.exception.DbException;
 
@@ -11,15 +12,12 @@ import java.sql.Connection;
 
 
 @Service
-public class SessionService extends DatabaseService {
+public class SessionService {
 
+    @Autowired
+    @Qualifier("sessionServiceDs")
     private DataSource ds;
 
-    public SessionService(DataSource ds) {
-        this.ds = ds;
-    }
-
-    @Override
     protected Connection getConnection() {
         return DataSourceUtils.getConnection(ds);
     }
@@ -57,6 +55,7 @@ public class SessionService extends DatabaseService {
         return sessionDao.removeSession(session);
     }
 
+    @SuppressWarnings("unused")
     public boolean removeAll() throws DbException {
         final Connection dbConnection = getConnection();
         if (dbConnection == null) {

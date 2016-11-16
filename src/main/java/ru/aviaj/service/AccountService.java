@@ -1,41 +1,28 @@
 package ru.aviaj.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
 import ru.aviaj.database.DatabaseService;
 import ru.aviaj.database.dao.UserProfileDAO;
 import ru.aviaj.database.exception.DbException;
 import ru.aviaj.model.UserProfile;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AccountService extends DatabaseService {
 
+    @Autowired
+    @Qualifier("accountServiceDs")
+    private DataSource ds;
+
     @Override
     protected Connection getConnection() {
-
-        final Map<String, String> envVar = System.getenv();
-        final String mysqlUser = envVar.get("AVIAJ_MYSQL_USER");
-        final String mysqlPassword = envVar.get("AVIAJ_MYSQL_PASSWORD");
-        final String mysqlPath = envVar.get("AVIAJ_MYSQL_PATH");
-
-        try {
-            final Driver driver = (Driver) Class.forName("com.mysql.jdbc.Driver").newInstance();
-            DriverManager.registerDriver(driver);
-            final String url = "jdbc:" +
-                     mysqlPath + "?user=" + mysqlUser + "&password=" + mysqlPassword + "&reconnect=true";
-
-            return DriverManager.getConnection(url);
-        }
-        catch (SQLException | InstantiationException | IllegalAccessException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return DataSourceUtils.getConnection(ds);
     }
 
     public UserProfile getUserById(long id) throws DbException {
