@@ -1,5 +1,7 @@
 package ru.aviaj.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,8 @@ public class RegistrationController {
     private final AccountService accountService;
     private final SessionService sessionService;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationController.class);
+
     @Autowired
     public RegistrationController(AccountService accountService, SessionService sessionService) {
         this.accountService = accountService;
@@ -43,6 +47,7 @@ public class RegistrationController {
                 );
             }
         } catch (DbException e) {
+            LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );
@@ -79,6 +84,7 @@ public class RegistrationController {
                     );
             }
         } catch (DbException e) {
+            LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );
@@ -97,6 +103,7 @@ public class RegistrationController {
             return ResponseEntity.ok(new UserProfileResponse(registeredUser));
 
         } catch (DbException e) {
+            LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );

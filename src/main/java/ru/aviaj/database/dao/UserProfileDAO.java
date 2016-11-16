@@ -1,5 +1,7 @@
 package ru.aviaj.database.dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.aviaj.database.exception.DbException;
 import ru.aviaj.database.exception.DbQueryException;
 import ru.aviaj.database.exception.DbResultSetException;
@@ -15,6 +17,8 @@ import java.util.List;
 @SuppressWarnings({"Duplicates", "unused"})
 public class UserProfileDAO {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserProfileDAO.class);
+
     private Connection dbConnection;
 
     public UserProfileDAO(Connection dbConnection) {
@@ -27,6 +31,7 @@ public class UserProfileDAO {
             final String query = "SELECT * FROM User WHERE id = " + Long.toString(id) + ';';
             return executor.execQuery(dbConnection, query, new UserResultHandler());
         } catch (DbResultSetException | DbQueryException e) {
+            LOGGER.warn(e.getMessage());
             return null;
         }
     }
@@ -37,6 +42,7 @@ public class UserProfileDAO {
             final String query = "SELECT * FROM User WHERE login = '" + login + "';";
             return executor.execQuery(dbConnection, query, new UserResultHandler());
         } catch (DbResultSetException | DbQueryException e) {
+            LOGGER.warn(e.getMessage());
             return null;
         }
     }
@@ -47,6 +53,7 @@ public class UserProfileDAO {
             final String query = "SELECT * FROM User WHERE email = '" + email + "';";
             return executor.execQuery(dbConnection, query, new UserResultHandler());
         } catch (DbResultSetException | DbQueryException e) {
+            LOGGER.warn(e.getMessage());
             return null;
         }
     }
@@ -57,6 +64,7 @@ public class UserProfileDAO {
             final String query = "SELECT * FROM User WHERE login = '" + login + "' OR email = '" + email +"';";
             return executor.execQuery(dbConnection, query, new UserResultHandler());
         } catch (DbResultSetException | DbQueryException e) {
+            LOGGER.warn(e.getMessage());
             return null;
         }
     }
@@ -67,6 +75,7 @@ public class UserProfileDAO {
             final String query = "SELECT * FROM User ORDER BY rating DESC LIMIT 10;";
             return executor.execQuery(dbConnection, query, new UserListResultHandler());
         } catch (DbResultSetException | DbQueryException e) {
+            LOGGER.warn(e.getMessage());
             return null;
         }
     }
@@ -77,6 +86,7 @@ public class UserProfileDAO {
             final String query = "SELECT * FROM User ORDER BY login;";
             return executor.execQuery(dbConnection, query, new UserListResultHandler());
         } catch (DbResultSetException | DbQueryException e) {
+            LOGGER.warn(e.getMessage());
             return null;
         }
     }
@@ -89,6 +99,7 @@ public class UserProfileDAO {
             executor.execUpdate(dbConnection, update);
         }
         catch (DbUpdateException e) {
+            LOGGER.warn(e.getMessage());
             return  null;
         }
 
@@ -103,6 +114,7 @@ public class UserProfileDAO {
             executor.execUpdate(dbConnection, update);
         }
         catch (DbUpdateException e) {
+            LOGGER.warn(e.getMessage());
             return false;
         }
 

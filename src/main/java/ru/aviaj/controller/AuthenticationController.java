@@ -1,5 +1,7 @@
 package ru.aviaj.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,8 @@ public class AuthenticationController {
     private final AccountService accountService;
     private final SessionService sessionService;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
+
     @Autowired
     public AuthenticationController(AccountService accountService, SessionService sessionService) {
         this.accountService = accountService;
@@ -40,6 +44,7 @@ public class AuthenticationController {
                         new ErrorList(ErrorType.ALREADYLOGIN)
                 );
         } catch (DbException e) {
+            LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );
@@ -54,6 +59,7 @@ public class AuthenticationController {
                 );
             }
         } catch (DbException e) {
+            LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );
@@ -77,6 +83,7 @@ public class AuthenticationController {
                 );
             }
         } catch (DbException e) {
+            LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );
@@ -98,6 +105,7 @@ public class AuthenticationController {
                 );
             }
         } catch (DbException e) {
+            LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );
@@ -114,6 +122,7 @@ public class AuthenticationController {
             return ResponseEntity.ok(new UserResponse(loginedUser));
 
         } catch (DbException e) {
+            LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );
@@ -134,6 +143,7 @@ public class AuthenticationController {
                 );
             }
         } catch (DbException e) {
+            LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );
@@ -147,6 +157,7 @@ public class AuthenticationController {
                 );
             }
         } catch (DbException e) {
+            LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );

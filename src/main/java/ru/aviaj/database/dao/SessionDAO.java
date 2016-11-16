@@ -1,5 +1,7 @@
 package ru.aviaj.database.dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.aviaj.database.exception.DbException;
 import ru.aviaj.database.exception.DbQueryException;
 import ru.aviaj.database.exception.DbResultSetException;
@@ -9,6 +11,8 @@ import ru.aviaj.database.executor.Executor;
 import java.sql.Connection;
 
 public class SessionDAO {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionDAO.class);
 
     private Connection dbConnection;
 
@@ -25,6 +29,7 @@ public class SessionDAO {
                 return resultSet.getLong("userId");
             });
         } catch (DbQueryException | DbResultSetException e) {
+            LOGGER.warn(e.getMessage());
             return 0;
         }
     }
@@ -39,6 +44,7 @@ public class SessionDAO {
             return true;
         }
         catch (DbUpdateException e) {
+            LOGGER.warn(e.getMessage());
             return false;
         }
     }
@@ -53,6 +59,7 @@ public class SessionDAO {
             return true;
         }
         catch (DbUpdateException e) {
+            LOGGER.warn(e.getMessage());
             return false;
         }
     }
@@ -66,6 +73,7 @@ public class SessionDAO {
             return true;
         }
         catch (DbUpdateException e) {
+            LOGGER.warn(e.getMessage());
             return false;
         }
     }
