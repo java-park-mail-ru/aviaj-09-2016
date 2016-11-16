@@ -17,14 +17,14 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-public class AccountSessionTest {
+public class AccountTest {
 
     @Autowired
     private H2AccountService accountService;
 
     List<UserProfile> mockUsers = new ArrayList<>();
 
-    public AccountSessionTest() throws Exception {
+    public AccountTest() throws Exception {
         for (int i = 1; i <= 10; i++) {
             mockUsers.add(new UserProfile(
                     "User" + Integer.toString(i),
@@ -47,7 +47,6 @@ public class AccountSessionTest {
 
     @Test
     public void addUserTest() throws Exception {
-        System.out.println("addUserTest:");
         final UserProfile user = accountService.addUser("TestUser", "test@mail.ru", "psw");
         assertEquals("TestUser", user.getLogin());
         assertEquals("test@mail.ru", user.getEmail());
@@ -58,7 +57,6 @@ public class AccountSessionTest {
 
     @Test
     public void getUserTest() throws Exception {
-        System.out.println("\ngetUserTest:");
         fillUser();
         final UserProfile mockUser3 = mockUsers.get(2);
         final UserProfile user3 = accountService.getUserByLogin(mockUser3.getLogin());
@@ -75,7 +73,6 @@ public class AccountSessionTest {
 
     @Test
     public void updateRatingTest() throws Exception {
-        System.out.println("\nupdateRatingTest:");
         fillUser();
         final UserProfile user = accountService.getUserByLogin(mockUsers.get(7).getLogin());
         assertNotNull(user);

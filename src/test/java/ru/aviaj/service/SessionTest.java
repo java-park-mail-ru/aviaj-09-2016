@@ -31,7 +31,6 @@ public class SessionTest {
 
     @Test
     public void addSessionTest() throws Exception {
-        System.out.println("\naddSessionTest:");
         assertTrue(sessionService.addSession("samplesession", 100));
         assertFalse(sessionService.addSession("samplesession", 100));
     }
@@ -39,7 +38,6 @@ public class SessionTest {
 
     @Test
     public void getSessionTest() throws Exception {
-        System.out.println("\ngetSessionTest:");
         fillSession();
         assertEquals(5, sessionService.getUserIdBySession("session5"));
         assertEquals(0, sessionService.getUserIdBySession("NoSession"));

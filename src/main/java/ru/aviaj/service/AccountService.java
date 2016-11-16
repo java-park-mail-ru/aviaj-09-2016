@@ -3,7 +3,7 @@ package ru.aviaj.service;
 import org.springframework.stereotype.Service;
 import ru.aviaj.database.DatabaseService;
 import ru.aviaj.database.dao.UserProfileDAO;
-import ru.aviaj.database.exception.ConnectException;
+import ru.aviaj.database.exception.DbException;
 import ru.aviaj.model.UserProfile;
 
 import java.sql.Connection;
@@ -38,10 +38,10 @@ public class AccountService extends DatabaseService {
         return null;
     }
 
-    public UserProfile getUserById(long id) throws ConnectException {
+    public UserProfile getUserById(long id) throws DbException {
         final Connection dbConnection = getConnection();
         if (dbConnection == null) {
-            throw new ConnectException("Unable to connect database!");
+            throw new DbException("Unable to connect database!");
         }
 
         final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
@@ -49,10 +49,10 @@ public class AccountService extends DatabaseService {
         return userDao.getUserById(id);
     }
 
-    public UserProfile getUserByLogin(String login) throws ConnectException {
+    public UserProfile getUserByLogin(String login) throws DbException {
         final Connection dbConnection = getConnection();
         if (dbConnection == null) {
-            throw new ConnectException("Unable to connect database!");
+            throw new DbException("Unable to connect database!");
         }
 
         final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
@@ -60,10 +60,10 @@ public class AccountService extends DatabaseService {
         return userDao.getUserByLogin(login);
     }
 
-    public UserProfile getUserExistance(String login, String email) throws ConnectException {
+    public UserProfile getUserExistance(String login, String email) throws DbException {
         final Connection dbConnection = getConnection();
         if (dbConnection == null) {
-            throw new ConnectException("Unable to connect database!");
+            throw new DbException("Unable to connect database!");
         }
 
         final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
@@ -71,10 +71,10 @@ public class AccountService extends DatabaseService {
         return userDao.getUserExistance(login, email);
     }
 
-    public List<UserProfile> getTopUsers() throws ConnectException {
+    public List<UserProfile> getTopUsers() throws DbException {
         final Connection dbConnection = getConnection();
         if (dbConnection == null) {
-            throw new ConnectException("Unable to connect database!");
+            throw new DbException("Unable to connect database!");
         }
 
         final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
@@ -82,10 +82,10 @@ public class AccountService extends DatabaseService {
         return userDao.getTopUsers();
     }
 
-    public List<UserProfile> getAllUsers() throws ConnectException {
+    public List<UserProfile> getAllUsers() throws DbException {
         final Connection dbConnection = getConnection();
         if (dbConnection == null) {
-            throw new ConnectException("Unable to connect database!");
+            throw new DbException("Unable to connect database!");
         }
 
         final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
@@ -93,10 +93,10 @@ public class AccountService extends DatabaseService {
         return userDao.getUsers();
     }
 
-    public UserProfile addUser(String login, String email, String password) throws ConnectException {
+    public UserProfile addUser(String login, String email, String password) throws DbException {
         final Connection dbConnection = getConnection();
         if (dbConnection == null) {
-            throw new ConnectException("Unable to connect database!");
+            throw new DbException("Unable to connect database!");
         }
 
         final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
@@ -104,10 +104,10 @@ public class AccountService extends DatabaseService {
         return userDao.addUser(login, email, password);
     }
 
-    public boolean updateUserRating(long userId, int incrementValue) throws ConnectException {
+    public boolean updateUserRating(long userId, int incrementValue) throws DbException {
         final Connection dbConnection = getConnection();
         if (dbConnection == null) {
-            throw new ConnectException("Unable to connect database!");
+            throw new DbException("Unable to connect database!");
         }
 
         final UserProfileDAO userDao = new UserProfileDAO(dbConnection);

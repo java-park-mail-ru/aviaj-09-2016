@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.aviaj.database.exception.ConnectException;
+import ru.aviaj.database.exception.DbException;
 import ru.aviaj.model.ErrorList;
 import ru.aviaj.model.ErrorType;
 import ru.aviaj.model.UserProfile;
@@ -30,44 +30,49 @@ public class UserSelectionController {
 
     @RequestMapping(path = "/api/users", method = RequestMethod.GET)
     public ResponseEntity getUsers() {
+
+        final UserResponseList users = new UserResponseList();
+        final List<UserProfile> usersList;
         try {
-            final UserResponseList users = new UserResponseList();
-            final List<UserProfile> usersList = accountService.getAllUsers();
-
-            for(UserProfile profile : usersList) {
-                users.addUserResponse(new UserResponse(profile));
-            }
-
-            return ResponseEntity.ok(users);
-        }
-        catch (ConnectException e) {
+            usersList = accountService.getAllUsers();
+        } catch (DbException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.DBCONNECTERROR)
+                    new ErrorList(ErrorType.DBERROR)
             );
         }
+
+
+        for(UserProfile profile : usersList) {
+            users.addUserResponse(new UserResponse(profile));
+        }
+
+        return ResponseEntity.ok(users);
+
     }
 
     @RequestMapping(path = "/api/users/top", method = RequestMethod.GET)
     public ResponseEntity getTop() {
+
+        final UserResponseList users = new UserResponseList();
+        final List<UserProfile> usersList;
         try {
-            final UserResponseList users = new UserResponseList();
-            final List<UserProfile> usersList = accountService.getTopUsers();
-
-            for(UserProfile profile : usersList) {
-                users.addUserResponse(new UserResponse(profile));
-            }
-
-            return ResponseEntity.ok(users);
-        }
-        catch (ConnectException e) {
+            usersList = accountService.getTopUsers();
+        } catch (DbException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.DBCONNECTERROR)
+                    new ErrorList(ErrorType.DBERROR)
             );
         }
+
+        for(UserProfile profile : usersList) {
+            users.addUserResponse(new UserResponse(profile));
+        }
+
+        return ResponseEntity.ok(users);
     }
 
     @RequestMapping(path = "/api/users/id/{userId}", method = RequestMethod.GET)
     public ResponseEntity getById(@PathVariable long userId) {
+
         if (userId <= 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ErrorList(ErrorType.WRONGUSERID)
@@ -81,18 +86,18 @@ public class UserSelectionController {
                         new ErrorList(ErrorType.NOUSERID)
                 );
             }
-            else
-                return ResponseEntity.ok(new UserResponse(user));
-        }
-        catch (ConnectException e) {
+
+            return ResponseEntity.ok(new UserResponse(user));
+        } catch (DbException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.DBCONNECTERROR)
+                    new ErrorList(ErrorType.DBERROR)
             );
         }
     }
 
     @RequestMapping(path = "/api/users/login/{login}", method = RequestMethod.GET)
     public ResponseEntity getByLogin(@PathVariable String login) {
+
         if(StringUtils.isEmpty(login)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ErrorList(ErrorType.EMPTYLOGIN)
@@ -106,14 +111,16 @@ public class UserSelectionController {
                         new ErrorList(ErrorType.NOLOGIN)
                 );
             }
+
             return ResponseEntity.ok(new UserResponse(user));
-        } catch (ConnectException e) {
+        } catch (DbException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.DBCONNECTERROR)
+                    new ErrorList(ErrorType.DBERROR)
             );
         }
 
     }
+
     @SuppressWarnings("unused")
     private static final class UserResponse {
         private long id;

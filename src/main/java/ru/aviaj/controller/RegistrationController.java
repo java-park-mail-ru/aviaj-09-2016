@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.aviaj.database.exception.ConnectException;
+import ru.aviaj.database.exception.DbException;
 import ru.aviaj.model.ErrorList;
 import ru.aviaj.model.ErrorType;
 import ru.aviaj.model.UserProfile;
@@ -42,31 +42,31 @@ public class RegistrationController {
                         new ErrorList(ErrorType.ALREADYLOGIN)
                 );
             }
+        } catch (DbException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new ErrorList(ErrorType.DBERROR)
+            );
+        }
 
-            final String login = body.getLogin();
-            final String email = body.getEmail();
-            final String password = body.getPassword();
+        final String login = body.getLogin();
+        final String email = body.getEmail();
+        final String password = body.getPassword();
 
+        final ErrorList errorList = new ErrorList();
+        if (StringUtils.isEmpty(login)) {
+            errorList.addError(ErrorType.EMPTYLOGIN);
+        }
+        if (StringUtils.isEmpty(email)) {
+            errorList.addError(ErrorType.EMPTYEMAIL);
+        }
+        if (StringUtils.isEmpty(password)) {
+            errorList.addError(ErrorType.EMPTYPASSWORD);
+        }
+        if (!errorList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorList);
+        }
 
-            final ErrorList errorList = new ErrorList();
-
-            if (StringUtils.isEmpty(login)) {
-                errorList.addError(ErrorType.EMPTYLOGIN);
-            }
-
-            if (StringUtils.isEmpty(email)) {
-                errorList.addError(ErrorType.EMPTYEMAIL);
-            }
-
-            if (StringUtils.isEmpty(password)) {
-                errorList.addError(ErrorType.EMPTYPASSWORD);
-            }
-
-            if (!errorList.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorList);
-            }
-
-
+        try {
             final UserProfile existingUser = accountService.getUserExistance(login, email);
             if (existingUser != null) {
                 if (login.equals(existingUser.getLogin()))
@@ -78,10 +78,15 @@ public class RegistrationController {
                             new ErrorList(ErrorType.DUBLICATEEMAIL)
                     );
             }
+        } catch (DbException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new ErrorList(ErrorType.DBERROR)
+            );
+        }
 
-            final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            final String encodedPassword = encoder.encode(password);
-
+        final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        final String encodedPassword = encoder.encode(password);
+        try {
             final UserProfile registeredUser = accountService.addUser(login, email, encodedPassword);
             if (registeredUser == null) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
@@ -90,12 +95,13 @@ public class RegistrationController {
             }
 
             return ResponseEntity.ok(new UserProfileResponse(registeredUser));
-        }
-        catch (ConnectException e) {
+
+        } catch (DbException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.DBCONNECTERROR)
+                    new ErrorList(ErrorType.DBERROR)
             );
         }
+
     }
 
     @SuppressWarnings("unused")

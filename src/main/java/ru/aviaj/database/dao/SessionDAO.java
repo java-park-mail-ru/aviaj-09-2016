@@ -1,10 +1,12 @@
 package ru.aviaj.database.dao;
 
-import ru.aviaj.database.exception.ConnectException;
+import ru.aviaj.database.exception.DbException;
+import ru.aviaj.database.exception.DbQueryException;
+import ru.aviaj.database.exception.DbResultSetException;
+import ru.aviaj.database.exception.DbUpdateException;
 import ru.aviaj.database.executor.Executor;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 
 public class SessionDAO {
 
@@ -14,7 +16,7 @@ public class SessionDAO {
         this.dbConnection = dbConnection;
     }
 
-    public long getUserIdBySession(String session) throws ConnectException {
+    public long getUserIdBySession(String session) throws DbException {
         final Executor executor = new Executor();
         try {
             final String query = "SELECT userId FROM Session WHERE session = '" + session + "';";
@@ -22,12 +24,12 @@ public class SessionDAO {
                 resultSet.next();
                 return resultSet.getLong("userId");
             });
-        } catch (SQLException e) {
+        } catch (DbQueryException | DbResultSetException e) {
             return 0;
         }
     }
 
-    public boolean addSession(String session, long userId) throws ConnectException {
+    public boolean addSession(String session, long userId) throws DbException {
         final Executor executor = new Executor();
         try {
             final String update = "INSERT INTO Session (session, userId) VALUES ('" + session +
@@ -36,14 +38,13 @@ public class SessionDAO {
 
             return true;
         }
-        catch (SQLException e) {
-            System.out.print(e.getErrorCode() + ": " + e.toString());
+        catch (DbUpdateException e) {
             return false;
         }
     }
 
     @SuppressWarnings("Duplicates")
-    public boolean removeSession(String session) throws ConnectException {
+    public boolean removeSession(String session) throws DbException {
         final Executor executor = new Executor();
         try {
             final String update = "DELETE FROM Session WHERE session = '" + session + "';";
@@ -51,12 +52,12 @@ public class SessionDAO {
 
             return true;
         }
-        catch (SQLException e) {
+        catch (DbUpdateException e) {
             return false;
         }
     }
 
-    public boolean removeAll() throws ConnectException {
+    public boolean removeAll() throws DbException {
         final Executor executor = new Executor();
         try {
             final String update = "DELETE * FROM Session;";
@@ -64,7 +65,7 @@ public class SessionDAO {
 
             return true;
         }
-        catch (SQLException e) {
+        catch (DbUpdateException e) {
             return false;
         }
     }

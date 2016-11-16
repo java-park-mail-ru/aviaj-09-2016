@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.aviaj.database.exception.ConnectException;
+import ru.aviaj.database.exception.DbException;
 import ru.aviaj.model.ErrorList;
 import ru.aviaj.model.ErrorType;
 import ru.aviaj.model.UserProfile;
@@ -32,57 +32,78 @@ public class AuthenticationController {
 
     @RequestMapping(path = "/api/auth/login", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity login(@RequestBody UserRequest body, HttpSession httpSession) {
-        try {
 
+        try {
             final long loginedUserId = sessionService.getUserIdBySession(httpSession.getId());
             if (loginedUserId != 0)
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                         new ErrorList(ErrorType.ALREADYLOGIN)
                 );
+        } catch (DbException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new ErrorList(ErrorType.DBERROR)
+            );
+        }
 
-            final UserProfile requestUser = accountService.getUserByLogin(body.getLogin());
+        final UserProfile requestUser;
+        try {
+            requestUser = accountService.getUserByLogin(body.getLogin());
             if (requestUser == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                         new ErrorList(ErrorType.NOLOGIN)
                 );
             }
+        } catch (DbException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new ErrorList(ErrorType.DBERROR)
+            );
+        }
 
-            final String truePasswordHash = requestUser.getPassword();
-            final String bodyPassword = body.getPassword();
-            final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        final String truePasswordHash = requestUser.getPassword();
+        final String bodyPassword = body.getPassword();
+        final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-            if (!encoder.matches(bodyPassword, truePasswordHash)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                        new ErrorList(ErrorType.WRONGPASSWORD)
-                );
-            }
+        if (!encoder.matches(bodyPassword, truePasswordHash)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ErrorList(ErrorType.WRONGPASSWORD)
+            );
+        }
 
+        try {
             final boolean success = sessionService.addSession(httpSession.getId(), requestUser.getId());
             if (!success) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                         new ErrorList(ErrorType.UNEXPECTEDERROR)
                 );
             }
-
-            return ResponseEntity.ok(new UserResponse(requestUser));
-        }
-        catch (ConnectException e) {
+        } catch (DbException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.DBCONNECTERROR)
+                    new ErrorList(ErrorType.DBERROR)
             );
         }
+
+        return ResponseEntity.ok(new UserResponse(requestUser));
+
     }
 
     @RequestMapping(path = "/api/auth/authenticate", method = RequestMethod.GET)
     public ResponseEntity authenticate(HttpSession httpSession) {
+
+        final long loginedUserId;
         try {
-            final long loginedUserId = sessionService.getUserIdBySession(httpSession.getId());
+            loginedUserId = sessionService.getUserIdBySession(httpSession.getId());
             if (loginedUserId == 0) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                         new ErrorList(ErrorType.NOTLOGINED)
                 );
             }
+        } catch (DbException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new ErrorList(ErrorType.DBERROR)
+            );
+        }
 
+        try {
             final UserProfile loginedUser = accountService.getUserById(loginedUserId);
             if (loginedUser == null) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
@@ -91,42 +112,48 @@ public class AuthenticationController {
             }
 
             return ResponseEntity.ok(new UserResponse(loginedUser));
-        }
-        catch (ConnectException e) {
+
+        } catch (DbException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.DBCONNECTERROR)
+                    new ErrorList(ErrorType.DBERROR)
             );
         }
-
     }
 
     @RequestMapping(path = "/api/auth/logout", method = RequestMethod.POST)
     public ResponseEntity logout(HttpSession httpSession) {
 
-        try {
-            final String sessionId = httpSession.getId();
 
+        final String sessionId = httpSession.getId();
+
+        try {
             final long loginedUserId = sessionService.getUserIdBySession(sessionId);
             if (loginedUserId == 0) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                         new ErrorList(ErrorType.NOTLOGINED)
                 );
             }
+        } catch (DbException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new ErrorList(ErrorType.DBERROR)
+            );
+        }
 
+        try {
             final boolean success = sessionService.removeSession(sessionId);
             if (!success) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                         new ErrorList(ErrorType.UNEXPECTEDERROR)
                 );
             }
-
-            return ResponseEntity.ok("{\"success\": \"true\"}");
-        }
-        catch (ConnectException e) {
+        } catch (DbException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.DBCONNECTERROR)
+                    new ErrorList(ErrorType.DBERROR)
             );
         }
+
+        return ResponseEntity.ok("{\"success\": \"true\"}");
+
     }
 
     @SuppressWarnings("unused")

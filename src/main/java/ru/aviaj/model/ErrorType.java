@@ -17,7 +17,7 @@ public enum ErrorType {
     NOTREALISED(901),
     WRONGTYPE(902),
     WRONGBODY(903),
-    DBCONNECTERROR(951);
+    DBERROR(951);
 
     private int code;
 
