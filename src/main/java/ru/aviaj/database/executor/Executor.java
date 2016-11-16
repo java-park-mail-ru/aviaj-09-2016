@@ -1,9 +1,6 @@
 package ru.aviaj.database.executor;
 
-import ru.aviaj.database.exception.DbException;
-import ru.aviaj.database.exception.DbQueryException;
-import ru.aviaj.database.exception.DbResultSetException;
-import ru.aviaj.database.exception.DbUpdateException;
+import ru.aviaj.database.exception.*;
 import ru.aviaj.database.handler.IResultHandler;
 
 import java.sql.Connection;
@@ -11,18 +8,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-@SuppressWarnings({"JDBCResourceOpenedButNotSafelyClosed", "ThrowInsideCatchBlockWhichIgnoresCaughtException"})
+@SuppressWarnings({"JDBCResourceOpenedButNotSafelyClosed", "ThrowInsideCatchBlockWhichIgnoresCaughtException", "DuplicateThrows"})
 public class Executor {
 
     public <T> T execQuery(Connection dbConnection, String sqlQuery, IResultHandler<T> resultHandler)
-            throws DbException, DbResultSetException, DbQueryException {
+            throws DbStatementException, DbResultSetException, DbQueryException {
 
         try (Statement statement = dbConnection.createStatement()) {
 
             try {
                 statement.execute(sqlQuery);
             } catch (SQLException e) {
-                throw new DbQueryException(e.toString());
+                throw new DbQueryException("Unable to execute query statement!", e);
             }
 
             try (ResultSet resultSet = statement.getResultSet()) {
@@ -33,28 +30,28 @@ public class Executor {
 
                 return result;
             } catch (SQLException e) {
-                throw new DbResultSetException(e.toString());
+                throw new DbResultSetException("Unable to process ResultSet!", e);
             }
 
         }
         catch (SQLException e) {
-            throw new DbException("Unable to create statement!" + e.toString());
+            throw new DbStatementException("Unable to create statement!",e);
         }
     }
 
     public void execUpdate(Connection dbConnection, String sqlUpdate)
-            throws DbException, DbUpdateException {
+            throws DbStatementException, DbUpdateException {
 
         try (Statement statement = dbConnection.createStatement()) {
             try {
                 statement.execute(sqlUpdate);
             } catch (SQLException e) {
-                throw new DbUpdateException(e.toString());
+                throw new DbUpdateException("Unable to execute update query!", e);
             }
             statement.close();
         }
         catch (SQLException e) {
-            throw new DbException("Unable to create statement: " + e.toString());
+            throw new DbStatementException("Unable to create statement!", e);
         }
     }
 }

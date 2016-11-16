@@ -2,10 +2,7 @@ package ru.aviaj.database.dao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.aviaj.database.exception.DbException;
-import ru.aviaj.database.exception.DbQueryException;
-import ru.aviaj.database.exception.DbResultSetException;
-import ru.aviaj.database.exception.DbUpdateException;
+import ru.aviaj.database.exception.*;
 import ru.aviaj.database.executor.Executor;
 
 import java.sql.Connection;
@@ -20,7 +17,7 @@ public class SessionDAO {
         this.dbConnection = dbConnection;
     }
 
-    public long getUserIdBySession(String session) throws DbException {
+    public long getUserIdBySession(String session) {
         final Executor executor = new Executor();
         try {
             final String query = "SELECT userId FROM Session WHERE session = '" + session + "';";
@@ -28,13 +25,13 @@ public class SessionDAO {
                 resultSet.next();
                 return resultSet.getLong("userId");
             });
-        } catch (DbQueryException | DbResultSetException e) {
-            LOGGER.warn(e.getMessage());
+        } catch (DbQueryException | DbResultSetException | DbStatementException e) {
+            LOGGER.warn(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
             return 0;
         }
     }
 
-    public boolean addSession(String session, long userId) throws DbException {
+    public boolean addSession(String session, long userId) {
         final Executor executor = new Executor();
         try {
             final String update = "INSERT INTO Session (session, userId) VALUES ('" + session +
@@ -43,14 +40,14 @@ public class SessionDAO {
 
             return true;
         }
-        catch (DbUpdateException e) {
-            LOGGER.warn(e.getMessage());
+        catch (DbUpdateException | DbStatementException e) {
+            LOGGER.warn(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
             return false;
         }
     }
 
     @SuppressWarnings("Duplicates")
-    public boolean removeSession(String session) throws DbException {
+    public boolean removeSession(String session) {
         final Executor executor = new Executor();
         try {
             final String update = "DELETE FROM Session WHERE session = '" + session + "';";
@@ -58,13 +55,13 @@ public class SessionDAO {
 
             return true;
         }
-        catch (DbUpdateException e) {
-            LOGGER.warn(e.getMessage());
+        catch (DbUpdateException | DbStatementException e) {
+            LOGGER.warn(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
             return false;
         }
     }
 
-    public boolean removeAll() throws DbException {
+    public boolean removeAll() {
         final Executor executor = new Executor();
         try {
             final String update = "DELETE * FROM Session;";
@@ -72,8 +69,8 @@ public class SessionDAO {
 
             return true;
         }
-        catch (DbUpdateException e) {
-            LOGGER.warn(e.getMessage());
+        catch (DbUpdateException | DbStatementException e) {
+            LOGGER.warn(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
             return false;
         }
     }

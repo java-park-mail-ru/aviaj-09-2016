@@ -1,7 +1,9 @@
 package ru.aviaj.database.exception;
 
-public class DbUpdateException extends Exception {
-    public DbUpdateException(String message) {
-        super(message);
+import java.sql.SQLException;
+
+public class DbUpdateException extends DbException {
+    public DbUpdateException(String message, SQLException e) {
+        super(message, e);
     }
 }

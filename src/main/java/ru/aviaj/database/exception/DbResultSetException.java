@@ -1,7 +1,10 @@
 package ru.aviaj.database.exception;
 
-public class DbResultSetException extends Exception {
-    public DbResultSetException(String message) {
-        super(message);
+import java.sql.SQLException;
+
+public class DbResultSetException extends DbException {
+    public DbResultSetException(String message, SQLException e) {
+        super(message, e);
     }
 }
+

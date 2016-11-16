@@ -2,10 +2,11 @@ package ru.aviaj.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
 import ru.aviaj.database.dao.SessionDAO;
-import ru.aviaj.database.exception.DbException;
+import ru.aviaj.database.exception.DbConnectException;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -18,37 +19,32 @@ public class SessionService {
     @Qualifier("sessionServiceDs")
     private DataSource ds;
 
-    protected Connection getConnection() {
-        return DataSourceUtils.getConnection(ds);
+    protected Connection getConnection() throws DbConnectException {
+        try {
+           return DataSourceUtils.getConnection(ds);
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DbConnectException("Unable to connect to database!", e);
+        }
     }
 
-    public long getUserIdBySession(String session) throws DbException {
+    public long getUserIdBySession(String session) throws DbConnectException {
         final Connection dbConnection = getConnection();
-        if (dbConnection == null) {
-            throw new DbException("Unable to connect to the database!");
-        }
 
         final SessionDAO sessionDao = new SessionDAO(dbConnection);
 
         return sessionDao.getUserIdBySession(session);
     }
 
-    public boolean addSession(String session, long userId) throws DbException {
+    public boolean addSession(String session, long userId) throws DbConnectException {
         final Connection dbConnection = getConnection();
-        if (dbConnection == null) {
-            throw new DbException("Unable to connect to the database!");
-        }
 
         final SessionDAO sessionDao = new SessionDAO(dbConnection);
 
         return sessionDao.addSession(session, userId);
     }
 
-    public boolean removeSession(String session) throws DbException {
+    public boolean removeSession(String session) throws DbConnectException {
         final Connection dbConnection = getConnection();
-        if (dbConnection == null) {
-            throw new DbException("Unable to connect to the database!");
-        }
 
         final SessionDAO sessionDao = new SessionDAO(dbConnection);
 
@@ -56,11 +52,8 @@ public class SessionService {
     }
 
     @SuppressWarnings("unused")
-    public boolean removeAll() throws DbException {
+    public boolean removeAll() throws DbConnectException {
         final Connection dbConnection = getConnection();
-        if (dbConnection == null) {
-            throw new DbException("Unable to connect to the database!");
-        }
 
         final SessionDAO sessionDao = new SessionDAO(dbConnection);
 
