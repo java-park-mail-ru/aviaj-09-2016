@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 @TestPropertySource(locations = "classpath:test.properties")
 public class AccountTest {
 
-    @Autowired
+   /* @Autowired
     private AccountService accountService;
 
     List<UserProfile> mockUsers = new ArrayList<>();
@@ -84,6 +84,6 @@ public class AccountTest {
         user.updateRating(100);
         assertEquals(100, user.getRating());
         assertEquals(userUpd.getRating(), user.getRating());
-    }
+    } */
 
 }
