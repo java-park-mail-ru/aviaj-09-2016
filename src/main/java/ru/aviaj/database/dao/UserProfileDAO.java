@@ -63,12 +63,10 @@ public class UserProfileDAO {
         return getUserByLogin(login);
     }
 
-    public boolean updateRating(long id, long incValue) throws SQLException {
+    public void updateRating(long id, long incValue) throws SQLException {
         final Executor executor = new Executor();
         final String update = "UPDATE User set rating = (rating + " + Long.toString(incValue) + ") WHERE id = " +
                 Long.toString(id) + ';';
         executor.execUpdate(dbConnection, update);
-
-        return true;
     }
 }
