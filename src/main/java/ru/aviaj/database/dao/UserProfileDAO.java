@@ -1,20 +1,16 @@
 package ru.aviaj.database.dao;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.aviaj.database.exception.*;
 import ru.aviaj.database.executor.Executor;
 import ru.aviaj.database.handler.UserListResultHandler;
 import ru.aviaj.database.handler.UserResultHandler;
 import ru.aviaj.model.UserProfile;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 @SuppressWarnings({"Duplicates", "unused"})
 public class UserProfileDAO {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserProfileDAO.class);
 
     private Connection dbConnection;
 
@@ -22,98 +18,56 @@ public class UserProfileDAO {
         this.dbConnection = dbConnection;
     }
 
-    public UserProfile getUserById(long id)  {
+    public UserProfile getUserById(long id) throws SQLException {
         final Executor executor = new Executor();
-        try {
-            final String query = "SELECT * FROM User WHERE id = " + Long.toString(id) + ';';
-            return executor.execQuery(dbConnection, query, new UserResultHandler());
-        } catch (DbResultSetException | DbQueryException | DbStatementException e) {
-            LOGGER.warn(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
-            return null;
-        }
+        final String query = "SELECT * FROM User WHERE id = " + Long.toString(id) + ';';
+        return executor.execQuery(dbConnection, query, new UserResultHandler());
     }
 
-    public UserProfile getUserByLogin(String login) {
+    public UserProfile getUserByLogin(String login) throws SQLException {
         final Executor executor = new Executor();
-        try {
-            final String query = "SELECT * FROM User WHERE login = '" + login + "';";
-            return executor.execQuery(dbConnection, query, new UserResultHandler());
-        } catch (DbResultSetException | DbQueryException | DbStatementException e) {
-            LOGGER.warn(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
-            return null;
-        }
+        final String query = "SELECT * FROM User WHERE login = '" + login + "';";
+        return executor.execQuery(dbConnection, query, new UserResultHandler());
     }
 
-    public UserProfile getUserByEmail(String email) {
+    public UserProfile getUserByEmail(String email) throws SQLException {
         final Executor executor = new Executor();
-        try {
-            final String query = "SELECT * FROM User WHERE email = '" + email + "';";
-            return executor.execQuery(dbConnection, query, new UserResultHandler());
-        } catch (DbResultSetException | DbQueryException | DbStatementException e) {
-            LOGGER.warn(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
-            return null;
-        }
+        final String query = "SELECT * FROM User WHERE email = '" + email + "';";
+        return executor.execQuery(dbConnection, query, new UserResultHandler());
     }
 
-    public UserProfile getUserExistance(String login, String email) {
+    public UserProfile getUserExistance(String login, String email) throws SQLException {
         final Executor executor = new Executor();
-        try {
-            final String query = "SELECT * FROM User WHERE login = '" + login + "' OR email = '" + email +"';";
-            return executor.execQuery(dbConnection, query, new UserResultHandler());
-        } catch (DbResultSetException | DbQueryException | DbStatementException e) {
-            LOGGER.warn(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
-            return null;
-        }
+        final String query = "SELECT * FROM User WHERE login = '" + login + "' OR email = '" + email +"';";
+        return executor.execQuery(dbConnection, query, new UserResultHandler());
     }
 
-    public List<UserProfile> getTopUsers() {
+    public List<UserProfile> getTopUsers() throws SQLException {
         final Executor executor = new Executor();
-        try {
-            final String query = "SELECT * FROM User ORDER BY rating DESC LIMIT 10;";
-            return executor.execQuery(dbConnection, query, new UserListResultHandler());
-        } catch (DbResultSetException | DbQueryException | DbStatementException e) {
-            LOGGER.warn(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
-            return null;
-        }
+        final String query = "SELECT * FROM User ORDER BY rating DESC LIMIT 10;";
+        return executor.execQuery(dbConnection, query, new UserListResultHandler());
     }
 
-    public List<UserProfile> getUsers() {
+    public List<UserProfile> getUsers() throws SQLException {
         final Executor executor = new Executor();
-        try {
-            final String query = "SELECT * FROM User ORDER BY login;";
-            return executor.execQuery(dbConnection, query, new UserListResultHandler());
-        } catch (DbResultSetException | DbQueryException | DbStatementException e) {
-            LOGGER.warn(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
-            return null;
-        }
+        final String query = "SELECT * FROM User ORDER BY login;";
+        return executor.execQuery(dbConnection, query, new UserListResultHandler());
     }
 
-    public UserProfile addUser(String login, String email, String password) {
+    public UserProfile addUser(String login, String email, String password) throws SQLException {
         final Executor executor = new Executor();
-        try {
-            final String update = "INSERT INTO User(login, email, password) VALUES('" +
-                    login + "','" + email + "','" + password + "');";
-            executor.execUpdate(dbConnection, update);
-        }
-        catch (DbUpdateException | DbStatementException e) {
-            LOGGER.warn(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
-            return  null;
-        }
+        final String update = "INSERT INTO User(login, email, password) VALUES('" +
+                login + "','" + email + "','" + password + "');";
+        executor.execUpdate(dbConnection, update);
 
         return getUserByLogin(login);
     }
 
-    public boolean updateRating(long id, long incValue)  {
+    public boolean updateRating(long id, long incValue) throws SQLException {
         final Executor executor = new Executor();
-        try {
-            final String update = "UPDATE User set rating = (rating + " + Long.toString(incValue) + ") WHERE id = " +
-                    Long.toString(id) + ';';
-            executor.execUpdate(dbConnection, update);
-        }
-        catch (DbUpdateException | DbStatementException e) {
-            LOGGER.warn(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
-            return false;
-        }
+        final String update = "UPDATE User set rating = (rating + " + Long.toString(incValue) + ") WHERE id = " +
+                Long.toString(id) + ';';
+        executor.execUpdate(dbConnection, update);
 
         return true;
     }

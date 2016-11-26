@@ -1,15 +1,11 @@
 package ru.aviaj.database.dao;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ru.aviaj.database.exception.*;
 import ru.aviaj.database.executor.Executor;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class SessionDAO {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(SessionDAO.class);
 
     private Connection dbConnection;
 
@@ -17,61 +13,35 @@ public class SessionDAO {
         this.dbConnection = dbConnection;
     }
 
-    public long getUserIdBySession(String session) {
+    public long getUserIdBySession(String session) throws SQLException {
         final Executor executor = new Executor();
-        try {
-            final String query = "SELECT userId FROM Session WHERE session = '" + session + "';";
-            return executor.execQuery(dbConnection, query, resultSet -> {
-                resultSet.next();
-                return resultSet.getLong("userId");
-            });
-        } catch (DbQueryException | DbResultSetException | DbStatementException e) {
-            LOGGER.warn(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
-            return 0;
-        }
+        final String query = "SELECT userId FROM Session WHERE session = '" + session + "';";
+        return executor.execQuery(dbConnection, query, resultSet -> {
+            resultSet.next();
+            return resultSet.getLong("userId");
+        });
     }
 
-    public boolean addSession(String session, long userId) {
+    public boolean addSession(String session, long userId) throws SQLException {
         final Executor executor = new Executor();
-        try {
-            final String update = "INSERT INTO Session (session, userId) VALUES ('" + session +
-                    "', " + Long.toString(userId) + ");";
-            executor.execUpdate(dbConnection, update);
-
-            return true;
-        }
-        catch (DbUpdateException | DbStatementException e) {
-            LOGGER.warn(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
-            return false;
-        }
+        final String update = "INSERT INTO Session (session, userId) VALUES ('" + session +
+                "', " + Long.toString(userId) + ");";
+        executor.execUpdate(dbConnection, update);
+        return true;
     }
 
     @SuppressWarnings("Duplicates")
-    public boolean removeSession(String session) {
+    public boolean removeSession(String session) throws SQLException {
         final Executor executor = new Executor();
-        try {
-            final String update = "DELETE FROM Session WHERE session = '" + session + "';";
-            executor.execUpdate(dbConnection, update);
-
-            return true;
-        }
-        catch (DbUpdateException | DbStatementException e) {
-            LOGGER.warn(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
-            return false;
-        }
+        final String update = "DELETE FROM Session WHERE session = '" + session + "';";
+        executor.execUpdate(dbConnection, update);
+        return true;
     }
 
-    public boolean removeAll() {
+    public boolean removeAll() throws SQLException {
         final Executor executor = new Executor();
-        try {
-            final String update = "DELETE * FROM Session;";
-            executor.execUpdate(dbConnection, update);
-
-            return true;
-        }
-        catch (DbUpdateException | DbStatementException e) {
-            LOGGER.warn(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
-            return false;
-        }
+        final String update = "DELETE * FROM Session;";
+        executor.execUpdate(dbConnection, update);
+        return true;
     }
 }
