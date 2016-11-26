@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ru.aviaj.database.exception.DbException;
 import ru.aviaj.model.ErrorList;
 import ru.aviaj.model.ErrorType;
 import ru.aviaj.model.UserProfile;
@@ -42,8 +43,8 @@ public class AuthenticationController {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                         new ErrorList(ErrorType.ALREADYLOGIN)
                 );
-        } catch (DbConnectException e) {
-            LOGGER.error(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
+        } catch (DbException e) {
+            LOGGER.error("Login error:", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );
@@ -57,8 +58,8 @@ public class AuthenticationController {
                         new ErrorList(ErrorType.NOLOGIN)
                 );
             }
-        } catch (DbConnectException e) {
-            LOGGER.error(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
+        } catch (DbException e) {
+            LOGGER.error("Login error:", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );
@@ -75,14 +76,10 @@ public class AuthenticationController {
         }
 
         try {
-            final boolean success = sessionService.addSession(httpSession.getId(), requestUser.getId());
-            if (!success) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                        new ErrorList(ErrorType.UNEXPECTEDERROR)
-                );
-            }
-        } catch (DbConnectException e) {
-            LOGGER.error(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
+            sessionService.addSession(httpSession.getId(), requestUser.getId());
+
+        } catch (DbException e) {
+            LOGGER.error("Login error:", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );
@@ -103,8 +100,8 @@ public class AuthenticationController {
                         new ErrorList(ErrorType.NOTLOGINED)
                 );
             }
-        } catch (DbConnectException e) {
-            LOGGER.error(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
+        } catch (DbException e) {
+            LOGGER.error("Authenticate error:", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );
@@ -120,8 +117,8 @@ public class AuthenticationController {
 
             return ResponseEntity.ok(new UserResponse(loginedUser));
 
-        } catch (DbConnectException e) {
-            LOGGER.error(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
+        } catch (DbException e) {
+            LOGGER.error("Authenticate error:", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );
@@ -130,7 +127,6 @@ public class AuthenticationController {
 
     @RequestMapping(path = "/api/auth/logout", method = RequestMethod.POST)
     public ResponseEntity logout(HttpSession httpSession) {
-
 
         final String sessionId = httpSession.getId();
 
@@ -141,22 +137,18 @@ public class AuthenticationController {
                         new ErrorList(ErrorType.NOTLOGINED)
                 );
             }
-        } catch (DbConnectException e) {
-            LOGGER.error(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
+        } catch (DbException e) {
+            LOGGER.error("Logout error:", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );
         }
 
         try {
-            final boolean success = sessionService.removeSession(sessionId);
-            if (!success) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                        new ErrorList(ErrorType.UNEXPECTEDERROR)
-                );
-            }
-        } catch (DbConnectException e) {
-            LOGGER.error(e.getMessage() + "\nStacktrace:\n" + e.getStackTraceString());
+            sessionService.removeSession(sessionId);
+
+        } catch (DbException e) {
+            LOGGER.error("Logout error:", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );
