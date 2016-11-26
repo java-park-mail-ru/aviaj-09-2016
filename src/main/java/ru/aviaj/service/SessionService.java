@@ -6,7 +6,6 @@ import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
 import ru.aviaj.database.DatabaseService;
 import ru.aviaj.database.dao.SessionDAO;
-import ru.aviaj.database.exception.DbConnectException;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

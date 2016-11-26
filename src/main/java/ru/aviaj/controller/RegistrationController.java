@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import ru.aviaj.database.exception.DbConnectException;
 import ru.aviaj.model.ErrorList;
 import ru.aviaj.model.ErrorType;
 import ru.aviaj.model.UserProfile;

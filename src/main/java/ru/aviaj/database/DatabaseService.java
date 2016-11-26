@@ -1,7 +1,5 @@
 package ru.aviaj.database;
 
-import ru.aviaj.database.exception.DbConnectException;
-
 import java.sql.Connection;
 
 public abstract class DatabaseService {
