@@ -6,6 +6,7 @@ import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
 import ru.aviaj.database.DatabaseService;
 import ru.aviaj.database.dao.SessionDAO;
+import ru.aviaj.database.exception.DbException;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -22,15 +23,15 @@ public class SessionService extends DatabaseService {
     }
 
     @Override
-    protected Connection getConnection() throws DbConnectException {
+    protected Connection getConnection() throws DbException {
         try {
            return DataSourceUtils.getConnection(ds);
         } catch (CannotGetJdbcConnectionException e) {
-            throw new DbConnectException("Unable to connect to database!", e);
+            throw new DbException("Unable to connect to database!", e);
         }
     }
 
-    public long getUserIdBySession(String session) throws DbConnectException {
+    public long getUserIdBySession(String session) throws DbException {
         final Connection dbConnection = getConnection();
 
         final SessionDAO sessionDao = new SessionDAO(dbConnection);
@@ -38,7 +39,7 @@ public class SessionService extends DatabaseService {
         return sessionDao.getUserIdBySession(session);
     }
 
-    public boolean addSession(String session, long userId) throws DbConnectException {
+    public boolean addSession(String session, long userId) throws DbException {
         final Connection dbConnection = getConnection();
 
         final SessionDAO sessionDao = new SessionDAO(dbConnection);
@@ -46,7 +47,7 @@ public class SessionService extends DatabaseService {
         return sessionDao.addSession(session, userId);
     }
 
-    public boolean removeSession(String session) throws DbConnectException {
+    public boolean removeSession(String session) throws DbException {
         final Connection dbConnection = getConnection();
 
         final SessionDAO sessionDao = new SessionDAO(dbConnection);
@@ -55,7 +56,7 @@ public class SessionService extends DatabaseService {
     }
 
     @SuppressWarnings("unused")
-    public boolean removeAll() throws DbConnectException {
+    public boolean removeAll() throws DbException {
         final Connection dbConnection = getConnection();
 
         final SessionDAO sessionDao = new SessionDAO(dbConnection);

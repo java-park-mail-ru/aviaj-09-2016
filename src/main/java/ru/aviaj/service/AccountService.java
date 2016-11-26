@@ -6,10 +6,12 @@ import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
 import ru.aviaj.database.DatabaseService;
 import ru.aviaj.database.dao.UserProfileDAO;
+import ru.aviaj.database.exception.DbException;
 import ru.aviaj.model.UserProfile;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -23,68 +25,82 @@ public class AccountService extends DatabaseService {
     }
 
     @Override
-    protected Connection getConnection() throws DbConnectException {
+    protected Connection getConnection() throws DbException {
         try {
             return DataSourceUtils.getConnection(ds);
         } catch (CannotGetJdbcConnectionException e) {
-            throw new DbConnectException("Unable to connect to database!", e);
+            throw new DbException("Unable to connect to database!", e);
         }
     }
 
-    public UserProfile getUserById(long id) throws DbConnectException {
+    public UserProfile getUserById(long id) throws DbException {
         final Connection dbConnection = getConnection();
-
-        final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
-
-        return userDao.getUserById(id);
+        try {
+            final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
+            return userDao.getUserById(id);
+        } catch (SQLException e) {
+            throw new DbException("Unable to get user!", e);
+        }
     }
 
-    public UserProfile getUserByLogin(String login) throws DbConnectException {
+    public UserProfile getUserByLogin(String login) throws DbException {
         final Connection dbConnection = getConnection();
-
-        final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
-
-        return userDao.getUserByLogin(login);
+        try {
+            final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
+            return userDao.getUserByLogin(login);
+        } catch (SQLException e) {
+            throw new DbException("Unable to get user!", e);
+        }
     }
 
-    public UserProfile getUserExistance(String login, String email) throws DbConnectException {
+    public UserProfile getUserExistance(String login, String email) throws DbException {
         final Connection dbConnection = getConnection();
-
-        final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
-
-        return userDao.getUserExistance(login, email);
+        try {
+            final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
+            return userDao.getUserExistance(login, email);
+        } catch (SQLException e) {
+            throw new DbException("Unable to get user existance!", e);
+        }
     }
 
-    public List<UserProfile> getTopUsers() throws DbConnectException {
+    public List<UserProfile> getTopUsers() throws DbException {
         final Connection dbConnection = getConnection();
-
-        final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
-
-        return userDao.getTopUsers();
+        try {
+            final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
+            return userDao.getTopUsers();
+        } catch (SQLException e) {
+            throw new DbException("Unable to get users!", e);
+        }
     }
 
-    public List<UserProfile> getAllUsers() throws DbConnectException {
+    public List<UserProfile> getAllUsers() throws DbException {
         final Connection dbConnection = getConnection();
-
-        final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
-
-        return userDao.getUsers();
+        try {
+            final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
+            return userDao.getUsers();
+        } catch (SQLException e) {
+            throw new DbException("Unable to get users!", e);
+        }
     }
 
-    public UserProfile addUser(String login, String email, String password) throws DbConnectException {
+    public UserProfile addUser(String login, String email, String password) throws DbException {
         final Connection dbConnection = getConnection();
-
-        final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
-
-        return userDao.addUser(login, email, password);
+        try {
+            final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
+            return userDao.addUser(login, email, password);
+        } catch (SQLException e) {
+            throw new DbException("Unable to get users!", e);
+        }
     }
 
-    public boolean updateUserRating(long userId, int incrementValue) throws DbConnectException {
+    public void updateUserRating(long userId, int incrementValue) throws DbException {
         final Connection dbConnection = getConnection();
-
-        final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
-
-        return userDao.updateRating(userId, incrementValue);
+        try {
+            final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
+            userDao.updateRating(userId, incrementValue);
+        } catch (SQLException e) {
+            throw new DbException("Unable to get users!", e);
+        }
     }
 
 }
