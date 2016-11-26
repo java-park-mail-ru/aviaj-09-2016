@@ -8,11 +8,12 @@ import java.sql.SQLException;
 public class UserResultHandler implements IResultHandler<UserProfile> {
     @Override
     public UserProfile handle(ResultSet resultSet) throws SQLException {
-        resultSet.next();
-        return new UserProfile(resultSet.getString("login"),
-                resultSet.getString("email"),
-                resultSet.getString("password"),
-                resultSet.getLong("id"),
-                resultSet.getLong("rating"));
+        if (resultSet.next())
+            return new UserProfile(resultSet.getString("login"),
+                    resultSet.getString("email"),
+                    resultSet.getString("password"),
+                    resultSet.getLong("id"),
+                    resultSet.getLong("rating"));
+        return null;
     }
 }

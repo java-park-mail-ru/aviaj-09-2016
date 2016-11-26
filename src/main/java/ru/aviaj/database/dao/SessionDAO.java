@@ -17,8 +17,9 @@ public class SessionDAO {
         final Executor executor = new Executor();
         final String query = "SELECT userId FROM Session WHERE session = '" + session + "';";
         return executor.execQuery(dbConnection, query, resultSet -> {
-            resultSet.next();
-            return resultSet.getLong("userId");
+            if (resultSet.next())
+                return resultSet.getLong("userId");
+            return (long)0;
         });
     }
 
