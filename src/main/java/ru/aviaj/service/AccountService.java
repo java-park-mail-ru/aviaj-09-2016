@@ -89,7 +89,7 @@ public class AccountService extends DatabaseService {
             final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
             return userDao.addUser(login, email, password);
         } catch (SQLException e) {
-            throw new DbException("Unable to get users!", e);
+            throw new DbException("Unable to add user!", e);
         }
     }
 
@@ -99,7 +99,7 @@ public class AccountService extends DatabaseService {
             final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
             userDao.updateRating(userId, incrementValue);
         } catch (SQLException e) {
-            throw new DbException("Unable to get users!", e);
+            throw new DbException("Unable to update rating!", e);
         }
     }
 

@@ -10,6 +10,7 @@ import ru.aviaj.database.exception.DbException;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 
 @Service
@@ -33,35 +34,43 @@ public class SessionService extends DatabaseService {
 
     public long getUserIdBySession(String session) throws DbException {
         final Connection dbConnection = getConnection();
-
-        final SessionDAO sessionDao = new SessionDAO(dbConnection);
-
-        return sessionDao.getUserIdBySession(session);
+        try {
+            final SessionDAO sessionDao = new SessionDAO(dbConnection);
+            return sessionDao.getUserIdBySession(session);
+        } catch (SQLException e) {
+            throw new DbException("Unable to get user id!", e);
+        }
     }
 
-    public boolean addSession(String session, long userId) throws DbException {
+    public void addSession(String session, long userId) throws DbException {
         final Connection dbConnection = getConnection();
-
-        final SessionDAO sessionDao = new SessionDAO(dbConnection);
-
-        return sessionDao.addSession(session, userId);
+        try {
+            final SessionDAO sessionDao = new SessionDAO(dbConnection);
+            sessionDao.addSession(session, userId);
+        } catch (SQLException e) {
+            throw new DbException("Unable to add session!", e);
+        }
     }
 
-    public boolean removeSession(String session) throws DbException {
+    public void removeSession(String session) throws DbException {
         final Connection dbConnection = getConnection();
-
-        final SessionDAO sessionDao = new SessionDAO(dbConnection);
-
-        return sessionDao.removeSession(session);
+        try {
+            final SessionDAO sessionDao = new SessionDAO(dbConnection);
+            sessionDao.removeSession(session);
+        } catch (SQLException e) {
+            throw new DbException("Unable to remove session!", e);
+        }
     }
 
     @SuppressWarnings("unused")
-    public boolean removeAll() throws DbException {
+    public void removeAll() throws DbException {
         final Connection dbConnection = getConnection();
-
-        final SessionDAO sessionDao = new SessionDAO(dbConnection);
-
-        return sessionDao.removeAll();
+        try {
+            final SessionDAO sessionDao = new SessionDAO(dbConnection);
+            sessionDao.removeAll();
+        } catch (SQLException e) {
+            throw new DbException("Unable to remove sessions!", e);
+        }
     }
 
 }
