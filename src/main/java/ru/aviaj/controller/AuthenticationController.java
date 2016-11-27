@@ -85,6 +85,7 @@ public class AuthenticationController {
             );
         }
 
+        httpSession.setAttribute("AVIAJ_ID", requestUser.getId());
         return ResponseEntity.ok(new UserResponse(requestUser));
 
     }
@@ -95,7 +96,7 @@ public class AuthenticationController {
         final long loginedUserId;
         try {
             loginedUserId = sessionService.getUserIdBySession(httpSession.getId());
-            if (loginedUserId == 0) {
+            if ((loginedUserId == 0) || (loginedUserId != (long)httpSession.getAttribute("AVIAJ_ID"))) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                         new ErrorList(ErrorType.NOTLOGINED)
                 );
@@ -154,6 +155,7 @@ public class AuthenticationController {
             );
         }
 
+        httpSession.removeAttribute("AVIAJ_ID");
         return ResponseEntity.ok("{\"success\": \"true\"}");
 
     }
