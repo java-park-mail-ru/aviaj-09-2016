@@ -39,7 +39,7 @@ public class SessionDAO {
 
     public void removeAll() throws SQLException {
         final Executor executor = new Executor();
-        final String update = "DELETE * FROM Session;";
+        final String update = "DELETE FROM Session;";
         executor.execUpdate(dbConnection, update);
     }
 }
