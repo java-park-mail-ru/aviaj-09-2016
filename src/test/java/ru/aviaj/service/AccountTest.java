@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 @TestPropertySource(locations = "classpath:test.properties")
 public class AccountTest {
 
-   /* @Autowired
+    @Autowired
     private AccountService accountService;
 
     List<UserProfile> mockUsers = new ArrayList<>();
@@ -52,8 +52,7 @@ public class AccountTest {
         final UserProfile user = accountService.addUser("TestUser", "test@mail.ru", "psw");
         assertEquals("TestUser", user.getLogin());
         assertEquals("test@mail.ru", user.getEmail());
-        assertEquals("psw", user.getPassword());
-        assertNull(accountService.addUser("TestUser", "test@mail.ru", "psw"));
+        assertNotNull(accountService.getUserExistance("TestUser", "test@mail.ru"));
     }
 
 
@@ -78,12 +77,14 @@ public class AccountTest {
         fillUser();
         final UserProfile user = accountService.getUserByLogin(mockUsers.get(7).getLogin());
         assertNotNull(user);
-        assertTrue(accountService.updateUserRating(user.getId(), 100));
+        accountService.updateUserRating(user.getId(), 100);
         final UserProfile userUpd = accountService.getUserByLogin(user.getLogin());
         assertNotNull(userUpd);
         user.updateRating(100);
         assertEquals(100, user.getRating());
         assertEquals(userUpd.getRating(), user.getRating());
-    } */
+        final List<UserProfile> top = accountService.getTopUsers();
+        assertEquals(100, top.get(0).getRating());
+    }
 
 }
