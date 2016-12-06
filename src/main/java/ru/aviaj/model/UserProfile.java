@@ -12,12 +12,7 @@ public class UserProfile {
     private long rating;
 
     public UserProfile(String login, String email, String password) {
-
-        this.id = 0;
-        this.login = login;
-        this.email = email;
-        this.password = password;
-        this.rating = 0;
+        this(login, email, password, 0, 0);
     }
 
     public UserProfile(String login, String email, String password, long id, long rating) {
@@ -26,15 +21,6 @@ public class UserProfile {
         this.email = email;
         this.password = password;
         this.rating = rating;
-    }
-
-    public UserProfile(UserProfile other) {
-
-        this.id = other.id;
-        this.login = other.login;
-        this.email = other.email;
-        this.password = other.password;
-        this.rating = other.rating;
     }
 
     @SuppressWarnings("RedundantIfStatement")

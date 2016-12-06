@@ -1,8 +1,6 @@
 package ru.aviaj.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.CannotGetJdbcConnectionException;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
 import ru.aviaj.database.DatabaseService;
 import ru.aviaj.database.dao.UserProfileDAO;
@@ -17,21 +15,11 @@ import java.util.List;
 @Service
 public class AccountService extends DatabaseService {
 
-    private DataSource ds;
-
     @Autowired
     public AccountService(DataSource ds) {
         this.ds = ds;
     }
 
-    @Override
-    protected Connection getConnection() throws DbException {
-        try {
-            return DataSourceUtils.getConnection(ds);
-        } catch (CannotGetJdbcConnectionException e) {
-            throw new DbException("Unable to connect to database!", e);
-        }
-    }
 
     public UserProfile getUserById(long id) throws DbException {
         final Connection dbConnection = getConnection();

@@ -1,5 +1,6 @@
 package ru.aviaj.database.executor;
 
+import org.jetbrains.annotations.Nullable;
 import ru.aviaj.database.handler.IResultHandler;
 
 import java.sql.Connection;
@@ -10,6 +11,7 @@ import java.sql.Statement;
 @SuppressWarnings({"JDBCResourceOpenedButNotSafelyClosed", "ThrowInsideCatchBlockWhichIgnoresCaughtException", "DuplicateThrows"})
 public class Executor {
 
+    @Nullable
     public <T> T execQuery(Connection dbConnection, String sqlQuery, IResultHandler<T> resultHandler)
             throws SQLException {
 
@@ -20,11 +22,7 @@ public class Executor {
                 return null;
 
             try(ResultSet resultSet = statement.getResultSet()) {
-                final T result = resultHandler.handle(resultSet);
-                resultSet.close();
-                statement.close();
-
-                return result;
+                return resultHandler.handle(resultSet);
             }
         }
     }
@@ -33,10 +31,7 @@ public class Executor {
             throws SQLException {
 
         try (Statement statement = dbConnection.createStatement()) {
-            final int result = statement.executeUpdate(sqlUpdate);
-            statement.close();
-
-            return result;
+            return statement.executeUpdate(sqlUpdate);
         }
     }
 }
