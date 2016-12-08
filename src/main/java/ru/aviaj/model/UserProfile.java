@@ -1,6 +1,7 @@
 package ru.aviaj.model;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @SuppressWarnings({"ConstantNamingConvention", "unused", "OverlyComplexBooleanExpression"})
 public class UserProfile {

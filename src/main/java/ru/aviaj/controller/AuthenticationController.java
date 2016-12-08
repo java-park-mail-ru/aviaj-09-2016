@@ -66,8 +66,14 @@ public class AuthenticationController {
             );
         }
 
-        final String truePasswordHash = requestUser.getPassword();
         final String bodyPassword = body.getPassword();
+        if (bodyPassword == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ErrorList(ErrorType.WRONGPASSWORD)
+            );
+        }
+
+        final String truePasswordHash = requestUser.getPassword();
         final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         if (!encoder.matches(bodyPassword, truePasswordHash)) {
