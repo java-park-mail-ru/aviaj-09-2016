@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.aviaj.database.DatabaseService;
 import ru.aviaj.database.dao.SessionDAO;
+import ru.aviaj.database.dao.UserProfileDAO;
 import ru.aviaj.database.exception.DbException;
 
 import javax.sql.DataSource;
@@ -58,6 +59,16 @@ public class SessionService extends DatabaseService {
             sessionDao.removeAll();
         } catch (SQLException e) {
             throw new DbException("Unable to remove sessions!", e);
+        }
+    }
+
+    public void truncateAll() throws DbException {
+        final Connection dbConnection = getConnection();
+        try {
+            final SessionDAO sessionDAO = new SessionDAO(dbConnection);
+            sessionDAO.truncate();
+        } catch (SQLException e) {
+            throw new DbException("Unable to truncate table Session!", e);
         }
     }
 

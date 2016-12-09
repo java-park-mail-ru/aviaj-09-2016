@@ -30,6 +30,8 @@ public class SessionTest {
     public void addSessionTest() throws Exception {
         sessionService.addSession("samplesession", 100);
         assertEquals(100, sessionService.getUserIdBySession("samplesession"));
+
+        sessionService.truncateAll();
     }
 
 
@@ -42,5 +44,7 @@ public class SessionTest {
         assertEquals(0, sessionService.getUserIdBySession("session5"));
         sessionService.removeAll();
         assertEquals(0, sessionService.getUserIdBySession("session1"));
+
+        sessionService.truncateAll();
     }
 }

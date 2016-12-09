@@ -69,4 +69,11 @@ public class UserProfileDAO {
                 Long.toString(id) + ';';
         executor.execUpdate(dbConnection, update);
     }
+
+    public void truncate() throws SQLException {
+        final Executor executor = new Executor();
+        final String update = "TRUNCATE TABLE User;";
+        executor.execUpdate(dbConnection, update);
+    }
+
 }

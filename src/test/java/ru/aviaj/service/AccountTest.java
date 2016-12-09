@@ -53,6 +53,8 @@ public class AccountTest {
         assertEquals("TestUser", user.getLogin());
         assertEquals("test@mail.ru", user.getEmail());
         assertNotNull(accountService.getUserExistance("TestUser", "test@mail.ru"));
+
+        accountService.truncateAll();
     }
 
 
@@ -70,6 +72,8 @@ public class AccountTest {
         final UserProfile user5 = accountService.getUserByLogin("User5");
         assertNotNull(user5);
         assertEquals(user5.getLogin(), accountService.getUserExistance(user5.getLogin(), user5.getEmail()).getLogin());
+
+        accountService.truncateAll();
     }
 
     @Test
@@ -85,6 +89,8 @@ public class AccountTest {
         assertEquals(userUpd.getRating(), user.getRating());
         final List<UserProfile> top = accountService.getTopUsers();
         assertEquals(100, top.get(0).getRating());
+
+        accountService.truncateAll();
     }
 
 }

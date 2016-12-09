@@ -5,6 +5,7 @@ import ru.aviaj.database.executor.Executor;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+@SuppressWarnings("ConstantConditions")
 public class SessionDAO {
 
     private Connection dbConnection;
@@ -40,6 +41,12 @@ public class SessionDAO {
     public void removeAll() throws SQLException {
         final Executor executor = new Executor();
         final String update = "DELETE FROM Session;";
+        executor.execUpdate(dbConnection, update);
+    }
+
+    public void truncate() throws SQLException {
+        final Executor executor = new Executor();
+        final String update = "TRUNCATE TABLE Session;";
         executor.execUpdate(dbConnection, update);
     }
 }

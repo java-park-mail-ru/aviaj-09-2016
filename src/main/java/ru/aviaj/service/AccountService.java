@@ -91,4 +91,14 @@ public class AccountService extends DatabaseService {
         }
     }
 
+    public void truncateAll() throws DbException {
+        final Connection dbConnection = getConnection();
+        try {
+            final UserProfileDAO userDao = new UserProfileDAO(dbConnection);
+            userDao.truncate();
+        } catch (SQLException e) {
+            throw new DbException("Unable to truncate table User!", e);
+        }
+    }
+
 }
