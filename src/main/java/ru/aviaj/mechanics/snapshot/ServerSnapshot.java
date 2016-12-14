@@ -2,6 +2,7 @@ package ru.aviaj.mechanics.snapshot;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class ServerSnapshot {
 
     private List<ServerPlayerSnapshot> players;

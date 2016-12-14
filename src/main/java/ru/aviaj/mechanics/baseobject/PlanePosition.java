@@ -1,5 +1,6 @@
 package ru.aviaj.mechanics.baseobject;
 
+import ru.aviaj.mechanics.GameConfig;
 import ru.aviaj.mechanics.basetype.Dot;
 import ru.aviaj.mechanics.basetype.Vector;
 
@@ -9,14 +10,17 @@ public class PlanePosition {
     private Dot center;
     private Vector direction;
 
+    private long planeWidth;
+    private long planeHeight;
+    private long planeLength;
+
     public PlanePosition(Dot center, Vector direction) {
         this.center = center;
         this.direction = direction;
-    }
 
-    public PlanePosition(long xC, long yC, long zC, long xD, long yD, long zD) {
-        this.center = new Dot(xC, yC, zC);
-        this.direction = new Vector(xD, yD, zD);
+        this.planeHeight = GameConfig.PLANE_HEIGHT;
+        this.planeLength = GameConfig.PLANE_LENGTH;
+        this.planeWidth = GameConfig.TRACK_WIDTH;
     }
 
     public Dot getCenter() {
@@ -33,5 +37,17 @@ public class PlanePosition {
 
     public Vector getDirection() {
         return direction;
+    }
+
+    public long getPlaneWidth() {
+        return planeWidth;
+    }
+
+    public long getPlaneHeight() {
+        return planeHeight;
+    }
+
+    public long getPlaneLength() {
+        return planeLength;
     }
 }
