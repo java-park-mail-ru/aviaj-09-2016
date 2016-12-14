@@ -1,41 +1,23 @@
 package ru.aviaj.mechanics.snapshot;
 
+import ru.aviaj.mechanics.basetype.Vector;
+
 @SuppressWarnings("unused")
 public class ClientSnaphot {
 
-    private long speedX;
-    private long speedY;
-    private long speedZ;
-
+    private Vector speed;
     private long frameTime;
 
-    public long getSpeedX() {
-        return speedX;
+    public Vector getSpeed() {
+        return speed;
     }
 
-    public long getSpeedY() {
-        return speedY;
-    }
-
-    public void setSpeedX(long speedX) {
-        this.speedX = speedX;
-    }
-
-    public void setSpeedY(long speedY) {
-        this.speedY = speedY;
-    }
-
-    public void setSpeedZ(long speedZ) {
-        this.speedZ = speedZ;
+    public void setSpeed(Vector speed) {
+        this.speed = speed;
     }
 
     public void setFrameTime(long frameTime) {
         this.frameTime = frameTime;
-    }
-
-    public long getSpeedZ() {
-
-        return speedZ;
     }
 
     public long getFrameTime() {
