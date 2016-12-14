@@ -16,6 +16,9 @@ import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
 import ru.aviaj.service.SessionService;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -46,8 +49,7 @@ public class AuthenticationControllerTest {
             final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             final String encodedPassword = encoder.encode("password");
             final UserProfile userProfile = accountService.addUser("login", "email", encodedPassword);
-            if (userProfile == null)
-                throw new Exception();
+            assertNotNull(userProfile);
             return userProfile;
         }
         return accountService.getUserByLogin("login");
@@ -56,8 +58,7 @@ public class AuthenticationControllerTest {
     private void authUser(UserProfile userProfile) throws Exception {
         if (sessionService.getUserIdBySession("testSession") != userProfile.getId()) {
             sessionService.addSession("testSession", userProfile.getId());
-            if (sessionService.getUserIdBySession("testSession") != userProfile.getId())
-                throw new Exception();
+            assertEquals(sessionService.getUserIdBySession("testSession"), userProfile.getId());
         }
     }
 
@@ -89,12 +90,6 @@ public class AuthenticationControllerTest {
     public void authenticate() throws Exception {
         final UserProfile testUser = createUser();
         authUser(testUser);
-       /* mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/authenticate").sessionAttr("JSESSIONID", "testSession"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("login").value(testUser.getLogin()))
-                .andExpect(jsonPath("email").value(testUser.getEmail()))
-                .andExpect(jsonPath("id").value(testUser.getId()))
-                .andExpect(jsonPath("rating").value(testUser.getRating())); */
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/authenticate").sessionAttr("JSESSIONID", "Session"))
                 .andExpect(status().isUnauthorized());
@@ -105,9 +100,6 @@ public class AuthenticationControllerTest {
     public void logout() throws Exception {
         final UserProfile testUser = createUser();
         authUser(testUser);
-        /*mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/logout").sessionAttr("JSESSIONID", "testSession"))
-                .andExpect(status().isOk());
-        isAuthenticated = false; */
         sessionService.removeSession("testSession");
         isAuthenticated = false;
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/logout").sessionAttr("JSESSIONID", "Session"))
