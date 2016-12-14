@@ -1,10 +1,12 @@
 package ru.aviaj.model;
 
+@SuppressWarnings("unused")
 public enum ErrorType {
     WRONGUSERID(9),
     NOLOGIN(10),
     WRONGPASSWORD(11),
     DUBLICATELOGIN(21),
+    DUBLICATEEMAIL(22),
     EMPTYLOGIN(23),
     EMPTYEMAIL(24),
     EMPTYPASSWORD(25),
@@ -14,7 +16,8 @@ public enum ErrorType {
     UNEXPECTEDERROR(900),
     NOTREALISED(901),
     WRONGTYPE(902),
-    WRONGBODY(903);
+    WRONGBODY(903),
+    DBERROR(951);
 
     private int code;
 
