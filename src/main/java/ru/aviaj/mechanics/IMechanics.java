@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 @SuppressWarnings("unused")
 public interface IMechanics {
 
-    // void addClientSnaphot();
+    void addClientSnaphot();
 
     void addUser(@NotNull long userId);
 
