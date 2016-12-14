@@ -3,8 +3,9 @@ package ru.aviaj.mechanics.basetype;
 @SuppressWarnings("unused")
 public enum CollisionStatus {
     NONE,
-    OVERFLY,
+    RING_OVERFLY,
+    RING_COLLISION,
     GROUND,
-    OBSTACLE,
-    PLANE
+    OUT_OF_TRACK,
+    PLANE,
 }
