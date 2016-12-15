@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public class AccountTest {
     List<UserProfile> mockUsers = new ArrayList<>();
 
     public AccountTest() throws Exception {
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 15; i++) {
             mockUsers.add(new UserProfile(
                     "User" + Integer.toString(i),
                     "user" + Integer.toString(i) + "@mail.ru",
@@ -91,6 +92,19 @@ public class AccountTest {
         assertEquals(100, top.get(0).getRating());
 
         accountService.truncateAll();
+    }
+
+    @Test
+    public void getUsersTest() throws Exception {
+        fillUser();
+
+        assertEquals(accountService.getAllUsers().size(), 15);
+
+        assertEquals(accountService.getTopUsers().size(), 10);
+        assertEquals(accountService.getTopUsers().get(1).getRating(), 0);
+
+        accountService.truncateAll();
+
     }
 
 }
