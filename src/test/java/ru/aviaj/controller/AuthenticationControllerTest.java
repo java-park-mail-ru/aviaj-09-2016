@@ -38,9 +38,6 @@ public class AuthenticationControllerTest {
     @Autowired
     private SessionService sessionService;
 
-    private static boolean isCreated = false;
-    private static boolean isAuthenticated = false;
-
 
     private UserProfile createUser() throws Exception {
         if (accountService.getUserByLogin("login") == null)
@@ -83,6 +80,9 @@ public class AuthenticationControllerTest {
                 .content("{\"login\":\"login\"}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+
+        accountService.truncateAll();
+        sessionService.truncateAll();
     }
 
     @Test
@@ -90,8 +90,16 @@ public class AuthenticationControllerTest {
         final UserProfile testUser = createUser();
         authUser(testUser);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/authenticate").sessionAttr("JSESSIONID", "Session"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/authenticate")
+                .sessionAttr("AVIAJSESSIONID", "testSession"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/authenticate")
+                .sessionAttr("AVIAJSESSIONID", "Session"))
                 .andExpect(status().isUnauthorized());
+
+        accountService.truncateAll();
+        sessionService.truncateAll();
 
     }
 
@@ -99,10 +107,15 @@ public class AuthenticationControllerTest {
     public void logout() throws Exception {
         final UserProfile testUser = createUser();
         authUser(testUser);
-        sessionService.removeSession("testSession");
-        isAuthenticated = false;
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/logout").sessionAttr("JSESSIONID", "Session"))
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/logout").sessionAttr("AVIAJSESSIONID", "testSession"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/logout").sessionAttr("AVIAJSESSIONID", "testSession"))
                 .andExpect(status().isUnauthorized());
+
+        accountService.truncateAll();
+        sessionService.truncateAll();
     }
 
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,17 +38,22 @@ public class AuthenticationController {
     @RequestMapping(path = "/api/auth/login", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity login(@RequestBody UserRequest body, HttpSession httpSession) {
 
-        try {
-            final long loginedUserId = sessionService.getUserIdBySession(httpSession.getId());
-            if (loginedUserId != 0)
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                        new ErrorList(ErrorType.ALREADYLOGIN)
+        if (httpSession.getAttribute("AVIAJSESSIONID") != null) {
+            final String sessionId = httpSession.getAttribute("AVIAJSESSIONID").toString();
+            try {
+                final long loginedUserId = sessionService.getUserIdBySession(sessionId);
+                if (loginedUserId != 0)
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                            new ErrorList(ErrorType.ALREADYLOGIN)
+                    );
+                else
+                    httpSession.removeAttribute("AVIAJSESSIONID");
+            } catch (DbException e) {
+                LOGGER.error("Login error:", e);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                        new ErrorList(ErrorType.DBERROR)
                 );
-        } catch (DbException e) {
-            LOGGER.error("Login error:", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.DBERROR)
-            );
+            }
         }
 
         final UserProfile requestUser;
@@ -81,8 +87,9 @@ public class AuthenticationController {
             );
         }
 
+        final String loginedUserSession = httpSession.getId();
         try {
-            sessionService.addSession(httpSession.getId(), requestUser.getId());
+            sessionService.addSession(loginedUserSession, requestUser.getId());
 
         } catch (DbException e) {
             LOGGER.error("Login error:", e);
@@ -91,7 +98,7 @@ public class AuthenticationController {
             );
         }
 
-        httpSession.setAttribute("AVIAJ_ID", requestUser.getId());
+        httpSession.setAttribute("AVIAJSESSIONID", loginedUserSession);
         return ResponseEntity.ok(new UserResponse(requestUser));
 
     }
@@ -101,8 +108,14 @@ public class AuthenticationController {
 
         final long loginedUserId;
         try {
-            loginedUserId = sessionService.getUserIdBySession(httpSession.getId());
-            if ((loginedUserId == 0) || (loginedUserId != (long)httpSession.getAttribute("AVIAJ_ID"))) {
+
+            if (httpSession.getAttribute("AVIAJSESSIONID") == null)
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                        new ErrorList(ErrorType.NOTLOGINED)
+                );
+            loginedUserId = sessionService.getUserIdBySession(httpSession.getAttribute("AVIAJSESSIONID").toString());
+            if ((loginedUserId == 0)) {
+                httpSession.removeAttribute("AVIAJSESSIONID");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                         new ErrorList(ErrorType.NOTLOGINED)
                 );
@@ -117,6 +130,7 @@ public class AuthenticationController {
         try {
             final UserProfile loginedUser = accountService.getUserById(loginedUserId);
             if (loginedUser == null) {
+                httpSession.removeAttribute("AVIAJSESSIONID");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                         new ErrorList(ErrorType.UNEXPECTEDERROR)
                 );
@@ -126,6 +140,7 @@ public class AuthenticationController {
 
         } catch (DbException e) {
             LOGGER.error("Authenticate error:", e);
+            httpSession.removeAttribute("AVIAJSESSIONID");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );
@@ -135,11 +150,16 @@ public class AuthenticationController {
     @RequestMapping(path = "/api/auth/logout", method = RequestMethod.POST)
     public ResponseEntity logout(HttpSession httpSession) {
 
-        final String sessionId = httpSession.getId();
+        if (httpSession.getAttribute("AVIAJSESSIONID") == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    new ErrorList(ErrorType.NOTLOGINED));
+
+        final String sessionId = httpSession.getAttribute("AVIAJSESSIONID").toString();
 
         try {
             final long loginedUserId = sessionService.getUserIdBySession(sessionId);
             if (loginedUserId == 0) {
+                httpSession.removeAttribute("AVIAJSESSIONID");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
                         new ErrorList(ErrorType.NOTLOGINED)
                 );
@@ -156,12 +176,13 @@ public class AuthenticationController {
 
         } catch (DbException e) {
             LOGGER.error("Logout error:", e);
+            httpSession.removeAttribute("AVIAJSESSIONID");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new ErrorList(ErrorType.DBERROR)
             );
         }
 
-        httpSession.removeAttribute("AVIAJ_ID");
+        httpSession.removeAttribute("AVIAJSESSIONID");
         return ResponseEntity.ok("{\"success\": \"true\"}");
 
     }
