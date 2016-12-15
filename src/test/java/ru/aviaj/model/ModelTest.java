@@ -20,9 +20,9 @@ public class ModelTest {
 
     @Test
     public void userProfileTest() throws Exception {
-        UserProfile user1 = new UserProfile("login1", "email1", "psw", 1, 0);
-        UserProfile user2 = new UserProfile("login1", "email1", "psw");
-        UserProfile user3 = new UserProfile("login1", "email1", "psw", 1, 0);
+        final UserProfile user1 = new UserProfile("login1", "email1", "psw", 1, 0);
+        final UserProfile user2 = new UserProfile("login1", "email1", "psw");
+        final UserProfile user3 = new UserProfile("login1", "email1", "psw", 1, 0);
 
         assertTrue(user1.equals(user3));
         assertFalse(user2.equals(user1));
@@ -38,9 +38,9 @@ public class ModelTest {
     }
 
     @Test
-    public void ErrorListTest() throws Exception {
-        ErrorList errorList = new ErrorList();
-        ErrorList otherErrorList = new ErrorList(ErrorType.NOUSERID);
+    public void errorListTest() throws Exception {
+        final ErrorList errorList = new ErrorList();
+        final ErrorList otherErrorList = new ErrorList(ErrorType.NOUSERID);
 
         assertTrue(errorList.isEmpty());
         errorList.addError(ErrorType.ALREADYLOGIN);

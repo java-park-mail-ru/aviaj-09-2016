@@ -21,6 +21,7 @@ import ru.aviaj.service.SessionService;
 import javax.servlet.http.HttpSession;
 
 
+@SuppressWarnings("unused")
 @RestController
 public class RegistrationController {
 

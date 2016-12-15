@@ -18,6 +18,7 @@ import ru.aviaj.service.AccountService;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 @RestController
 public class UserSelectionController {
 

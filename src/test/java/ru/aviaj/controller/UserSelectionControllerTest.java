@@ -1,6 +1,5 @@
 package ru.aviaj.controller;
 
-import com.jayway.jsonpath.JsonPath;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +12,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
-import ru.aviaj.service.SessionService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @TestPropertySource(locations = "classpath:test.properties")
@@ -105,5 +103,4 @@ public class UserSelectionControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value((int)testUser.getId()));
     }
-
 }

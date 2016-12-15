@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 @SpringBootTest
 @TestPropertySource(locations = "classpath:test.properties")
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE)
-@SuppressWarnings({"OverlyBroadThrowsClause", "FieldCanBeLocal", "unused"})
+@SuppressWarnings({"OverlyBroadThrowsClause", "FieldCanBeLocal", "unused", "InstanceMethodNamingConvention"})
 @RunWith(SpringRunner.class)
 
 public class GlobalExceptionControllerTest {

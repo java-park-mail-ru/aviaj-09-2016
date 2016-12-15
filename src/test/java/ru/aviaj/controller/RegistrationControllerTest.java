@@ -15,7 +15,6 @@ import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
 import ru.aviaj.service.SessionService;
 
-import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -40,7 +39,7 @@ public class RegistrationControllerTest {
         accountService.truncateAll();
         sessionService.truncateAll();
 
-        UserProfile testUser1 = accountService.addUser("login1", "email1", "psw1");
+        final UserProfile testUser1 = accountService.addUser("login1", "email1", "psw1");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/signup")
                 .content("{\"login\":\"login\",\"email\":\"email\",\"password\":\"password\"}")

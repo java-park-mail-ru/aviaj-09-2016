@@ -15,14 +15,14 @@ import static org.junit.Assert.*;
 @SpringBootTest
 @TestPropertySource(locations = "classpath:test.properties")
 @AutoConfigureMockMvc(print = MockMvcPrint.NONE)
-@SuppressWarnings({"OverlyBroadThrowsClause", "FieldCanBeLocal", "unused"})
+@SuppressWarnings({"OverlyBroadThrowsClause", "FieldCanBeLocal", "unused", "MethodNameSameAsClassName"})
 @RunWith(SpringRunner.class)
 
 public class DbExceptionTest {
 
     @Test
-    public void DbExceptionTest() throws Exception {
-        DbException dbException = new DbException("Exception", new SQLException());
+    public void dbExceptionTest() throws Exception {
+        final DbException dbException = new DbException("Exception", new SQLException());
         assertEquals(dbException.getMessage(), "Exception");
     }
 }
