@@ -60,6 +60,9 @@ public class AuthenticationControllerTest {
 
     @Test
     public void login() throws Exception {
+        accountService.truncateAll();
+        sessionService.truncateAll();
+
         final UserProfile testUser = createUser();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
@@ -80,13 +83,13 @@ public class AuthenticationControllerTest {
                 .content("{\"login\":\"login\"}")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
-
-        accountService.truncateAll();
-        sessionService.truncateAll();
     }
 
     @Test
     public void authenticate() throws Exception {
+        accountService.truncateAll();
+        sessionService.truncateAll();
+
         final UserProfile testUser = createUser();
         authUser(testUser);
 
@@ -97,14 +100,13 @@ public class AuthenticationControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/auth/authenticate")
                 .sessionAttr("AVIAJSESSIONID", "Session"))
                 .andExpect(status().isUnauthorized());
-
-        accountService.truncateAll();
-        sessionService.truncateAll();
-
     }
 
     @Test
     public void logout() throws Exception {
+        accountService.truncateAll();
+        sessionService.truncateAll();
+
         final UserProfile testUser = createUser();
         authUser(testUser);
 
@@ -113,9 +115,6 @@ public class AuthenticationControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/logout").sessionAttr("AVIAJSESSIONID", "testSession"))
                 .andExpect(status().isUnauthorized());
-
-        accountService.truncateAll();
-        sessionService.truncateAll();
     }
 
 }

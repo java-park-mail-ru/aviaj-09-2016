@@ -30,12 +30,6 @@ public class UserProfileDAO {
         return executor.execQuery(dbConnection, query, new UserResultHandler());
     }
 
-    public UserProfile getUserByEmail(String email) throws SQLException {
-        final Executor executor = new Executor();
-        final String query = "SELECT * FROM User WHERE email = '" + email + "';";
-        return executor.execQuery(dbConnection, query, new UserResultHandler());
-    }
-
     public UserProfile getUserExistance(String login, String email) throws SQLException {
         final Executor executor = new Executor();
         final String query = "SELECT * FROM User WHERE login = '" + login + "' OR email = '" + email +"';";

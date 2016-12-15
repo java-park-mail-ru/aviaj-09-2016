@@ -37,6 +37,9 @@ public class RegistrationControllerTest {
 
     @Test
     public void signupTest() throws Exception {
+        accountService.truncateAll();
+        sessionService.truncateAll();
+
         UserProfile testUser1 = accountService.addUser("login1", "email1", "psw1");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/signup")
@@ -55,9 +58,6 @@ public class RegistrationControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .sessionAttr("AVIAJSESSIONID", "testSession"))
                 .andExpect(status().isForbidden());
-
-        accountService.truncateAll();
-        sessionService.truncateAll();
 
     }
 
