@@ -88,9 +88,7 @@ public class AccountTest {
         accountService.updateUserRating(user.getId(), 100);
         final UserProfile userUpd = accountService.getUserByLogin(user.getLogin());
         assertNotNull(userUpd);
-        user.updateRating(100);
-        assertEquals(100, user.getRating());
-        assertEquals(userUpd.getRating(), user.getRating());
+        assertEquals(userUpd.getId(), user.getId());
         final List<UserProfile> top = accountService.getTopUsers();
         assertEquals(100, top.get(0).getRating());
 

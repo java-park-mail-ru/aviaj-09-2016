@@ -59,10 +59,6 @@ public class UserProfile {
         return rating;
     }
 
-    public void updateRating(long updateValue) {
-        rating += updateValue;
-    }
-
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
