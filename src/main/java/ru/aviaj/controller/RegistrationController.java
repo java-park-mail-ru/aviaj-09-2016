@@ -21,6 +21,7 @@ import ru.aviaj.service.SessionService;
 import javax.servlet.http.HttpSession;
 
 
+@SuppressWarnings("unused")
 @RestController
 public class RegistrationController {
 
@@ -39,18 +40,23 @@ public class RegistrationController {
     @RequestMapping(path = "/api/auth/signup", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity signup(@RequestBody UserSignupRequest body, HttpSession httpSession) {
 
-        try {
-            final long loginedUserId = sessionService.getUserIdBySession(httpSession.getId());
-            if (loginedUserId != 0) {
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                        new ErrorList(ErrorType.ALREADYLOGIN)
+        if (httpSession.getAttribute("AVIAJSESSIONID") != null) {
+
+            try {
+                final long loginedUserId = sessionService.getUserIdBySession(httpSession.getAttribute("AVIAJSESSIONID")
+                        .toString());
+                if (loginedUserId != 0) {
+                    httpSession.removeAttribute("AVIAJSESSIONID");
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                            new ErrorList(ErrorType.ALREADYLOGIN)
+                    );
+                }
+            } catch (DbException e) {
+                LOGGER.error("Signup error:", e);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                        new ErrorList(ErrorType.DBERROR)
                 );
             }
-        } catch (DbException e) {
-            LOGGER.error("Signup error:", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.DBERROR)
-            );
         }
 
         final String login = body.getLogin();

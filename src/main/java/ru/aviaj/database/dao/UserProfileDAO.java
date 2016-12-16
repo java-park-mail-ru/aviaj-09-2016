@@ -1,5 +1,6 @@
 package ru.aviaj.database.dao;
 
+import org.jetbrains.annotations.Nullable;
 import ru.aviaj.database.executor.Executor;
 import ru.aviaj.database.handler.UserListResultHandler;
 import ru.aviaj.database.handler.UserResultHandler;
@@ -18,42 +19,42 @@ public class UserProfileDAO {
         this.dbConnection = dbConnection;
     }
 
+    @Nullable
     public UserProfile getUserById(long id) throws SQLException {
         final Executor executor = new Executor();
         final String query = "SELECT * FROM User WHERE id = " + Long.toString(id) + ';';
         return executor.execQuery(dbConnection, query, new UserResultHandler());
     }
 
+    @Nullable
     public UserProfile getUserByLogin(String login) throws SQLException {
         final Executor executor = new Executor();
         final String query = "SELECT * FROM User WHERE login = '" + login + "';";
         return executor.execQuery(dbConnection, query, new UserResultHandler());
     }
 
-    public UserProfile getUserByEmail(String email) throws SQLException {
-        final Executor executor = new Executor();
-        final String query = "SELECT * FROM User WHERE email = '" + email + "';";
-        return executor.execQuery(dbConnection, query, new UserResultHandler());
-    }
-
+    @Nullable
     public UserProfile getUserExistance(String login, String email) throws SQLException {
         final Executor executor = new Executor();
         final String query = "SELECT * FROM User WHERE login = '" + login + "' OR email = '" + email +"';";
         return executor.execQuery(dbConnection, query, new UserResultHandler());
     }
 
+    @Nullable
     public List<UserProfile> getTopUsers() throws SQLException {
         final Executor executor = new Executor();
         final String query = "SELECT * FROM User ORDER BY rating DESC LIMIT 10;";
         return executor.execQuery(dbConnection, query, new UserListResultHandler());
     }
 
+    @Nullable
     public List<UserProfile> getUsers() throws SQLException {
         final Executor executor = new Executor();
         final String query = "SELECT * FROM User ORDER BY login;";
         return executor.execQuery(dbConnection, query, new UserListResultHandler());
     }
 
+    @Nullable
     public UserProfile addUser(String login, String email, String password) throws SQLException {
         final Executor executor = new Executor();
         final String update = "INSERT INTO User(login, email, password) VALUES('" +

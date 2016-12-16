@@ -27,7 +27,7 @@ public class AccountTest {
     List<UserProfile> mockUsers = new ArrayList<>();
 
     public AccountTest() throws Exception {
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 15; i++) {
             mockUsers.add(new UserProfile(
                     "User" + Integer.toString(i),
                     "user" + Integer.toString(i) + "@mail.ru",
@@ -65,6 +65,8 @@ public class AccountTest {
         final UserProfile user3 = accountService.getUserByLogin(mockUser3.getLogin());
         assertNotNull(user3);
         assertEquals(user3.getLogin(), mockUser3.getLogin());
+        assertEquals(mockUser3.getLogin(),accountService.getUserExistance(mockUser3.getLogin(), mockUser3.getEmail())
+            .getLogin());
 
         assertNotNull(accountService.getUserByLogin("User5"));
         assertNull(accountService.getUserByLogin("NoUser"));
@@ -72,6 +74,7 @@ public class AccountTest {
         final UserProfile user5 = accountService.getUserByLogin("User5");
         assertNotNull(user5);
         assertEquals(user5.getLogin(), accountService.getUserExistance(user5.getLogin(), user5.getEmail()).getLogin());
+        assertEquals(user5, accountService.getUserById(user5.getId()));
 
         accountService.truncateAll();
     }
@@ -84,13 +87,24 @@ public class AccountTest {
         accountService.updateUserRating(user.getId(), 100);
         final UserProfile userUpd = accountService.getUserByLogin(user.getLogin());
         assertNotNull(userUpd);
-        user.updateRating(100);
-        assertEquals(100, user.getRating());
-        assertEquals(userUpd.getRating(), user.getRating());
+        assertEquals(userUpd.getId(), user.getId());
         final List<UserProfile> top = accountService.getTopUsers();
         assertEquals(100, top.get(0).getRating());
 
         accountService.truncateAll();
+    }
+
+    @Test
+    public void getUsersTest() throws Exception {
+        fillUser();
+
+        assertEquals(accountService.getAllUsers().size(), 15);
+
+        assertEquals(accountService.getTopUsers().size(), 10);
+        assertEquals(accountService.getTopUsers().get(1).getRating(), 0);
+
+        accountService.truncateAll();
+
     }
 
 }
