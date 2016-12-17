@@ -1,25 +1,53 @@
 package ru.aviaj.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.aviaj.database.DatabaseService;
 import ru.aviaj.database.dao.SessionDAO;
-import ru.aviaj.database.dao.UserProfileDAO;
 import ru.aviaj.database.exception.DbException;
+import ru.aviaj.messagesystem.Abonent;
+import ru.aviaj.messagesystem.Address;
+import ru.aviaj.messagesystem.MessageSystem;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 
+@SuppressWarnings("InfiniteLoopStatement")
 @Service
-public class SessionService extends DatabaseService {
+public class SessionService extends DatabaseService implements Abonent, Runnable {
+
+    private Address address = new Address();
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SessionService.class);
 
     @Autowired
     public SessionService(DataSource ds) {
         this.ds = ds;
     }
 
+    @Autowired
+    MessageSystem messageSystem;
+
+    @Override
+    public Address getAddress() {
+        return this.address;
+    }
+
+    @Override
+    public void run() {
+        while(true) {
+            messageSystem.execForAbonent(this);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                LOGGER.error("Unable to sleep thread!", e);
+            }
+        }
+    }
 
     public long getUserIdBySession(String session) throws DbException {
         final Connection dbConnection = getConnection();

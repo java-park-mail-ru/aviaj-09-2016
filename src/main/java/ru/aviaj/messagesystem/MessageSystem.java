@@ -1,5 +1,6 @@
 package ru.aviaj.messagesystem;
 
+import org.springframework.stereotype.Service;
 import ru.aviaj.messagesystem.message.Message;
 
 import java.util.HashMap;
@@ -7,6 +8,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+
+@Service
 public class MessageSystem {
 
     private final Map<Address, ConcurrentLinkedQueue<Message>> messages = new HashMap<>();
