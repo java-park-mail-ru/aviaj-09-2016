@@ -21,6 +21,9 @@ import ru.aviaj.service.AccountService;
 import ru.aviaj.service.SessionService;
 
 import javax.servlet.http.HttpSession;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentMap;
 
 @SuppressWarnings({"unused", "Duplicates", "InfiniteLoopStatement"})
 @RestController
@@ -36,6 +39,12 @@ public class AuthenticationController implements Abonent, Runnable {
 
     private Address address = new Address();
 
+    private ConcurrentMap<String, Long> waitingClients = new ConcurrentHashMap<>();
+
+    private static final long NULLUSER = 0;
+    private static final long ERRORUSER = -1;
+    private static final long WAITINGUSER = -2;
+
     @Autowired
     public AuthenticationController(AccountService accountService, SessionService sessionService) {
         this.accountService = accountService;
@@ -49,6 +58,18 @@ public class AuthenticationController implements Abonent, Runnable {
     @Override
     public Address getAddress() {
         return address;
+    }
+
+    public void addToWaiters(String sessionId) {
+        waitingClients.put(sessionId, WAITINGUSER);
+    }
+
+    public void setWaiterStatus(String sessionId, long status) {
+        waitingClients.put(sessionId, status);
+    }
+
+    public void removeFromWaiters(String sessionId) {
+        waitingClients.remove(sessionId);
     }
 
     @Override
