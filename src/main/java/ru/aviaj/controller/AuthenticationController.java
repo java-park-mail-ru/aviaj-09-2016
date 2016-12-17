@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.aviaj.database.exception.DbException;
+import ru.aviaj.messagesystem.Abonent;
+import ru.aviaj.messagesystem.Address;
+import ru.aviaj.messagesystem.MessageSystem;
 import ru.aviaj.model.ErrorList;
 import ru.aviaj.model.ErrorType;
 import ru.aviaj.model.UserProfile;
@@ -19,12 +22,19 @@ import ru.aviaj.service.SessionService;
 
 import javax.servlet.http.HttpSession;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "Duplicates", "InfiniteLoopStatement"})
 @RestController
-public class AuthenticationController {
+public class AuthenticationController implements Abonent, Runnable {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
 
     private final AccountService accountService;
     private final SessionService sessionService;
+
+    @Autowired
+    MessageSystem messageSystem;
+
+    private Address address = new Address();
 
     @Autowired
     public AuthenticationController(AccountService accountService, SessionService sessionService) {
@@ -32,7 +42,22 @@ public class AuthenticationController {
         this.sessionService = sessionService;
     }
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
+    @Override
+    public Address getAddress() {
+        return address;
+    }
+
+    @Override
+    public void run() {
+        while(true) {
+            messageSystem.execForAbonent(this);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                LOGGER.error("Unable to sleep thread!", e);
+            }
+        }
+    }
 
     @RequestMapping(path = "/api/auth/login", method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity login(@RequestBody UserRequest body, HttpSession httpSession) {
