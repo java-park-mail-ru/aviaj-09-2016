@@ -1,13 +1,13 @@
-package ru.aviaj.messagesystem.message.authcontroller;
+package ru.aviaj.messagesystem.message.sessionservice;
 
 import ru.aviaj.messagesystem.Abonent;
 import ru.aviaj.messagesystem.Address;
 import ru.aviaj.messagesystem.message.Message;
 import ru.aviaj.service.SessionService;
 
-public abstract class MsgToAuthController extends Message {
+public abstract class MsgToSessionService extends Message {
 
-    public MsgToAuthController(Address from, Address to) {
+    public MsgToSessionService(Address from, Address to) {
         super(from, to);
     }
 

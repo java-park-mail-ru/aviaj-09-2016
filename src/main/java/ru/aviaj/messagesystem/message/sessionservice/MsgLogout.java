@@ -1,14 +1,14 @@
-package ru.aviaj.messagesystem.message.authcontroller;
+package ru.aviaj.messagesystem.message.sessionservice;
 
 import ru.aviaj.database.exception.DbException;
 import ru.aviaj.messagesystem.Address;
 import ru.aviaj.service.SessionService;
 
-public class MsgAuth extends MsgToAuthController {
+public class MsgLogout extends MsgToSessionService {
 
     private String sessionId;
 
-    public MsgAuth(Address from, Address to, String sessionId) {
+    public MsgLogout(Address from, Address to, String sessionId, long userId) {
         super(from, to);
         this.sessionId = sessionId;
     }
@@ -16,7 +16,7 @@ public class MsgAuth extends MsgToAuthController {
     @Override
     public void exec(SessionService sessionService) {
         try {
-            sessionService.getUserIdBySession(this.sessionId);
+            sessionService.removeSession(this.sessionId);
         } catch (DbException e) {
             //Error back
         }
