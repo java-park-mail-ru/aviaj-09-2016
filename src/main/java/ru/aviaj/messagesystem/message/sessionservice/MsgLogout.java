@@ -2,6 +2,7 @@ package ru.aviaj.messagesystem.message.sessionservice;
 
 import ru.aviaj.database.exception.DbException;
 import ru.aviaj.messagesystem.Address;
+import ru.aviaj.messagesystem.message.authcontroller.MsgLogoutResult;
 import ru.aviaj.service.SessionService;
 
 public class MsgLogout extends MsgToSessionService {
@@ -17,9 +18,11 @@ public class MsgLogout extends MsgToSessionService {
     public void exec(SessionService sessionService) {
         try {
             sessionService.removeSession(this.sessionId);
+            final MsgLogoutResult resultMsg = new MsgLogoutResult(getTo(), getFrom(), sessionId, true);
+            sessionService.getMessageSystem().send(resultMsg);
         } catch (DbException e) {
-            //Error back
+            final MsgLogoutResult resultMsg = new MsgLogoutResult(getTo(), getFrom(), sessionId, false);
+            sessionService.getMessageSystem().send(resultMsg);
         }
-        //Success back
     }
 }

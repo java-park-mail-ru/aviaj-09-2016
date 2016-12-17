@@ -42,6 +42,10 @@ public class AuthenticationController implements Abonent, Runnable {
         this.sessionService = sessionService;
     }
 
+    public MessageSystem getMessageSystem() {
+        return messageSystem;
+    }
+
     @Override
     public Address getAddress() {
         return address;

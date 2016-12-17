@@ -2,6 +2,7 @@ package ru.aviaj.messagesystem.message.sessionservice;
 
 import ru.aviaj.database.exception.DbException;
 import ru.aviaj.messagesystem.Address;
+import ru.aviaj.messagesystem.message.authcontroller.MsgAuthResult;
 import ru.aviaj.service.SessionService;
 
 public class MsgAuth extends MsgToSessionService {
@@ -16,10 +17,12 @@ public class MsgAuth extends MsgToSessionService {
     @Override
     public void exec(SessionService sessionService) {
         try {
-            sessionService.getUserIdBySession(this.sessionId);
+            final long userId = sessionService.getUserIdBySession(this.sessionId);
+            final MsgAuthResult resultMsg = new MsgAuthResult(getTo(), getFrom(), sessionId, userId);
+            sessionService.getMessageSystem().send(resultMsg);
         } catch (DbException e) {
-            //Error back
+            final MsgAuthResult resultMsg = new MsgAuthResult(getTo(), getFrom(), sessionId, -1);
+            sessionService.getMessageSystem().send(resultMsg);
         }
-        //Success back
     }
 }

@@ -16,7 +16,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 
-@SuppressWarnings("InfiniteLoopStatement")
+@SuppressWarnings({"InfiniteLoopStatement", "Duplicates"})
 @Service
 public class SessionService extends DatabaseService implements Abonent, Runnable {
 
@@ -35,6 +35,10 @@ public class SessionService extends DatabaseService implements Abonent, Runnable
     @Override
     public Address getAddress() {
         return this.address;
+    }
+
+    public MessageSystem getMessageSystem() {
+        return messageSystem;
     }
 
     @Override
