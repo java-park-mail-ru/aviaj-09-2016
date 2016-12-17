@@ -127,11 +127,13 @@ public class AuthenticationController implements Abonent, Runnable {
                 try {
                     requestUser = accountService.getUserById(getWaiterStatus(sessionId));
                     if (requestUser == null) {
+                        removeFromWaiters(sessionId);
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                                 new ErrorList(ErrorType.NOLOGIN)
                         );
                     }
                 } catch (DbException e) {
+                    removeFromWaiters(sessionId);
                     LOGGER.error("Login error:", e);
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                             new ErrorList(ErrorType.DBERROR)
@@ -185,69 +187,6 @@ public class AuthenticationController implements Abonent, Runnable {
 
         return ResponseEntity.ok("WAIT");
 
-       /* if (httpSession.getAttribute("AVIAJSESSIONID") != null) {
-            final String sessionId = httpSession.getAttribute("AVIAJSESSIONID").toString();
-            try {
-                final long loginedUserId = sessionService.getUserIdBySession(sessionId);
-                if (loginedUserId != 0)
-                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                            new ErrorList(ErrorType.ALREADYLOGIN)
-                    );
-                else
-                    httpSession.removeAttribute("AVIAJSESSIONID");
-            } catch (DbException e) {
-                LOGGER.error("Login error:", e);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                        new ErrorList(ErrorType.DBERROR)
-                );
-            }
-        }
-
-        final UserProfile requestUser;
-        try {
-            requestUser = accountService.getUserByLogin(body.getLogin());
-            if (requestUser == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                        new ErrorList(ErrorType.NOLOGIN)
-                );
-            }
-        } catch (DbException e) {
-            LOGGER.error("Login error:", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.DBERROR)
-            );
-        }
-
-        final String bodyPassword = body.getPassword();
-        if (bodyPassword == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ErrorList(ErrorType.WRONGPASSWORD)
-            );
-        }
-
-        final String truePasswordHash = requestUser.getPassword();
-        final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-        if (!encoder.matches(bodyPassword, truePasswordHash)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ErrorList(ErrorType.WRONGPASSWORD)
-            );
-        }
-
-        final String loginedUserSession = httpSession.getId();
-        try {
-            sessionService.addSession(loginedUserSession, requestUser.getId());
-
-        } catch (DbException e) {
-            LOGGER.error("Login error:", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.DBERROR)
-            );
-        }
-
-        httpSession.setAttribute("AVIAJSESSIONID", loginedUserSession);
-        return ResponseEntity.ok(new UserResponse(requestUser)); */
-
     }
 
     @RequestMapping(path = "/api/auth/authenticate", method = RequestMethod.GET)
@@ -292,15 +231,18 @@ public class AuthenticationController implements Abonent, Runnable {
         try {
             final UserProfile loginedUser = accountService.getUserById(status);
             if (loginedUser == null) {
+                removeFromWaiters(sessionId);
                 httpSession.removeAttribute("AVIAJSESSIONID");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                         new ErrorList(ErrorType.UNEXPECTEDERROR)
                 );
             }
 
+            removeFromWaiters(sessionId);
             return ResponseEntity.ok(new UserResponse(loginedUser));
 
         } catch (DbException e) {
+            removeFromWaiters(sessionId);
             LOGGER.error("Authenticate error:", e);
             httpSession.removeAttribute("AVIAJSESSIONID");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
