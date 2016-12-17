@@ -16,14 +16,25 @@ public class MessageSystem {
 
     public void send(Message message) {
         final Queue<Message> msgQueue = messages.get(message.getTo());
+        if (msgQueue == null) {
+            final ConcurrentLinkedQueue<Message> newQueue = new ConcurrentLinkedQueue<>();
+            newQueue.add(message);
+            messages.put(message.getTo(), newQueue);
+
+            return;
+        }
         msgQueue.add(message);
     }
 
     public void execForAbonent(Abonent abonent) {
-        final Queue<Message> msgQueue = messages.get(abonent.getAddress());
-        while (!msgQueue.isEmpty()) {
-            final Message msg = msgQueue.poll();
-            msg.exec(abonent);
+        if (messages.size() != 0) {
+            final Queue<Message> msgQueue = messages.get(abonent.getAddress());
+            if (msgQueue != null) {
+                while (!msgQueue.isEmpty()) {
+                    final Message msg = msgQueue.poll();
+                    msg.exec(abonent);
+                }
+            }
         }
     }
 }

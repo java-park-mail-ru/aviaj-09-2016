@@ -339,6 +339,7 @@ public class AuthenticationController implements Abonent, Runnable {
             );
         }
 
+        removeFromWaiters(sessionId);
         httpSession.removeAttribute("AVIAJSESSIONID");
 
         return ResponseEntity.ok("{\"success\": \"true\"}");
