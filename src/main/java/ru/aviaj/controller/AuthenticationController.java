@@ -15,6 +15,7 @@ import ru.aviaj.messagesystem.Abonent;
 import ru.aviaj.messagesystem.Address;
 import ru.aviaj.messagesystem.MessageSystem;
 import ru.aviaj.messagesystem.message.sessionservice.MsgAuth;
+import ru.aviaj.messagesystem.message.sessionservice.MsgLogout;
 import ru.aviaj.model.ErrorList;
 import ru.aviaj.model.ErrorType;
 import ru.aviaj.model.UserProfile;
@@ -230,35 +231,29 @@ public class AuthenticationController implements Abonent, Runnable {
 
         final String sessionId = httpSession.getAttribute("AVIAJSESSIONID").toString();
 
-        try {
-            final long loginedUserId = sessionService.getUserIdBySession(sessionId);
-            if (loginedUserId == 0) {
-                httpSession.removeAttribute("AVIAJSESSIONID");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                        new ErrorList(ErrorType.NOTLOGINED)
-                );
-            }
-        } catch (DbException e) {
-            LOGGER.error("Logout error:", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.DBERROR)
-            );
+        if (!hasWaiter(sessionId)) {
+            addToWaiters(sessionId);
+            final MsgLogout msgLogout = new MsgLogout(getAddress(), sessionService.getAddress(), sessionId);
+            messageSystem.send(msgLogout);
+
+            return ResponseEntity.ok("WAIT");
         }
 
-        try {
-            sessionService.removeSession(sessionId);
+        final long status = getWaiterStatus(sessionId);
 
-        } catch (DbException e) {
-            LOGGER.error("Logout error:", e);
-            httpSession.removeAttribute("AVIAJSESSIONID");
+        if (status == WAITINGUSER)
+            return ResponseEntity.ok("WAIT");
+
+        if (status == ERRORUSER) {
+            removeFromWaiters(sessionId);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.DBERROR)
+                    new ErrorList(ErrorType.UNEXPECTEDERROR)
             );
         }
 
         httpSession.removeAttribute("AVIAJSESSIONID");
-        return ResponseEntity.ok("{\"success\": \"true\"}");
 
+        return ResponseEntity.ok("{\"success\": \"true\"}");
     }
 
     @SuppressWarnings("unused")
