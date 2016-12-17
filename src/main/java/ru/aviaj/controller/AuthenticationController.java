@@ -24,9 +24,12 @@ import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
 import ru.aviaj.service.SessionService;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 @SuppressWarnings({"unused", "Duplicates", "InfiniteLoopStatement"})
 @RestController
@@ -44,6 +47,8 @@ public class AuthenticationController implements Abonent, Runnable {
 
     private ConcurrentMap<String, Long> waitingClients = new ConcurrentHashMap<>();
 
+    private Executor threadExecutor = Executors.newSingleThreadExecutor();
+
     public static final long NULLUSER = 0;
     public static final long ERRORUSER = -1;
     public static final long WAITINGUSER = -2;
@@ -53,6 +58,11 @@ public class AuthenticationController implements Abonent, Runnable {
     public AuthenticationController(AccountService accountService, SessionService sessionService) {
         this.accountService = accountService;
         this.sessionService = sessionService;
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        threadExecutor.execute(this);
     }
 
     public MessageSystem getMessageSystem() {

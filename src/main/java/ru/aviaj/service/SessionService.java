@@ -11,9 +11,12 @@ import ru.aviaj.messagesystem.Abonent;
 import ru.aviaj.messagesystem.Address;
 import ru.aviaj.messagesystem.MessageSystem;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 
 @SuppressWarnings({"InfiniteLoopStatement", "Duplicates"})
@@ -31,6 +34,13 @@ public class SessionService extends DatabaseService implements Abonent, Runnable
 
     @Autowired
     MessageSystem messageSystem;
+
+    private Executor threadExecutor = Executors.newSingleThreadExecutor();
+
+    @PostConstruct
+    public void postConstruct() {
+        threadExecutor.execute(this);
+    }
 
     @Override
     public Address getAddress() {
