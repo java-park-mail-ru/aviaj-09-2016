@@ -8,7 +8,7 @@ public class MsgLogout extends MsgToSessionService {
 
     private String sessionId;
 
-    public MsgLogout(Address from, Address to, String sessionId, long userId) {
+    public MsgLogout(Address from, Address to, String sessionId) {
         super(from, to);
         this.sessionId = sessionId;
     }
