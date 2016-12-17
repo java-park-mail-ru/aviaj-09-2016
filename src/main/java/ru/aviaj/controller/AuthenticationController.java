@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.keygen.StringKeyGenerator;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +16,7 @@ import ru.aviaj.messagesystem.Abonent;
 import ru.aviaj.messagesystem.Address;
 import ru.aviaj.messagesystem.MessageSystem;
 import ru.aviaj.messagesystem.message.sessionservice.MsgAuth;
+import ru.aviaj.messagesystem.message.sessionservice.MsgLogin;
 import ru.aviaj.messagesystem.message.sessionservice.MsgLogout;
 import ru.aviaj.model.ErrorList;
 import ru.aviaj.model.ErrorType;
@@ -98,6 +100,82 @@ public class AuthenticationController implements Abonent, Runnable {
     public ResponseEntity login(@RequestBody UserRequest body, HttpSession httpSession) {
 
         if (httpSession.getAttribute("AVIAJSESSIONID") != null) {
+
+            String sessionId = httpSession.getAttribute("AVIAJSESSIONID").toString();
+
+            if (!hasWaiter(sessionId))
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                        new ErrorList(ErrorType.ALREADYLOGIN)
+                );
+
+            if (getWaiterStatus(sessionId) == WAITINGUSER) {
+                return ResponseEntity.ok("WAIT");
+            }
+
+            if (getWaiterStatus(sessionId) > 0) {
+                final UserProfile requestUser;
+                try {
+                    requestUser = accountService.getUserById(getWaiterStatus(sessionId));
+                    if (requestUser == null) {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                                new ErrorList(ErrorType.NOLOGIN)
+                        );
+                    }
+                } catch (DbException e) {
+                    LOGGER.error("Login error:", e);
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                            new ErrorList(ErrorType.DBERROR)
+                    );
+                }
+
+                removeFromWaiters(sessionId);
+                return ResponseEntity.ok(new UserResponse(requestUser));
+            }
+        }
+
+        final UserProfile requestUser;
+        try {
+            requestUser = accountService.getUserByLogin(body.getLogin());
+            if (requestUser == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                        new ErrorList(ErrorType.NOLOGIN)
+                );
+            }
+        } catch (DbException e) {
+            LOGGER.error("Login error:", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new ErrorList(ErrorType.DBERROR)
+            );
+        }
+
+        final String bodyPassword = body.getPassword();
+        if (bodyPassword == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ErrorList(ErrorType.WRONGPASSWORD)
+            );
+        }
+
+        final String truePasswordHash = requestUser.getPassword();
+        final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+        if (!encoder.matches(bodyPassword, truePasswordHash)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ErrorList(ErrorType.WRONGPASSWORD)
+            );
+        }
+
+        final String sessionId = httpSession.getId();
+        final long userId = requestUser.getId();
+
+        addToWaiters(sessionId);
+        MsgLogin msgLogin = new MsgLogin(getAddress(), sessionService.getAddress(), sessionId, userId);
+        messageSystem.send(msgLogin);
+
+        httpSession.setAttribute("AVIAJSESSIONID", sessionId);
+
+        return ResponseEntity.ok("WAIT");
+
+       /* if (httpSession.getAttribute("AVIAJSESSIONID") != null) {
             final String sessionId = httpSession.getAttribute("AVIAJSESSIONID").toString();
             try {
                 final long loginedUserId = sessionService.getUserIdBySession(sessionId);
@@ -158,7 +236,7 @@ public class AuthenticationController implements Abonent, Runnable {
         }
 
         httpSession.setAttribute("AVIAJSESSIONID", loginedUserSession);
-        return ResponseEntity.ok(new UserResponse(requestUser));
+        return ResponseEntity.ok(new UserResponse(requestUser)); */
 
     }
 
