@@ -18,6 +18,9 @@ public class MsgLoginResult extends MsgToAuthController {
 
     @Override
     public void exec(AuthenticationController authController) {
-
+        if (success)
+            authController.setWaiterStatus(sessionId, userId);
+        else
+            authController.setWaiterStatus(sessionId, AuthenticationController.ERRORUSER);
     }
 }

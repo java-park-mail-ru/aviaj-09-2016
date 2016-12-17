@@ -1,9 +1,7 @@
 package ru.aviaj.messagesystem.message.authcontroller;
 
 import ru.aviaj.controller.AuthenticationController;
-import ru.aviaj.database.exception.DbException;
 import ru.aviaj.messagesystem.Address;
-import ru.aviaj.service.SessionService;
 
 public class MsgAuthResult extends MsgToAuthController {
 
@@ -18,6 +16,6 @@ public class MsgAuthResult extends MsgToAuthController {
 
     @Override
     public void exec(AuthenticationController authController) {
-
+        authController.setWaiterStatus(sessionId, userId);
     }
 }

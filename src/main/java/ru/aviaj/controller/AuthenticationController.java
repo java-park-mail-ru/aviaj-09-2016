@@ -22,7 +22,6 @@ import ru.aviaj.service.SessionService;
 
 import javax.servlet.http.HttpSession;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 
 @SuppressWarnings({"unused", "Duplicates", "InfiniteLoopStatement"})
@@ -41,9 +40,10 @@ public class AuthenticationController implements Abonent, Runnable {
 
     private ConcurrentMap<String, Long> waitingClients = new ConcurrentHashMap<>();
 
-    private static final long NULLUSER = 0;
-    private static final long ERRORUSER = -1;
-    private static final long WAITINGUSER = -2;
+    public static final long NULLUSER = 0;
+    public static final long ERRORUSER = -1;
+    public static final long WAITINGUSER = -2;
+    public static final long LOGOUTUSER = -3;
 
     @Autowired
     public AuthenticationController(AccountService accountService, SessionService sessionService) {
