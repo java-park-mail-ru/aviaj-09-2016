@@ -11,6 +11,7 @@ public abstract class MsgToAuthController extends Message {
         super(from, to);
     }
 
+    @Override
     public void exec(Abonent abonent) {
         if (abonent instanceof SessionService) {
             exec((SessionService) abonent);
@@ -18,5 +19,5 @@ public abstract class MsgToAuthController extends Message {
     }
 
     public abstract void exec(SessionService sessionService);
-    
+
 }
