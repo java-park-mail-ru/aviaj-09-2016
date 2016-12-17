@@ -14,6 +14,7 @@ import ru.aviaj.database.exception.DbException;
 import ru.aviaj.messagesystem.Abonent;
 import ru.aviaj.messagesystem.Address;
 import ru.aviaj.messagesystem.MessageSystem;
+import ru.aviaj.messagesystem.message.sessionservice.MsgAuth;
 import ru.aviaj.model.ErrorList;
 import ru.aviaj.model.ErrorType;
 import ru.aviaj.model.UserProfile;
@@ -62,6 +63,14 @@ public class AuthenticationController implements Abonent, Runnable {
 
     public void addToWaiters(String sessionId) {
         waitingClients.put(sessionId, WAITINGUSER);
+    }
+
+    public boolean hasWaiter(String sessionId) {
+        return waitingClients.containsKey(sessionId);
+    }
+
+    public long getWaiterStatus(String sessionId) {
+        return waitingClients.get(sessionId);
     }
 
     public void setWaiterStatus(String sessionId, long status) {
@@ -155,29 +164,44 @@ public class AuthenticationController implements Abonent, Runnable {
     @RequestMapping(path = "/api/auth/authenticate", method = RequestMethod.GET)
     public ResponseEntity authenticate(HttpSession httpSession) {
 
-        final long loginedUserId;
-        try {
+        if (httpSession.getAttribute("AVIAJSESSIONID") == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    new ErrorList(ErrorType.NOTLOGINED)
+            );
 
-            if (httpSession.getAttribute("AVIAJSESSIONID") == null)
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                        new ErrorList(ErrorType.NOTLOGINED)
-                );
-            loginedUserId = sessionService.getUserIdBySession(httpSession.getAttribute("AVIAJSESSIONID").toString());
-            if ((loginedUserId == 0)) {
-                httpSession.removeAttribute("AVIAJSESSIONID");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-                        new ErrorList(ErrorType.NOTLOGINED)
-                );
-            }
-        } catch (DbException e) {
-            LOGGER.error("Authenticate error:", e);
+        final String sessionId = httpSession.getAttribute("AVIAJSESSIONID").toString();
+
+        if (!hasWaiter(sessionId)) {
+            addToWaiters(sessionId);
+            final MsgAuth msgAuth = new MsgAuth(getAddress(), sessionService.getAddress(), sessionId);
+            messageSystem.send(msgAuth);
+
+            return ResponseEntity.ok("WAIT");
+        }
+
+        final long status = getWaiterStatus(sessionId);
+
+        if (status == WAITINGUSER)
+            return ResponseEntity.ok("WAIT");
+
+        if (status == NULLUSER) {
+            removeFromWaiters(sessionId);
+            httpSession.removeAttribute("AVIAJSESSIONID");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    new ErrorList(ErrorType.NOTLOGINED)
+            );
+        }
+
+        if (status == ERRORUSER) {
+            removeFromWaiters(sessionId);
+            httpSession.removeAttribute("AVIAJSESSIONID");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ErrorList(ErrorType.DBERROR)
+                    new ErrorList(ErrorType.UNEXPECTEDERROR)
             );
         }
 
         try {
-            final UserProfile loginedUser = accountService.getUserById(loginedUserId);
+            final UserProfile loginedUser = accountService.getUserById(status);
             if (loginedUser == null) {
                 httpSession.removeAttribute("AVIAJSESSIONID");
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
@@ -194,6 +218,7 @@ public class AuthenticationController implements Abonent, Runnable {
                     new ErrorList(ErrorType.DBERROR)
             );
         }
+
     }
 
     @RequestMapping(path = "/api/auth/logout", method = RequestMethod.POST)
