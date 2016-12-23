@@ -14,6 +14,15 @@ public class PlanePosition {
     private long planeHeight;
     private long planeLength;
 
+    public PlanePosition() {
+        this.center = new Dot();
+        this.direction = new Vector();
+
+        this.planeHeight = GameConfig.PLANE_HEIGHT;
+        this.planeLength = GameConfig.PLANE_LENGTH;
+        this.planeWidth = GameConfig.TRACK_WIDTH;
+    }
+
     public PlanePosition(Dot center, Vector direction) {
         this.center = center;
         this.direction = direction;
