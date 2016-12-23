@@ -21,5 +21,30 @@ public class GameSession {
         id = ID_GENERATOR.getAndIncrement();
         this.playerFirst = new Player(playerFirst);
         this.playerSecond = new Player(playerSecond);
+        track.randomize();
+    }
+
+    public void updateRatingFirst(long updateValue) {
+        playerFirst.updateRating(updateValue);
+    }
+
+    public void updateRatingSecond(long updateValue) {
+        playerSecond.updateRating(updateValue);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public Player getPlayerFirst() {
+        return playerFirst;
+    }
+
+    public Player getPlayerSecond() {
+        return playerSecond;
+    }
+
+    public TrackMap getTrack() {
+        return track;
     }
 }
