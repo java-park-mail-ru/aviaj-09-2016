@@ -6,6 +6,7 @@ import com.sun.imageio.plugins.wbmp.WBMPImageReader;
 import org.eclipse.jetty.websocket.api.WebSocketException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Service
 public class ClientService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientService.class);
@@ -22,7 +24,7 @@ public class ClientService {
     private Map<Long, WebSocketSession> wsSessions = new ConcurrentHashMap<>();
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private void addClient(long userId, WebSocketSession session) {
+    public void addClient(long userId, WebSocketSession session) {
         wsSessions.put(userId, session);
     }
 
