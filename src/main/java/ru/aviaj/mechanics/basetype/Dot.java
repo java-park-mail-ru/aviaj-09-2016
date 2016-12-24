@@ -15,9 +15,13 @@ public class Dot {
         this.z = z;
     }
 
-    public long getX() {
+    public int getX() {
         return x;
     }
+
+    public int getY() { return y; }
+
+    public int getZ() { return z; }
 
     public void setX(int x) {
         this.x = x;
@@ -31,11 +35,5 @@ public class Dot {
         this.z = z;
     }
 
-    public long getY() {
-        return y;
-    }
 
-    public long getZ() {
-        return z;
-    }
 }

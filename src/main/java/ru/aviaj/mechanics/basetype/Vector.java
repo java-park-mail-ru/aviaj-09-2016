@@ -22,7 +22,7 @@ public class Vector {
     public int getY() { return y; }
 
     public int getZ() { return z; }
-    
+
     public void setX(int x) {
         this.x = x;
     }
