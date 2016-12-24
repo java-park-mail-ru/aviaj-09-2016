@@ -47,4 +47,15 @@ public class GameSession {
     public TrackMap getTrack() {
         return track;
     }
+
+    public Player getPlayerForUser(long userId) {
+        if (userId == playerFirst.getUserProfile().getId()) {
+            return playerFirst;
+        }
+        else if (userId == playerSecond.getUserProfile().getId()) {
+            return playerSecond;
+        }
+        else
+            return null;
+    }
 }
