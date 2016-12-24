@@ -19,14 +19,6 @@ public class Ring {
         this.ratingValue = ratingValue;
     }
 
-    public Ring(long xC, long yC, long zC, long xD, long yD, long zD, long radius, long ratingValue, int id) {
-        this.center = new Dot(xC, yC, zC);
-        this.normal = new Vector(xD, yD, zD);
-        this.id = id;
-        this.radius = radius;
-        this.ratingValue = ratingValue;
-    }
-
     public Dot getCenter() {
         return center;
     }

@@ -3,13 +3,13 @@ package ru.aviaj.mechanics.basetype;
 @SuppressWarnings({"unused", "InstanceVariableNamingConvention", "ClassNamingConvention"})
 public class Dot {
 
-    private long x;
-    private long y;
-    private long z;
+    private int x;
+    private int y;
+    private int z;
 
     public Dot() { x = y = z = 0 ; }
 
-    public Dot(long x, long y, long z) {
+    public Dot(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -19,15 +19,15 @@ public class Dot {
         return x;
     }
 
-    public void setX(long x) {
+    public void setX(int x) {
         this.x = x;
     }
 
-    public void setY(long y) {
+    public void setY(int y) {
         this.y = y;
     }
 
-    public void setZ(long z) {
+    public void setZ(int z) {
         this.z = z;
     }
 

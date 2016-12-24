@@ -3,13 +3,13 @@ package ru.aviaj.mechanics.basetype;
 @SuppressWarnings({"unused", "InstanceVariableNamingConvention"})
 public class Vector {
 
-    private long x;
-    private long y;
-    private long z;
+    private int x;
+    private int y;
+    private int z;
 
     public Vector() { x = y = z = 0; }
 
-    public Vector(long x, long y, long z) {
+    public Vector(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -19,15 +19,15 @@ public class Vector {
         return x;
     }
 
-    public void setX(long x) {
+    public void setX(int x) {
         this.x = x;
     }
 
-    public void setY(long y) {
+    public void setY(int y) {
         this.y = y;
     }
 
-    public void setZ(long z) {
+    public void setZ(int z) {
         this.z = z;
     }
 
