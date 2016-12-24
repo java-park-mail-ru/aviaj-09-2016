@@ -5,6 +5,7 @@ import ru.aviaj.model.UserProfile;
 public class Player {
 
     private final UserProfile userProfile;
+    private final long userId;
     private PlanePosition planePosition;
 
     private long ping;
@@ -13,7 +14,9 @@ public class Player {
     private long ratingToUpdate = 0;
 
     public Player(UserProfile userProfile) {
+
         this.userProfile = userProfile;
+        this.userId = userProfile.getId();
         this.planePosition = new PlanePosition();
 
         this.ping = 0;
@@ -22,6 +25,10 @@ public class Player {
 
     public PlanePosition getPlanePosition() {
         return planePosition;
+    }
+
+    public long getUserId() {
+        return userId;
     }
 
     public long getPing() {

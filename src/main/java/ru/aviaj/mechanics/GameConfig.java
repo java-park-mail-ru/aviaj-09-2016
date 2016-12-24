@@ -14,6 +14,8 @@ public class GameConfig {
     public static final int DEFAULT_RADIUS = 110;
     public static final long MIN_RING_RATING_VALUE = 20;
 
+    public static final int DEFAULT_SPEED = 10;
+
     public static final long GAME_STEP_TIME = 50;
 
 }

@@ -9,32 +9,34 @@ import java.util.Map;
 
 public class InitRequest {
 
-    private long userId;
-    private List<ServerPlayerSnapshot> players;
-    private Map<Long, String> playerNames;
+    public static class Request {
+        private long userId;
+        private List<ServerPlayerSnapshot> players;
+        private Map<Long, String> playerNames;
 
-    public long getUserId() {
-        return userId;
-    }
+        public long getUserId() {
+            return userId;
+        }
 
-    public List<ServerPlayerSnapshot> getPlayers() {
-        return players;
-    }
+        public List<ServerPlayerSnapshot> getPlayers() {
+            return players;
+        }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
+        public void setUserId(long userId) {
+            this.userId = userId;
+        }
 
-    public void setPlayers(List<ServerPlayerSnapshot> players) {
-        this.players = players;
-    }
+        public void setPlayers(List<ServerPlayerSnapshot> players) {
+            this.players = players;
+        }
 
-    public void setPlayerNames(Map<Long, String> playerNames) {
-        this.playerNames = playerNames;
-    }
+        public void setPlayerNames(Map<Long, String> playerNames) {
+            this.playerNames = playerNames;
+        }
 
-    public Map<Long, String> getPlayerNames() {
-        return playerNames;
+        public Map<Long, String> getPlayerNames() {
+            return playerNames;
 
+        }
     }
 }
