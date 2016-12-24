@@ -15,10 +15,14 @@ public class Vector {
         this.z = z;
     }
 
-    public long getX() {
+    public int getX() {
         return x;
     }
 
+    public int getY() { return y; }
+
+    public int getZ() { return z; }
+    
     public void setX(int x) {
         this.x = x;
     }
@@ -31,20 +35,13 @@ public class Vector {
         this.z = z;
     }
 
-    public long getY() {
-        return y;
 
-    }
-
-    public long getZ() {
-        return z;
-    }
 
     public double getAbs() {
         return Math.sqrt(x*x + y*y + z*z);
     }
 
-    public long getAbsSquare() {
+    public int getAbsSquare() {
         return (x*x + y*y + z*z);
     }
 }
