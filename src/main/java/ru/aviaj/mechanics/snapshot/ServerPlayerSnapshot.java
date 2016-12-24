@@ -2,6 +2,7 @@ package ru.aviaj.mechanics.snapshot;
 
 
 import ru.aviaj.mechanics.baseobject.PlanePosition;
+import ru.aviaj.mechanics.baseobject.Player;
 
 public class ServerPlayerSnapshot {
 
@@ -14,6 +15,11 @@ public class ServerPlayerSnapshot {
     public ServerPlayerSnapshot(long userId, PlanePosition planePosition) {
         this.userId = userId;
         this.planePosition = planePosition;
+    }
+
+    public ServerPlayerSnapshot(Player player) {
+        this.userId = player.getUserProfile().getId();
+        this.planePosition = player.getPlanePosition();
     }
 
     public long getUserId() {
