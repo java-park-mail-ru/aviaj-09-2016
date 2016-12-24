@@ -8,7 +8,7 @@ import ru.aviaj.mechanics.basetype.Vector;
 public class PlanePosition {
 
     private Dot center;
-    private Vector direction;
+    private Vector speedDirection;
 
     private long planeWidth;
     private long planeHeight;
@@ -16,16 +16,16 @@ public class PlanePosition {
 
     public PlanePosition() {
         this.center = new Dot();
-        this.direction = new Vector();
+        this.speedDirection = new Vector();
 
         this.planeHeight = GameConfig.PLANE_HEIGHT;
         this.planeLength = GameConfig.PLANE_LENGTH;
         this.planeWidth = GameConfig.TRACK_WIDTH;
     }
 
-    public PlanePosition(Dot center, Vector direction) {
+    public PlanePosition(Dot center, Vector speedDirection) {
         this.center = center;
-        this.direction = direction;
+        this.speedDirection = speedDirection;
 
         this.planeHeight = GameConfig.PLANE_HEIGHT;
         this.planeLength = GameConfig.PLANE_LENGTH;
@@ -40,12 +40,12 @@ public class PlanePosition {
         this.center = center;
     }
 
-    public void setDirection(Vector direction) {
-        this.direction = direction;
+    public void setSpeedDirection(Vector speedDirection) {
+        this.speedDirection = speedDirection;
     }
 
-    public Vector getDirection() {
-        return direction;
+    public Vector getSpeedDirection() {
+        return speedDirection;
     }
 
     public long getPlaneWidth() {
