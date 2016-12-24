@@ -14,6 +14,12 @@ public class DotDouble {
         this.z = z;
     }
 
+    public DotDouble(Dot dot) {
+        this.x = (double)dot.getX();
+        this.y = (double)dot.getY();
+        this.z = (double)dot.getZ();
+    }
+
     public double getX() {
         return x;
     }

@@ -8,7 +8,7 @@ public final class Geometry {
 
     //Координаты проекции точки на плоскость
     public static DotDouble dotPlaneProjection(Dot dot, Vector planeNormal) {
-        Determiner determiner = new Determiner();
+        final Determiner determiner = new Determiner();
 
         determiner.setValue(0, 0, planeNormal.getY());
         determiner.setValue(1, 0, planeNormal.getZ());
@@ -62,5 +62,11 @@ public final class Geometry {
         final double detZ = (double)determiner.count();
 
         return new DotDouble((detX/det), (detY/det), (detZ)/(det));
+    }
+
+    public static double dotDistance(DotDouble dotA, DotDouble dotB) {
+        return Math.sqrt((dotB.getX() - dotA.getX())*(dotB.getX() - dotA.getX()) +
+                (dotB.getY() - dotA.getY())*(dotB.getY() - dotA.getY()) +
+                (dotB.getZ() - dotA.getZ())*(dotB.getZ() - dotA.getZ()));
     }
 }
