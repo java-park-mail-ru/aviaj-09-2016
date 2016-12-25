@@ -6,7 +6,7 @@ import ru.aviaj.mechanics.basetype.Vector;
 public class ClientSnaphot {
 
     private Vector speed;
-    private long clientFrameTime;
+    private int clientFrameTime;
 
     public Vector getSpeed() {
         return speed;
@@ -16,11 +16,11 @@ public class ClientSnaphot {
         this.speed = speed;
     }
 
-    public void setClientFrameTime(long clientFrameTime) {
+    public void setClientFrameTime(int clientFrameTime) {
         this.clientFrameTime = clientFrameTime;
     }
 
-    public long getClientFrameTime() {
+    public int getClientFrameTime() {
         return clientFrameTime;
     }
 }

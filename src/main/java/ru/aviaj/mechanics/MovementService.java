@@ -12,6 +12,8 @@ import ru.aviaj.mechanics.gamesession.GameSession;
 import ru.aviaj.mechanics.gamesession.GameSessionService;
 import ru.aviaj.mechanics.geometry.Geometry;
 
+import java.util.List;
+
 @SuppressWarnings({"unused", "OverlyComplexBooleanExpression", "OverlyComplexMethod"})
 @Service
 public class MovementService {
@@ -23,7 +25,8 @@ public class MovementService {
         this.gameSessionService = gameSessionService;
     }
 
-    private CollisionStatus processRingCollision(PlanePosition position, Ring ring, int time) {
+    private long processRingOverfly(PlanePosition position, Ring ring, int time) {
+
         final DotDouble projection = Geometry.dotPlaneProjection(position.getCenter(), ring.getNormal());
 
         final Dot nextPosition = new Dot(position.getCenter().getX() + position.getSpeedDirection().getX()*time,
@@ -35,11 +38,20 @@ public class MovementService {
         {
             final double distance = Geometry.dotDistance(projection, new DotDouble(ring.getCenter()));
             if (distance < (double)ring.getRadius()) {
-                return CollisionStatus.RING_OVERFLY;
+                return ring.getRatingValue();
             }
         }
 
-        return CollisionStatus.NONE;
+        return 0;
+    }
+
+    public long processRings(PlanePosition planePosition, List<Ring> rings, int time) {
+        long result = 0;
+        for(Ring ring : rings) {
+            result += processRingOverfly(planePosition, ring, time);
+        }
+
+        return result;
     }
 
     public CollisionStatus processCollisions(GameSession gameSession, int time) {
@@ -48,19 +60,7 @@ public class MovementService {
 
         final PlanePosition planePositionFirst = gameSession.getPlayerFirst().getPlanePosition();
 
-        for(Ring ring : track.getRings()) {
-            if (processRingCollision(planePositionFirst, ring, time) == CollisionStatus.RING_OVERFLY) {
-                gameSession.updateRatingFirst(ring.getRatingValue());
-            }
-        }
-
         final PlanePosition planePositionSecond = gameSession.getPlayerSecond().getPlanePosition();
-
-        for(Ring ring : track.getRings()) {
-            if (processRingCollision(planePositionSecond, ring, time) == CollisionStatus.RING_OVERFLY) {
-                gameSession.updateRatingSecond(ring.getRatingValue());
-            }
-        }
 
         if ((planePositionFirst.getCenter().getX() > GameConfig.TRACK_WIDTH) ||
                 (planePositionFirst.getCenter().getY() > GameConfig.TRACK_WIDTH)) {
