@@ -23,12 +23,12 @@ public class MovementService {
         this.gameSessionService = gameSessionService;
     }
 
-    private CollisionStatus processRingCollision(PlanePosition position, Ring ring) {
+    private CollisionStatus processRingCollision(PlanePosition position, Ring ring, int time) {
         final DotDouble projection = Geometry.dotPlaneProjection(position.getCenter(), ring.getNormal());
 
-        final Dot nextPosition = new Dot(position.getCenter().getX() + position.getSpeedDirection().getX(),
-                position.getCenter().getY() + position.getSpeedDirection().getY(),
-                position.getCenter().getZ() + position.getSpeedDirection().getZ());
+        final Dot nextPosition = new Dot(position.getCenter().getX() + position.getSpeedDirection().getX()*time,
+                position.getCenter().getY() + position.getSpeedDirection().getY()*time,
+                position.getCenter().getZ() + position.getSpeedDirection().getZ()*time);
 
         if ( (((float)position.getCenter().getZ() >= projection.getZ()) && ((float)nextPosition.getZ() < projection.getZ()))
                 || (((float)position.getCenter().getZ() <= projection.getZ()) && ((float)nextPosition.getZ() > projection.getZ())))
@@ -42,14 +42,14 @@ public class MovementService {
         return CollisionStatus.NONE;
     }
 
-    private CollisionStatus processCollisions(GameSession gameSession) {
+    public CollisionStatus processCollisions(GameSession gameSession, int time) {
 
         final TrackMap track = gameSession.getTrack();
 
         final PlanePosition planePositionFirst = gameSession.getPlayerFirst().getPlanePosition();
 
         for(Ring ring : track.getRings()) {
-            if (processRingCollision(planePositionFirst, ring) == CollisionStatus.RING_OVERFLY) {
+            if (processRingCollision(planePositionFirst, ring, time) == CollisionStatus.RING_OVERFLY) {
                 gameSession.updateRatingFirst(ring.getRatingValue());
             }
         }
@@ -57,7 +57,7 @@ public class MovementService {
         final PlanePosition planePositionSecond = gameSession.getPlayerSecond().getPlanePosition();
 
         for(Ring ring : track.getRings()) {
-            if (processRingCollision(planePositionSecond, ring) == CollisionStatus.RING_OVERFLY) {
+            if (processRingCollision(planePositionSecond, ring, time) == CollisionStatus.RING_OVERFLY) {
                 gameSession.updateRatingSecond(ring.getRatingValue());
             }
         }
@@ -81,25 +81,17 @@ public class MovementService {
         return CollisionStatus.OK;
     }
 
-    public void processMovements(GameSession gameSession) {
+    public PlanePosition processMovements(PlanePosition planePosition, int time) {
 
-        final PlanePosition planePositionFirst = gameSession.getPlayerFirst().getPlanePosition();
-        final PlanePosition newFirstPosition = new PlanePosition(
-                new Dot(planePositionFirst.getCenter().getX() + planePositionFirst.getSpeedDirection().getX(),
-                        planePositionFirst.getCenter().getY() + planePositionFirst.getSpeedDirection().getY(),
-                        planePositionFirst.getCenter().getZ() + planePositionFirst.getSpeedDirection().getZ()),
-                planePositionFirst.getSpeedDirection()
+        return new PlanePosition(
+                new Dot(planePosition.getCenter().getX() + planePosition.getSpeedDirection().getX()*time,
+                        planePosition.getCenter().getY() + planePosition.getSpeedDirection().getY()*time,
+                        planePosition.getCenter().getZ() + planePosition.getSpeedDirection().getZ()*time),
+                planePosition.getSpeedDirection()
         );
-        gameSession.getPlayerFirst().setPlanePosition(newFirstPosition);
 
-        final PlanePosition planePositionSecond = gameSession.getPlayerSecond().getPlanePosition();
-        final PlanePosition newSecondPosition = new PlanePosition(
-                new Dot(planePositionSecond.getCenter().getX() + planePositionSecond.getSpeedDirection().getX(),
-                        planePositionSecond.getCenter().getY() + planePositionSecond.getSpeedDirection().getY(),
-                        planePositionSecond.getCenter().getZ() + planePositionSecond.getSpeedDirection().getZ()),
-                planePositionSecond.getSpeedDirection()
-        );
-        gameSession.getPlayerSecond().setPlanePosition(newFirstPosition);
     }
+
+
 
 }
