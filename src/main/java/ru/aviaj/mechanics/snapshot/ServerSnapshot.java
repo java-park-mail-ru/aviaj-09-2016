@@ -6,7 +6,7 @@ import java.util.List;
 public class ServerSnapshot {
 
     private List<ServerPlayerSnapshot> players;
-    private long serverFrameTime;
+    private int serverFrameTime;
 
     public List<ServerPlayerSnapshot> getPlayers() {
         return players;
@@ -16,11 +16,11 @@ public class ServerSnapshot {
         this.players = players;
     }
 
-    public void setServerFrameTime(long serverFrameTime) {
+    public void setServerFrameTime(int serverFrameTime) {
         this.serverFrameTime = serverFrameTime;
     }
 
-    public long getServerFrameTime() {
+    public int getServerFrameTime() {
         return serverFrameTime;
     }
 }
