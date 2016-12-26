@@ -4,6 +4,7 @@ package ru.aviaj.mechanics.snapshot;
 import ru.aviaj.mechanics.baseobject.PlanePosition;
 import ru.aviaj.mechanics.baseobject.Player;
 
+@SuppressWarnings("unused")
 public class ServerPlayerSnapshot {
 
     private long userId;

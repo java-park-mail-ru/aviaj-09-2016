@@ -3,7 +3,6 @@ package ru.aviaj.mechanics.snapshot;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.socket.WebSocketMessage;
 import ru.aviaj.mechanics.baseobject.Player;
 import ru.aviaj.mechanics.gamesession.GameSession;
 import ru.aviaj.websocket.ClientMessage;
@@ -11,9 +10,9 @@ import ru.aviaj.websocket.ClientService;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
+@SuppressWarnings("OverlyBroadCatchBlock")
 @Service
 public class ServerSnapshotService {
 

@@ -2,6 +2,7 @@ package ru.aviaj.mechanics.baseobject;
 
 import ru.aviaj.model.UserProfile;
 
+@SuppressWarnings("unused")
 public class Player {
 
     private final UserProfile userProfile;

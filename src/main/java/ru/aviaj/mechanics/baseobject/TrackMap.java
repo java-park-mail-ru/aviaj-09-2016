@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "MagicNumber", "FieldCanBeLocal"})
 public class TrackMap {
 
     private int width = GameConfig.TRACK_WIDTH;

@@ -9,6 +9,7 @@ import ru.aviaj.websocket.HandleException;
 
 import javax.annotation.PostConstruct;
 
+@SuppressWarnings("unused")
 public class JoinGameHandler extends ClientMessageHandler<JoinRequest.Request> {
 
     private Mechanics mechanics;

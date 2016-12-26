@@ -1,6 +1,5 @@
 package ru.aviaj.mechanics.snapshot;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.aviaj.mechanics.MovementService;
 import ru.aviaj.mechanics.baseobject.Player;

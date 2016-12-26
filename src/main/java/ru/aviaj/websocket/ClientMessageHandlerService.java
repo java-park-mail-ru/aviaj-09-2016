@@ -2,12 +2,12 @@ package ru.aviaj.websocket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.messaging.MessageHandler;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings({"unused", "unchecked", "SingleCharacterStringConcatenation"})
 @Service
 public class ClientMessageHandlerService {
 

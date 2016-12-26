@@ -14,13 +14,13 @@ import ru.aviaj.mechanics.snapshot.ClientSnapshotService;
 import ru.aviaj.mechanics.snapshot.ServerSnapshotService;
 import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
-import ru.aviaj.service.SessionService;
 import ru.aviaj.websocket.ClientService;
 
 import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+@SuppressWarnings({"unused", "FieldCanBeLocal", "WhileLoopReplaceableByForEach"})
 @Service
 public class Mechanics implements IMechanics {
 
@@ -28,7 +28,6 @@ public class Mechanics implements IMechanics {
     private static final Logger LOGGER = LoggerFactory.getLogger(Mechanics.class);
 
     private AccountService accountService;
-    private SessionService sessionService;
     private ClientService clientService;
     private ClientSnapshotService clientSnapshotService;
     private ServerSnapshotService serverSnapshotService;
@@ -42,13 +41,11 @@ public class Mechanics implements IMechanics {
 
     @Autowired
     public Mechanics(AccountService accountService,
-                     SessionService sessionService,
                      ClientService clientService,
                      ServerSnapshotService serverSnapshotService,
                      MovementService movementService,
                      GameSessionService gameSessionService) {
         this.accountService = accountService;
-        this.sessionService = sessionService;
         this.clientService = clientService;
         this.serverSnapshotService = serverSnapshotService;
         this.movementService = movementService;
@@ -122,7 +119,7 @@ public class Mechanics implements IMechanics {
             try {
                 serverSnapshotService.sendSnapshot(gameSession, frameTime);
             } catch (RuntimeException e) {
-                LOGGER.error("Unable to send snapshot with id " + Long.toString(gameSession.getId()) + "!", e);
+                LOGGER.error("Unable to send snapshot with id " + Long.toString(gameSession.getId()) + '!', e);
                 deleteSessions.add(gameSession);
             }
         }

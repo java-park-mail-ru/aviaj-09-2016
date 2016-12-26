@@ -1,6 +1,7 @@
 package ru.aviaj.mechanics.geometry;
 
 
+@SuppressWarnings("OverlyComplexBooleanExpression")
 public class Determiner {
 
     public static final int SIZE = 3;

@@ -9,16 +9,15 @@ import ru.aviaj.websocket.ClientMessage;
 import ru.aviaj.websocket.ClientService;
 
 import java.io.IOException;
-import java.sql.Time;
 import java.time.Clock;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+@SuppressWarnings("OverlyBroadCatchBlock")
 public class PingService {
     private static final long MAX_PING = TimeUnit.SECONDS.toMillis(1);
     private static final Logger LOGGER = LoggerFactory.getLogger(PingService.class);
@@ -66,11 +65,11 @@ public class PingService {
             final long now = Clock.systemDefaultZone().millis();
             final ClientPingData.Request request = ClientPingData.Request.createBuilder().id(id).build();
             try {
-                ClientMessage message = new ClientMessage(ClientPingData.Request.class.getName(),
+                final ClientMessage message = new ClientMessage(ClientPingData.Request.class.getName(),
                         objectMapper.writeValueAsString(request));
                 clientService.sendClientMessage(userId, message);
             } catch (IOException e) {
-                LOGGER.error("Unable to send ping message to user with id " + Long.toString(userId) + "!", e);
+                LOGGER.error("Unable to send ping message to user with id " + Long.toString(userId) + '!', e);
                 return;
             }
 

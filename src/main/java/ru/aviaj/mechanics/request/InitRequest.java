@@ -1,14 +1,13 @@
 package ru.aviaj.mechanics.request;
 
-import ru.aviaj.mechanics.baseobject.Player;
 import ru.aviaj.mechanics.snapshot.ServerPlayerSnapshot;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class InitRequest {
 
+    @SuppressWarnings("unused")
     public static class Request {
         private long userId;
         private List<ServerPlayerSnapshot> players;

@@ -1,6 +1,6 @@
 package ru.aviaj.mechanics.basetype;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "EnumeratedConstantNamingConvention"})
 public enum CollisionStatus {
     NONE,
     OK,

@@ -2,7 +2,6 @@ package ru.aviaj.websocket;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.imageio.plugins.wbmp.WBMPImageReader;
 import org.eclipse.jetty.websocket.api.WebSocketException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,12 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
-import ru.aviaj.model.UserProfile;
 
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings("ThrowInsideCatchBlockWhichIgnoresCaughtException")
 @Service
 public class ClientService {
 
@@ -51,7 +50,7 @@ public class ClientService {
     public void sendClientMessage(long userId, ClientMessage message) throws IOException {
         final WebSocketSession session = wsSessions.get(userId);
         if (session == null) {
-            throw new IOException("Unable to find session for id " + Long.toString(userId) + "!");
+            throw new IOException("Unable to find session for id " + Long.toString(userId) + '!');
         }
         if (!session.isOpen()) {
             throw new IOException("Session is closed!");
@@ -60,7 +59,7 @@ public class ClientService {
         try {
             session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
         } catch (JsonProcessingException | WebSocketException e) {
-            throw new IOException("Unable to send message to client with id " + Long.toString(userId) + "!");
+            throw new IOException("Unable to send message to client with id " + Long.toString(userId) + '!');
         }
     }
 

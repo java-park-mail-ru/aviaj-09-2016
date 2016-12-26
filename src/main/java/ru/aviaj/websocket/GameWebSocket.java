@@ -4,10 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import ru.aviaj.database.exception.DbException;
@@ -17,6 +15,7 @@ import ru.aviaj.service.SessionService;
 
 import java.io.IOException;
 
+@SuppressWarnings({"OverlyBroadCatchBlock", "FieldCanBeLocal", "unused"})
 public class GameWebSocket extends TextWebSocketHandler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameWebSocket.class);

@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.aviaj.mechanics.Mechanics;
-import ru.aviaj.mechanics.snapshot.ClientSnaphot;
 import ru.aviaj.mechanics.time.PingService;
 import ru.aviaj.mechanics.time.Timing;
 import ru.aviaj.mechanics.time.request.GetClientPing;
@@ -14,6 +12,7 @@ import ru.aviaj.websocket.*;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 
+@SuppressWarnings("unused")
 @Component
 public class GetClientPingHandler extends ClientMessageHandler<GetClientPing.Request> {
 
@@ -46,7 +45,7 @@ public class GetClientPingHandler extends ClientMessageHandler<GetClientPing.Req
         }
 
         try {
-            ClientMessage clientMessage = new ClientMessage(GetClientPing.Response.class.getName(),
+            final ClientMessage clientMessage = new ClientMessage(GetClientPing.Response.class.getName(),
                     objectMapper.writeValueAsString(builder.build()));
             clientService.sendClientMessage(userId, clientMessage);
         } catch (JsonProcessingException e) {

@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
-import org.springframework.web.socket.WebSocketMessage;
 import ru.aviaj.database.exception.DbException;
 import ru.aviaj.mechanics.GameConfig;
 import ru.aviaj.mechanics.baseobject.PlanePosition;
@@ -16,14 +15,13 @@ import ru.aviaj.mechanics.request.InitRequest;
 import ru.aviaj.mechanics.snapshot.ServerPlayerSnapshot;
 import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
-import ru.aviaj.service.SessionService;
 import ru.aviaj.websocket.ClientMessage;
 import ru.aviaj.websocket.ClientService;
 
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.IOException;
 import java.util.*;
 
+@SuppressWarnings({"MagicNumber", "OverlyBroadCatchBlock", "unused"})
 public class GameSessionService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameSessionService.class);
@@ -70,13 +68,13 @@ public class GameSessionService {
 
 
         for(Player player : players) {
-            InitRequest.Request initRequest = new InitRequest.Request();
+            final InitRequest.Request initRequest = new InitRequest.Request();
             initRequest.setUserId(player.getUserProfile().getId());
             initRequest.setPlayerNames(names);
             initRequest.setPlayers(playerSnapshots);
 
             try {
-                ClientMessage clientMessage = new ClientMessage(InitRequest.class.getName(),
+                final ClientMessage clientMessage = new ClientMessage(InitRequest.class.getName(),
                         objectMapper.writeValueAsString(initRequest));
                 clientService.sendClientMessage(player.getUserProfile().getId(), clientMessage);
             } catch (IOException e) {
@@ -111,7 +109,7 @@ public class GameSessionService {
         return gameSession;
     }
 
-    public void GameOver(GameSession gameSession) {
+    public void gameOver(GameSession gameSession) {
 
         try {
             accountServiceService.updateUserRating(gameSession.getPlayerFirst().getUserId(),

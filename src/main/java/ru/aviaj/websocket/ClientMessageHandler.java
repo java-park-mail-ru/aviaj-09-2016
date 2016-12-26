@@ -2,9 +2,9 @@ package ru.aviaj.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
+@SuppressWarnings({"OverlyBroadCatchBlock", "unused"})
 public abstract class ClientMessageHandler<T> {
 
     private final Class<T> clazz;
@@ -21,7 +21,7 @@ public abstract class ClientMessageHandler<T> {
             final Object messageData = objectMapper.readValue(clientMessage.getContent(), clazz);
             handle(clazz.cast(messageData), userId);
         } catch (IOException | ClassCastException e) {
-            throw new HandleException("Unable to read message type " + clientMessage.getType() + "!", e);
+            throw new HandleException("Unable to read message type " + clientMessage.getType() + '!', e);
         }
     }
 }

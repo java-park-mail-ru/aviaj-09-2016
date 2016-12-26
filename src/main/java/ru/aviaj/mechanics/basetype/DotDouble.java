@@ -1,5 +1,6 @@
 package ru.aviaj.mechanics.basetype;
 
+@SuppressWarnings({"InstanceVariableNamingConvention", "unused"})
 public class DotDouble {
 
     private double x;

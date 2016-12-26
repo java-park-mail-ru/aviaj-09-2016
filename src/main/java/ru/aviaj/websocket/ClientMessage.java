@@ -1,5 +1,6 @@
 package ru.aviaj.websocket;
 
+@SuppressWarnings("unused")
 public class ClientMessage {
 
     private String type;

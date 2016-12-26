@@ -5,6 +5,7 @@ public class GetClientPing {
 
     }
 
+    @SuppressWarnings("unused")
     public static class Response {
 
         private long clientPing;
@@ -25,6 +26,7 @@ public class GetClientPing {
 
         public static Builder createBuilder() { return new Builder(); }
 
+        @SuppressWarnings({"InnerClassTooDeeplyNested", "ParameterHidesMemberVariable"})
         public static class Builder {
             private long ping = -1;
             private long timeShift = -1;

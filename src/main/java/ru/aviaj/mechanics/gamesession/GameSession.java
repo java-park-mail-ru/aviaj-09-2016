@@ -1,11 +1,13 @@
 package ru.aviaj.mechanics.gamesession;
 
+import org.jetbrains.annotations.Nullable;
 import ru.aviaj.mechanics.baseobject.Player;
 import ru.aviaj.mechanics.baseobject.TrackMap;
 import ru.aviaj.model.UserProfile;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+@SuppressWarnings("unused")
 public class GameSession {
 
     private static final AtomicLong ID_GENERATOR = new AtomicLong(0);
@@ -48,6 +50,7 @@ public class GameSession {
         return track;
     }
 
+    @Nullable
     public Player getPlayerForUser(long userId) {
         if (userId == playerFirst.getUserProfile().getId()) {
             return playerFirst;
