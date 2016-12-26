@@ -1,5 +1,6 @@
 package ru.aviaj.mechanics;
 
+import org.springframework.stereotype.Service;
 import ru.aviaj.mechanics.snapshot.ClientSnaphot;
 
 import javax.validation.constraints.NotNull;

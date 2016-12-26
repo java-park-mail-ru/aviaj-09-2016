@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.aviaj.mechanics.time.request.ClientPingData;
 import ru.aviaj.websocket.ClientMessage;
 import ru.aviaj.websocket.ClientService;
@@ -18,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 @SuppressWarnings("OverlyBroadCatchBlock")
+@Service
 public class PingService {
     private static final long MAX_PING = TimeUnit.SECONDS.toMillis(1);
     private static final Logger LOGGER = LoggerFactory.getLogger(PingService.class);

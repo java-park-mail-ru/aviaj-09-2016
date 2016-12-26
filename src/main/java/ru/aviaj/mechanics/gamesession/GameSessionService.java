@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import ru.aviaj.database.exception.DbException;
 import ru.aviaj.mechanics.GameConfig;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.util.*;
 
 @SuppressWarnings({"MagicNumber", "OverlyBroadCatchBlock", "unused"})
+@Service
 public class GameSessionService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameSessionService.class);

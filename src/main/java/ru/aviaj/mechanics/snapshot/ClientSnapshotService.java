@@ -17,7 +17,7 @@ public class ClientSnapshotService {
 
     private Map<Long, ArrayList<ClientSnaphot>> snapshots = new ConcurrentHashMap<>();
 
-    private MovementService movementService;
+    private final MovementService movementService;
 
     public ClientSnapshotService(MovementService movementService) {
         this.movementService = movementService;
