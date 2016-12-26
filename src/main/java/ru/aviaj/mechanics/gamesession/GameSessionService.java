@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketMessage;
+import ru.aviaj.database.exception.DbException;
 import ru.aviaj.mechanics.GameConfig;
 import ru.aviaj.mechanics.baseobject.PlanePosition;
 import ru.aviaj.mechanics.baseobject.Player;
@@ -14,6 +15,8 @@ import ru.aviaj.mechanics.basetype.Vector;
 import ru.aviaj.mechanics.request.InitRequest;
 import ru.aviaj.mechanics.snapshot.ServerPlayerSnapshot;
 import ru.aviaj.model.UserProfile;
+import ru.aviaj.service.AccountService;
+import ru.aviaj.service.SessionService;
 import ru.aviaj.websocket.ClientMessage;
 import ru.aviaj.websocket.ClientService;
 
@@ -25,6 +28,7 @@ public class GameSessionService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GameSessionService.class);
 
+    private AccountService accountServiceService;
 
     private final Map<Long, GameSession> userGames  = new HashMap<>();
     private final Set<GameSession> gameSessions = new LinkedHashSet<>();
@@ -34,8 +38,9 @@ public class GameSessionService {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
-    public GameSessionService(ClientService clientService) {
+    public GameSessionService(ClientService clientService, AccountService accountService) {
         this.clientService = clientService;
+        this.accountServiceService = accountService;
     }
 
     private void initGameSession(GameSession gameSession) {
@@ -107,6 +112,16 @@ public class GameSessionService {
     }
 
     public void GameOver(GameSession gameSession) {
+
+        try {
+            accountServiceService.updateUserRating(gameSession.getPlayerFirst().getUserId(),
+                    (int)gameSession.getPlayerFirst().getRatingToUpdate());
+            accountServiceService.updateUserRating(gameSession.getPlayerSecond().getUserId(),
+                    (int)gameSession.getPlayerSecond().getRatingToUpdate());
+        } catch (DbException e) {
+            LOGGER.error("Database error!", e);
+        }
+
         final boolean deleted = gameSessions.remove(gameSession);
         userGames.remove(gameSession.getPlayerFirst().getUserId());
         userGames.remove(gameSession.getPlayerSecond().getUserId());

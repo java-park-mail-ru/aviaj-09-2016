@@ -25,7 +25,7 @@ public class ServerSnapshotService {
         this.clientService = clientService;
     }
 
-    public void sendSnapshot(GameSession gameSession, int frameTime) {
+    public void sendSnapshot(GameSession gameSession, long frameTime) {
         final List<Player> players = new ArrayList<>();
         players.add(gameSession.getPlayerFirst());
         players.add(gameSession.getPlayerSecond());

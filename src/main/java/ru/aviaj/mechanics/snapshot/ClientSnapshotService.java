@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.aviaj.mechanics.MovementService;
 import ru.aviaj.mechanics.baseobject.Player;
 import ru.aviaj.mechanics.baseobject.Ring;
+import ru.aviaj.mechanics.basetype.CollisionStatus;
 import ru.aviaj.mechanics.gamesession.GameSession;
 
 import java.util.ArrayList;
@@ -19,7 +20,6 @@ public class ClientSnapshotService {
 
     private MovementService movementService;
 
-    @Autowired
     public ClientSnapshotService(MovementService movementService) {
         this.movementService = movementService;
     }
@@ -33,7 +33,7 @@ public class ClientSnapshotService {
         return snapshots.get(userId);
     }
 
-    public void processSessionSnapshots(GameSession gameSession) {
+    public CollisionStatus processSessionSnapshots(GameSession gameSession) {
 
         final List<Player> players = new ArrayList<>();
         players.add(gameSession.getPlayerFirst());
@@ -49,12 +49,22 @@ public class ClientSnapshotService {
             }
             for (ClientSnaphot snaphot : snaps) {
                 player.getPlanePosition().setSpeedDirection(snaphot.getSpeed());
+
                 player.updateRating(movementService.processRings(player.getPlanePosition(),
                         rings, snaphot.getClientFrameTime()));
+
+                final CollisionStatus collision = movementService.processCollisions(gameSession,
+                        snaphot.getClientFrameTime());
+                if (collision != CollisionStatus.OK) {
+                    return collision;
+                }
+
                 player.setPlanePosition(movementService.processMovements(player.getPlanePosition(),
                         snaphot.getClientFrameTime()));
             }
         }
+
+        return CollisionStatus.OK;
     }
 
 
