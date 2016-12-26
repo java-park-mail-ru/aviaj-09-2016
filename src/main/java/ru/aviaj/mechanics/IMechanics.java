@@ -1,11 +1,13 @@
 package ru.aviaj.mechanics;
 
+import ru.aviaj.mechanics.snapshot.ClientSnaphot;
+
 import javax.validation.constraints.NotNull;
 
 @SuppressWarnings("unused")
 public interface IMechanics {
 
-    void addClientSnaphot();
+    void addClientSnaphot(long userId, ClientSnaphot clientSnaphot);
 
     void addUser(@NotNull long userId);
 

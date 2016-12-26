@@ -2,6 +2,7 @@ package ru.aviaj.mechanics;
 
 
 import org.springframework.stereotype.Service;
+import ru.aviaj.mechanics.snapshot.ClientSnaphot;
 
 import javax.validation.constraints.NotNull;
 
@@ -10,7 +11,7 @@ public class Mechanics implements IMechanics {
 
 
     @Override
-    public void addClientSnaphot() {
+    public void addClientSnaphot(long userId, ClientSnaphot clientSnaphot) {
 
     }
 

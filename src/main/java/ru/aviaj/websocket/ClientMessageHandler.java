@@ -2,6 +2,7 @@ package ru.aviaj.websocket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
 public abstract class ClientMessageHandler<T> {
