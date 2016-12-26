@@ -7,34 +7,34 @@ public class GetClientPing {
 
     public static class Response {
 
-        private int clientPing;
-        private int clientTimeShift;
+        private long clientPing;
+        private long clientTimeShift;
 
-        public Response(int clientPing, int clientTimeShift) {
+        public Response(long clientPing, long clientTimeShift) {
             this.clientPing = clientPing;
             this.clientTimeShift = clientTimeShift;
         }
 
-        public int getClientPing() {
+        public long getClientPing() {
             return clientPing;
         }
 
-        public int getClientTimeShift() {
+        public long getClientTimeShift() {
             return clientTimeShift;
         }
 
         public static Builder createBuilder() { return new Builder(); }
 
         public static class Builder {
-            private int ping = -1;
-            private int timeShift = -1;
+            private long ping = -1;
+            private long timeShift = -1;
 
-            public Builder ping(int ping) {
+            public Builder ping(long ping) {
                 this.ping = ping;
                 return this;
             }
 
-            public Builder timeShift(int timeShift) {
+            public Builder timeShift(long timeShift) {
                 this.timeShift = timeShift;
                 return this;
             }

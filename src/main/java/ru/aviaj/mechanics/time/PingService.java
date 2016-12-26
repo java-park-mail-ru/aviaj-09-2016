@@ -37,7 +37,7 @@ public class PingService {
         this.clientService = clientService;
     }
 
-    public void rememberPing(long userId, int timeStamp, long requestId) {
+    public void rememberPing(long userId, long timeStamp, long requestId) {
         final Long timeWas = pendingRequests.get(requestId);
         if (timeWas == null) {
             return;

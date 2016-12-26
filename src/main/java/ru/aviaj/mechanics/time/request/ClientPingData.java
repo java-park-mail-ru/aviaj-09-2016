@@ -30,4 +30,17 @@ public class ClientPingData {
             }
         }
     }
+
+    public static final class Response {
+        private long id;
+        private long timeStamp;
+
+        public long getId() {
+            return id;
+        }
+
+        public long getTimeStamp() {
+            return timeStamp;
+        }
+    }
 }
