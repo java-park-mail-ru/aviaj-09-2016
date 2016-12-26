@@ -18,9 +18,9 @@ public class ClientPingData {
         }
 
         public static class Builder {
-            private int id = -1;
+            private long id = -1;
 
-            public Builder id(int id) {
+            public Builder id(long id) {
                 this.id = id;
                 return this;
             }
