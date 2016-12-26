@@ -11,6 +11,7 @@ import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import ru.aviaj.database.exception.DbException;
+import ru.aviaj.mechanics.time.PingService;
 import ru.aviaj.service.AccountService;
 import ru.aviaj.service.SessionService;
 
@@ -23,6 +24,7 @@ public class GameWebSocket extends TextWebSocketHandler {
     private AccountService accountService;
     private SessionService sessionService;
     private ClientService clientService;
+    private PingService pingService;
     private ClientMessageHandlerService handlerService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -31,10 +33,12 @@ public class GameWebSocket extends TextWebSocketHandler {
     public GameWebSocket(AccountService accountService,
                          SessionService sessionService,
                          ClientService clientService,
+                         PingService pingService,
                          ClientMessageHandlerService handlerService) {
         this.accountService = accountService;
         this.sessionService = sessionService;
         this.clientService = clientService;
+        this.pingService = pingService;
         this.handlerService = handlerService;
     }
 
@@ -52,7 +56,7 @@ public class GameWebSocket extends TextWebSocketHandler {
 
         clientService.addClient(userId, webSocketSession);
         webSocketSession.getAttributes().put("AVIAJGAMEID", userId);
-        //TODO: ping
+        pingService.refreshPing(userId);
     }
 
     @Override
