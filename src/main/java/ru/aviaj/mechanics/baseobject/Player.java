@@ -1,11 +1,10 @@
 package ru.aviaj.mechanics.baseobject;
 
-import ru.aviaj.model.UserProfile;
 
 @SuppressWarnings("unused")
 public class Player {
 
-    private final UserProfile userProfile;
+    private final String userLogin;
     private final long userId;
     private PlanePosition planePosition;
 
@@ -14,10 +13,10 @@ public class Player {
 
     private long ratingToUpdate = 0;
 
-    public Player(UserProfile userProfile) {
+    public Player(long userId, String userLogin) {
 
-        this.userProfile = userProfile;
-        this.userId = userProfile.getId();
+        this.userId = userId;
+        this.userLogin = userLogin;
         this.planePosition = new PlanePosition();
 
         this.ping = 0;
@@ -32,9 +31,7 @@ public class Player {
         return userId;
     }
 
-    public long getPing() {
-        return ping;
-    }
+    public long getPing() { return ping; }
 
     public long getTimeShift() {
         return timeShift;
@@ -52,9 +49,7 @@ public class Player {
         this.timeShift = timeShift;
     }
 
-    public UserProfile getUserProfile() {
-        return userProfile;
-    }
+    public String getUserLogin() { return userLogin; }
 
     public long getRatingToUpdate() {
         return ratingToUpdate;

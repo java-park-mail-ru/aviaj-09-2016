@@ -16,6 +16,7 @@ import ru.aviaj.mechanics.request.InitRequest;
 import ru.aviaj.mechanics.snapshot.ServerPlayerSnapshot;
 import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
+import ru.aviaj.service.UserLoginService;
 import ru.aviaj.websocket.ClientMessage;
 import ru.aviaj.websocket.ClientService;
 
@@ -29,6 +30,7 @@ public class GameSessionService {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameSessionService.class);
 
     private AccountService accountServiceService;
+    private UserLoginService userLoginService;
 
     private final Map<Long, GameSession> userGames  = new HashMap<>();
     private final Set<GameSession> gameSessions = new LinkedHashSet<>();
@@ -38,9 +40,11 @@ public class GameSessionService {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
-    public GameSessionService(ClientService clientService, AccountService accountService) {
+    public GameSessionService(ClientService clientService, AccountService accountService,
+                              UserLoginService userLoginService) {
         this.clientService = clientService;
         this.accountServiceService = accountService;
+        this.userLoginService = userLoginService;
     }
 
     private void initGameSession(GameSession gameSession) {
