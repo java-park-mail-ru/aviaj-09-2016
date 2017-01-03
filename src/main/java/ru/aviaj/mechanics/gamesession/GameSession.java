@@ -3,7 +3,6 @@ package ru.aviaj.mechanics.gamesession;
 import org.jetbrains.annotations.Nullable;
 import ru.aviaj.mechanics.baseobject.Player;
 import ru.aviaj.mechanics.baseobject.TrackMap;
-import ru.aviaj.model.UserProfile;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -19,10 +18,10 @@ public class GameSession {
 
     private final TrackMap track = new TrackMap();
 
-    public GameSession(UserProfile playerFirst, UserProfile playerSecond) {
+    public GameSession(long idFirst, String loginFirst, long idSecond, String loginSecond) {
         id = ID_GENERATOR.getAndIncrement();
-        this.playerFirst = new Player(playerFirst);
-        this.playerSecond = new Player(playerSecond);
+        this.playerFirst = new Player(idFirst, loginFirst);
+        this.playerSecond = new Player(idFirst, loginFirst);
         track.randomize();
     }
 
@@ -52,10 +51,10 @@ public class GameSession {
 
     @Nullable
     public Player getPlayerForUser(long userId) {
-        if (userId == playerFirst.getUserProfile().getId()) {
+        if (userId == playerFirst.getUserId()) {
             return playerFirst;
         }
-        else if (userId == playerSecond.getUserProfile().getId()) {
+        else if (userId == playerSecond.getUserId()) {
             return playerSecond;
         }
         else
