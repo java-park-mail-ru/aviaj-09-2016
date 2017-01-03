@@ -1,4 +1,4 @@
-package ru.aviaj.mechanics.baseobject;
+package ru.aviaj.model;
 
 import ru.aviaj.model.UserProfile;
 
