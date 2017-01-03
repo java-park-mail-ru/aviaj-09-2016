@@ -12,16 +12,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings("unused")
 @Service
-public class MinimalUserService {
+public class UserLoginService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MinimalUserService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserLoginService.class);
 
     private Map<Long, String> users = new ConcurrentHashMap<>();
 
     @Autowired
     AccountService accountService;
 
-    public MinimalUserService() {
+    public UserLoginService() {
         try {
             for (UserProfile userProfile : accountService.getAllUsers()) {
                 users.put(userProfile.getId(), userProfile.getLogin());
