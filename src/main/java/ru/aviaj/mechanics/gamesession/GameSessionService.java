@@ -14,7 +14,6 @@ import ru.aviaj.mechanics.basetype.Dot;
 import ru.aviaj.mechanics.basetype.Vector;
 import ru.aviaj.mechanics.request.InitRequest;
 import ru.aviaj.mechanics.snapshot.ServerPlayerSnapshot;
-import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
 import ru.aviaj.service.UserLoginService;
 import ru.aviaj.websocket.ClientMessage;
@@ -67,25 +66,25 @@ public class GameSessionService {
         playerSnapshots.add(new ServerPlayerSnapshot(gameSession.getPlayerSecond()));
 
         final Map<Long, String> names = new HashMap<>();
-        names.put(gameSession.getPlayerFirst().getUserProfile().getId(),
-                gameSession.getPlayerFirst().getUserProfile().getLogin());
-        names.put(gameSession.getPlayerSecond().getUserProfile().getId(),
-                gameSession.getPlayerSecond().getUserProfile().getLogin());
+        names.put(gameSession.getPlayerFirst().getUserId(),
+                gameSession.getPlayerFirst().getUserLogin());
+        names.put(gameSession.getPlayerSecond().getUserId(),
+                gameSession.getPlayerSecond().getUserLogin());
 
 
         for(Player player : players) {
             final InitRequest.Request initRequest = new InitRequest.Request();
-            initRequest.setUserId(player.getUserProfile().getId());
+            initRequest.setUserId(player.getUserId());
             initRequest.setPlayerNames(names);
             initRequest.setPlayers(playerSnapshots);
 
             try {
                 final ClientMessage clientMessage = new ClientMessage(InitRequest.class.getName(),
                         objectMapper.writeValueAsString(initRequest));
-                clientService.sendClientMessage(player.getUserProfile().getId(), clientMessage);
+                clientService.sendClientMessage(player.getUserId(), clientMessage);
             } catch (IOException e) {
                 players.forEach(playerDisconnect -> clientService.closeSession(
-                        playerDisconnect.getUserProfile().getId(), CloseStatus.SERVER_ERROR
+                        playerDisconnect.getUserId(), CloseStatus.SERVER_ERROR
                 ));
                 LOGGER.error("Unable to create message!", e);
             }
@@ -105,11 +104,12 @@ public class GameSessionService {
         return userGames.containsKey(userId);
     }
 
-    public GameSession startGame(UserProfile userFirst, UserProfile userSecond) {
-        final GameSession gameSession = new GameSession(userFirst, userSecond);
+    public GameSession startGame(long userIdFirst, long userIdSecond) {
+        final GameSession gameSession = new GameSession(userIdFirst, userLoginService.getUserLogin(userIdFirst),
+                userIdSecond, userLoginService.getUserLogin(userIdSecond));
         gameSessions.add(gameSession);
-        userGames.put(userFirst.getId(), gameSession);
-        userGames.put(userSecond.getId(), gameSession);
+        userGames.put(userIdFirst, gameSession);
+        userGames.put(userIdSecond, gameSession);
         initGameSession(gameSession);
 
         return gameSession;

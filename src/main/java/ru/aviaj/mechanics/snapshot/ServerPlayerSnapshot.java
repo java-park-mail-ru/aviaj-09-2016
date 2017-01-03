@@ -19,7 +19,7 @@ public class ServerPlayerSnapshot {
     }
 
     public ServerPlayerSnapshot(Player player) {
-        this.userId = player.getUserProfile().getId();
+        this.userId = player.getUserId();
         this.planePosition = player.getPlanePosition();
     }
 
