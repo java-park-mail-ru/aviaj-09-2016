@@ -17,6 +17,7 @@ import ru.aviaj.model.ErrorType;
 import ru.aviaj.model.UserProfile;
 import ru.aviaj.service.AccountService;
 import ru.aviaj.service.SessionService;
+import ru.aviaj.service.UserLoginService;
 
 import javax.servlet.http.HttpSession;
 
@@ -27,11 +28,14 @@ public class RegistrationController {
 
     private final AccountService accountService;
     private final SessionService sessionService;
+    private final UserLoginService userLoginService;
 
     @Autowired
-    public RegistrationController(AccountService accountService, SessionService sessionService) {
+    public RegistrationController(AccountService accountService, SessionService sessionService,
+                                  UserLoginService userLoginService) {
         this.accountService = accountService;
         this.sessionService = sessionService;
+        this.userLoginService = userLoginService;
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RegistrationController.class);
@@ -106,6 +110,7 @@ public class RegistrationController {
                 );
             }
 
+            userLoginService.addUserLogin(registeredUser.getId(), registeredUser.getLogin());
             return ResponseEntity.ok(new UserProfileResponse(registeredUser));
 
         } catch (DbException e) {
