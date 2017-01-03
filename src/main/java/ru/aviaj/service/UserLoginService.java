@@ -18,10 +18,11 @@ public class UserLoginService {
 
     private Map<Long, String> users = new ConcurrentHashMap<>();
 
-    @Autowired
-    AccountService accountService;
+    final AccountService accountService;
 
-    public UserLoginService() {
+    @Autowired
+    public UserLoginService(AccountService accountService) {
+        this.accountService = accountService;
         try {
             for (UserProfile userProfile : accountService.getAllUsers()) {
                 users.put(userProfile.getId(), userProfile.getLogin());
